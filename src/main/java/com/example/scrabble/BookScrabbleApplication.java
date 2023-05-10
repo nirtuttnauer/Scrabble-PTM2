@@ -10,7 +10,7 @@ import java.io.IOException;
 public class BookScrabbleApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(BookScrabbleApplication.class.getResource("hello-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(BookScrabbleApplication.class.getResource("menu-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1920, 1080);
         stage.setTitle("Kvedim!");
         stage.setScene(scene);
