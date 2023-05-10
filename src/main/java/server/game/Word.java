@@ -1,4 +1,4 @@
-package test;
+package server.game;
 
 import test.*;
 

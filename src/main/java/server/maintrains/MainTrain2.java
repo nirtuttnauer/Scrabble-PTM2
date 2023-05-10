@@ -1,4 +1,4 @@
-package test;
+package server.maintrains;
 
 import java.io.FileWriter;
 import java.io.PrintWriter;

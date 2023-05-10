@@ -1,5 +1,5 @@
 //
-package test;
+package server.game;
 
 import java.util.Objects;
 

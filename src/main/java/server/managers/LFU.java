@@ -1,4 +1,4 @@
-package test;
+package server.managers;
 
 
 import java.util.Comparator;
