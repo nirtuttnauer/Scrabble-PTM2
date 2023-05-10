@@ -1,12 +1,14 @@
 package server.maintrains;
 
-import test.Tile.Bag;
+import server.game.Board;
+import server.game.Tile;
+import server.game.Word;
 
-public class MainTrain {
+public class MainTrain1 {
 	
 	public static void testBag() {
-		Bag b=Tile.Bag.getBag();
-		Bag b1=Tile.Bag.getBag();
+		Tile.Bag b=Tile.Bag.getBag();
+		Tile.Bag b1=Tile.Bag.getBag();
 		if(b1!=b)
 			System.out.println("your Bag in not a Singleton (-5)");
 		
@@ -43,7 +45,7 @@ public class MainTrain {
 		Tile[] ts=new Tile[s.length()];
 		int i=0;
 		for(char c: s.toCharArray()) {
-			ts[i]=Bag.getBag().getTile(c);
+			ts[i]= Tile.Bag.getBag().getTile(c);
 			i++;
 		}
 		return ts;
@@ -54,9 +56,9 @@ public class MainTrain {
 		Board b = Board.getBoard();
 		if(b!=Board.getBoard())
 			System.out.println("board should be a Singleton (-5)");
-		
-		
-		Bag bag = Bag.getBag();
+
+
+		Tile.Bag bag = Tile.Bag.getBag();
 		Tile[] ts=new Tile[10];
 		for(int i=0;i<ts.length;i++) 
 			ts[i]=bag.getRand();

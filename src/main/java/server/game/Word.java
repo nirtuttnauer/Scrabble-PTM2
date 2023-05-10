@@ -1,7 +1,5 @@
 package server.game;
 
-import test.*;
-
 import java.util.Arrays;
 
 public class Word {

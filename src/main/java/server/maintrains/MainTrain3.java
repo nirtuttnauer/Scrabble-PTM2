@@ -1,5 +1,10 @@
 package server.maintrains;
 
+import server.ClientHandler;
+import server.MyServer;
+import server.managers.BookScrabbleHandler;
+import server.managers.DictionaryManager;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,9 +14,9 @@ import java.net.Socket;
 import java.util.Random;
 import java.util.Scanner;
 
-public class MainTrain {
+public class MainTrain3 {
 	
-	public static class ClientHandler1 implements ClientHandler{
+	public static class ClientHandler1 implements ClientHandler {
 		PrintWriter out;
 		Scanner in;		
 		@Override

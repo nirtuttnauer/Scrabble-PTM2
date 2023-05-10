@@ -1,10 +1,12 @@
 package server.maintrains;
 
+import server.managers.*;
+
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
 
-public class MainTrain {
+public class MainTrain2 {
 	
 	public static void testLRU() {
 		CacheReplacementPolicy lru=new LRU();
