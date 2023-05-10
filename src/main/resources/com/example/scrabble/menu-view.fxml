@@ -11,6 +11,6 @@
 
     <Label fx:id="welcomeText" text="hello" />
     <Button onAction="#onHelloButtonClick" text="Host" />
-    <Button onAction="#onHelloButtonClick" text="Join" />
+    <Button onAction="#onJoinButtonClick" text="Join" />
     <Button onAction="#onHelloButtonClick" text="Settings" />
 </VBox>

@@ -85,7 +85,6 @@ public class Board {
     public int tryPlaceWord(Word word) {
         if (boardLegal(word) && dictionaryLegal(word)) {
             word = fullWord(word);
-
             ArrayList<Word> newWords = filterWords(getWords(word));
             int score = getScore(newWords);
             PlaceWord(word);
