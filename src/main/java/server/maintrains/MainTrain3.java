@@ -1,4 +1,9 @@
-package test;
+package server.maintrains;
+
+import server.ClientHandler;
+import server.MyServer;
+import server.managers.BookScrabbleHandler;
+import server.managers.DictionaryManager;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -9,9 +14,9 @@ import java.net.Socket;
 import java.util.Random;
 import java.util.Scanner;
 
-public class MainTrain {
+public class MainTrain3 {
 	
-	public static class ClientHandler1 implements ClientHandler{
+	public static class ClientHandler1 implements ClientHandler {
 		PrintWriter out;
 		Scanner in;		
 		@Override
@@ -144,12 +149,12 @@ public class MainTrain {
 		int port=6000+r.nextInt(1000);
 		MyServer s=new MyServer(port, new BookScrabbleHandler());
 		s.start();
-		new Thread(()->runClient(port, "Q,s1.txt,s2.txt,"+s1[1], true));
-		new Thread(()->runClient(port, "Q,s1.txt,s2.txt,"+s2[4], true));
-		new Thread(()->runClient(port, "Q,s1.txt,s2.txt,2"+s1[1], false));
-		new Thread(()->runClient(port, "Q,s1.txt,s2.txt,3"+s2[4], false));
-		new Thread(()->runClient(port, "C,s1.txt,s2.txt,"+s1[9], true));
-		new Thread(()->runClient(port, "C,s1.txt,s2.txt,#"+s2[1], false));
+		runClient(port, "Q,s1.txt,s2.txt,"+s1[1], true);
+		runClient(port, "Q,s1.txt,s2.txt,"+s2[4], true);
+		runClient(port, "Q,s1.txt,s2.txt,2"+s1[1], false);
+		runClient(port, "Q,s1.txt,s2.txt,3"+s2[4], false);
+		runClient(port, "C,s1.txt,s2.txt,"+s1[9], true);
+		runClient(port, "C,s1.txt,s2.txt,#"+s2[1], false);
 		s.close();
 	}
 	

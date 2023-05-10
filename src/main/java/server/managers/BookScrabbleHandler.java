@@ -1,5 +1,7 @@
-package test;
+package server.managers;
 
+
+import server.ClientHandler;
 
 import java.io.InputStream;
 import java.io.OutputStream;

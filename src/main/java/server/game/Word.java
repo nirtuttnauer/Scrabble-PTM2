@@ -1,6 +1,4 @@
-package test;
-
-import test.*;
+package server.game;
 
 import java.util.Arrays;
 
