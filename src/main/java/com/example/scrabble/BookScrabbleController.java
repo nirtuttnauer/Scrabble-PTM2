@@ -11,4 +11,10 @@ public class BookScrabbleController {
     protected void onHelloButtonClick() {
         welcomeText.setText("Lama Omer Kaha Kaved?!");
     }
+
+    @FXML
+    protected void onJoinButtonClick() {
+        welcomeText.setText("Lama");
+    }
+
 }
