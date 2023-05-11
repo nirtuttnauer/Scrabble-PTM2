@@ -9,7 +9,7 @@ public class BookScrabbleController {
 
     @FXML
     protected void onHelloButtonClick() {
-        welcomeText.setText("Lama Omer Kaha Kaved?!");
+        welcomeText.setText("Lama AVIV Kaha Kaved?!");
     }
 
     @FXML
