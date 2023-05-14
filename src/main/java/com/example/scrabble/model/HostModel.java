@@ -1,4 +1,4 @@
-package model;
+package com.example.scrabble.model;
 
 public class HostModel implements iModel{
 

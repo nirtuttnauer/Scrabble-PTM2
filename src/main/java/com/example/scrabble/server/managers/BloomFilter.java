@@ -1,4 +1,4 @@
-package server.managers;
+package com.example.scrabble.server.managers;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;

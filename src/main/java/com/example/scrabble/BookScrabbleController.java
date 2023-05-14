@@ -2,8 +2,8 @@ package com.example.scrabble;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import model.HostModel;
-import vm.HostVM;
+import com.example.scrabble.model.HostModel;
+import com.example.scrabble.vm.HostVM;
 
 public class BookScrabbleController {
     @FXML

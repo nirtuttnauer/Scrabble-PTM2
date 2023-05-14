@@ -1,8 +1,8 @@
-package vm;
+package com.example.scrabble.vm;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import model.HostModel;
+import com.example.scrabble.model.HostModel;
 
 public class HostVM implements iVM{
     private final HostModel model;
