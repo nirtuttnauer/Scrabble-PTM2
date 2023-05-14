@@ -15,4 +15,19 @@ public class DemoModel implements iModel{
     public String getWelcomeMessage() {
         return welcomeMessage;
     }
+
+    @Override
+    public boolean checkClient() {
+        return false;
+    }
+
+    @Override
+    public void increaseScore(int value) {
+
+    }
+
+    @Override
+    public void decreaseScore(int value) {
+
+    }
 }

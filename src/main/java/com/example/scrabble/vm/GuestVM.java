@@ -1,35 +1,34 @@
 package com.example.scrabble.vm;
 
 import com.example.scrabble.model.GuestModel;
-import com.example.scrabble.model.HostModel;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
-public class GuestVM implements iVM{
+import java.util.Observable;
+import java.util.Observer;
+
+public class GuestVM implements Observer {
     private final GuestModel model;
-    private final StringProperty welcomeMessage;
+    //private final View view;
 
     public GuestVM(GuestModel model) {
         this.model = model;
-        welcomeMessage = new SimpleStringProperty();
-    }
-
-    public StringProperty welcomeMessageProperty() {
-        return welcomeMessage;
-    }
-
-    public void onHelloButtonClick() {
-        model.setWelcomeMessage("Lama Omer Kaha Kaved?!");
-        welcomeMessage.set(model.getWelcomeMessage());
-    }
-
-    public void onJoinButtonClick() {
-        model.setWelcomeMessage("Lama");
-        welcomeMessage.set(model.getWelcomeMessage());
+        model.addObserver(this);
     }
 
     @Override
-    public void onSettingButtonClick() {
-
+    public void update(Observable o, Object arg) {
+        if(o.getClass()==model.getClass()){}
     }
 }
+   // public StringProperty welcomeMessageProperty() {
+//        return welcomeMessage;
+//    }
+//
+//    public void onHelloButtonClick() {
+//        model.setWelcomeMessage("Lama Omer Kaha Kaved?!");
+//        welcomeMessage.set(model.getWelcomeMessage());
+//    }
+//
+//    public void onJoinButtonClick() {
+//        model.setWelcomeMessage("Lama");
+//        welcomeMessage.set(model.getWelcomeMessage());
+//    }
