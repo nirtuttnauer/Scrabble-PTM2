@@ -2,6 +2,7 @@ package com.example.scrabble.model;
 
 import com.example.scrabble.server.MyServer;
 import com.example.scrabble.server.managers.BookScrabbleHandler;
+import com.example.scrabble.server.managers.DictionaryManager;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,6 +11,8 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class HostModel extends Model {
+    MyServer server;
+
     public static void runClient(int port, String query, boolean result) {
         try {
             Socket server = new Socket("localhost", port);
@@ -28,13 +31,19 @@ public class HostModel extends Model {
         }
     }
 
-    public static void startServer() {
+    public void startServer() {
         Random r = new Random();
         int port = 6000 + r.nextInt(1000);
-        MyServer s = new MyServer(port, new BookScrabbleHandler());
-        s.start();
+        MyServer server = new MyServer(port, new BookScrabbleHandler());
+        server.start();
         System.out.println("Server started on port " + port);
-        s.close();
+        closeServer();
+        System.out.println("Server closed on port " + port);
+    }
+
+    public void closeServer() {
+        if (server != null)
+            server.close();
     }
 
 }

@@ -12,4 +12,8 @@ public class Model implements iModel {
     public String getNickname() {
         return nickname;
     }
+
+    public void serverStart() {
+        System.out.println("serverStart() was not implemented for Model");
+    }
 }

@@ -2,12 +2,13 @@ package com.example.scrabble;
 
 import com.example.scrabble.model.GuestModel;
 import com.example.scrabble.model.HostModel;
-import com.example.scrabble.model.StartModel;
+import com.example.scrabble.model.Model;
 import com.example.scrabble.model.iModel;
 import com.example.scrabble.vm.GuestVM;
 import com.example.scrabble.vm.HostVM;
 import com.example.scrabble.vm.VM;
-import com.example.scrabble.vm.iVM;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -16,22 +17,32 @@ import javafx.scene.control.TextField;
 import java.io.IOException;
 
 public class BookScrabbleController {
+
     @FXML
-    String nicknameString;
+    public TextField nicknameField;
     @FXML
-    public TextField nickname;
+    private Label title;
     @FXML
-    private Label MainTitle;
+    private VM viewModel;
     @FXML
-    private iVM viewModel;
+    private SceneController sc;
+
     @FXML
-    private SceneController sc = new SceneController();
+    private Label nickname;
 
     @FXML
     public void initialize() {
-        iModel model = new StartModel();
+        Model model = new Model();
         viewModel = new VM(model);
-        MainTitle.setText("BookScrabble");
+        title.textProperty().bind(viewModel.nicknameProperty());
+        if (nickname!=null){
+                    nickname.textProperty().bind(viewModel.nicknameProperty());
+        }
+        sc = new SceneController();
+    }
+
+    private void bindViewModel() {
+        title.textProperty().bind(viewModel.nicknameProperty());
     }
 
     @FXML
@@ -64,9 +75,7 @@ public class BookScrabbleController {
 
     @FXML
     public void onMenuButtonClick(ActionEvent event) throws IOException {
-
         sc.setScene(event, "menu-view.fxml");
-        MainTitle.setText("Welcome, " + nicknameString + "!");
     }
 
     @FXML
@@ -81,15 +90,19 @@ public class BookScrabbleController {
 
     @FXML
     public void onNameSubmitButtonClick(ActionEvent event) throws IOException {
-        nicknameString = nickname.getText();
+        String nickname = nicknameField.getText().trim();
+        if (!nickname.isEmpty()) {
+            viewModel.setNickname(nickname);
+            System.out.println("Nickname set to: " + viewModel.getNickname());
+        }
         onMenuButtonClick(event);
-        System.out.println(MainTitle.getText());
     }
 
-    public void setViewModel(iVM viewModel) {
+    public void setViewModel(VM viewModel) {
         this.viewModel = viewModel;
     }
 
+    @FXML
     public void onExitButtonClick(ActionEvent event) {
         System.exit(0);
     }

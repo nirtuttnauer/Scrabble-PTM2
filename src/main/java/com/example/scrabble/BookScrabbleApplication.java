@@ -1,6 +1,6 @@
 package com.example.scrabble;
 
-import com.example.scrabble.model.StartModel;
+import com.example.scrabble.model.Model;
 import com.example.scrabble.vm.VM;
 import com.example.scrabble.vm.iVM;
 import javafx.application.Application;
@@ -17,7 +17,7 @@ public class BookScrabbleApplication extends Application {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("welcome-view.fxml"));
             Parent root = loader.load();
 
-            iVM viewModel = new VM(new StartModel());
+            VM viewModel = new VM(new Model());
             viewModel.setNickname("John"); // Replace "John" with the actual nickname
 
             BookScrabbleController controller = loader.getController();

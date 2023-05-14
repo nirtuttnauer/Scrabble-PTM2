@@ -11,6 +11,6 @@
     </padding>
 
 
-    <Label fx:id="MainTitle" text="Leaderboard" textAlignment="CENTER"/>
+    <Label fx:id="title" text="Leaderboard" textAlignment="CENTER"/>
     <Button fx:id="menuButton" text="menu" textAlignment="CENTER" onAction="#onMenuButtonClick"/>
 </VBox>

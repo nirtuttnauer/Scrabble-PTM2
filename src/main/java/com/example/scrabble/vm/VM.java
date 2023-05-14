@@ -1,25 +1,33 @@
 package com.example.scrabble.vm;
 
+import com.example.scrabble.model.Model;
 import com.example.scrabble.model.iModel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class VM implements iVM{
-    private final iModel model;
-    private final StringProperty welcomeMessage;
+public class VM {
+    private final Model model;
+    private final StringProperty nickname;
 
     public VM(iModel model) {
-        this.model = model;
-        welcomeMessage = new SimpleStringProperty();
+        this.model = (Model) model;
+        nickname = new SimpleStringProperty();
     }
 
-    @Override
-    public void setNickname(String String) {
-        model.setNickname(String);
+    public void setNickname(String nickname) {
+        this.nickname.set(nickname);
+        model.setNickname(nickname);
     }
 
-    @Override
+    public String getNickname() {
+        return model.getNickname();
+    }
+
+    public StringProperty nicknameProperty() {
+        return nickname;
+    }
+
     public void serverStart() {
-        System.out.println("this cannot start a server");
+        model.serverStart();
     }
 }
