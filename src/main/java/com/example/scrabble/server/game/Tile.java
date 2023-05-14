@@ -1,5 +1,5 @@
 //
-package server.game;
+package com.example.scrabble.server.game;
 
 import java.util.Objects;
 

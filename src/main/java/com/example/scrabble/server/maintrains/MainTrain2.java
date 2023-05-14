@@ -1,10 +1,9 @@
-package server.maintrains;
+package com.example.scrabble.server.maintrains;
 
-import server.managers.*;
+import com.example.scrabble.server.managers.*;
 
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.security.NoSuchAlgorithmException;
 
 public class MainTrain2 {
 	

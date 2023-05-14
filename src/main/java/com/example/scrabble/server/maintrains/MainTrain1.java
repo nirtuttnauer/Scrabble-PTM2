@@ -1,8 +1,8 @@
-package server.maintrains;
+package com.example.scrabble.server.maintrains;
 
-import server.game.Board;
-import server.game.Tile;
-import server.game.Word;
+import com.example.scrabble.server.game.Board;
+import com.example.scrabble.server.game.Tile;
+import com.example.scrabble.server.game.Word;
 
 public class MainTrain1 {
 	

@@ -1,7 +1,7 @@
-package server.managers;
+package com.example.scrabble.server.managers;
 
 
-import server.ClientHandler;
+import com.example.scrabble.server.ClientHandler;
 
 import java.io.InputStream;
 import java.io.OutputStream;

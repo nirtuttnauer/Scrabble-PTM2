@@ -1,4 +1,4 @@
-package server;
+package com.example.scrabble.server;
 
 import java.io.InputStream;
 import java.io.OutputStream;

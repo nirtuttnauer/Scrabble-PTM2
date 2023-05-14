@@ -1,9 +1,9 @@
-package server.maintrains;
+package com.example.scrabble.server.maintrains;
 
-import server.ClientHandler;
-import server.MyServer;
-import server.managers.BookScrabbleHandler;
-import server.managers.DictionaryManager;
+import com.example.scrabble.server.ClientHandler;
+import com.example.scrabble.server.MyServer;
+import com.example.scrabble.server.managers.BookScrabbleHandler;
+import com.example.scrabble.server.managers.DictionaryManager;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -48,7 +48,7 @@ public class MainTrain3 {
 		outToServer.flush();
 		String response=in.next();
 		if(response==null || !response.equals(rev)) 
-			System.out.println("problem getting the right response from your server, cannot continue the test (-100)");
+			System.out.println("problem getting the right response from your com.example.scrabble.server, cannot continue the test (-100)");
 		in.close();
 		outToServer.println(text);
 		outToServer.close();
@@ -65,7 +65,7 @@ public class MainTrain3 {
 		try {
 			client1(port);
 		}catch(Exception e) {
-			System.out.println("some exception was thrown while testing your server, cannot continue the test (-100)");			
+			System.out.println("some exception was thrown while testing your com.example.scrabble.server, cannot continue the test (-100)");
 			ok=false;
 		}
 		s.close();
@@ -132,7 +132,7 @@ public class MainTrain3 {
 			out.flush();
 			String res=in.next();
 			if((result && !res.equals("true")) || (!result && !res.equals("false")))
-				System.out.println("problem getting the right answer from the server (-10)");
+				System.out.println("problem getting the right answer from the com.example.scrabble.server (-10)");
 			in.close();
 			out.close();
 			server.close();
