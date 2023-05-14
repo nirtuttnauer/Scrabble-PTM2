@@ -3,18 +3,17 @@ package com.example.scrabble;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import model.HostModel;
-import model.iModel;
-import vm.HostViewModel;
+import vm.HostVM;
 
 public class BookScrabbleController {
     @FXML
     private Label welcomeText;
 
-    private HostViewModel viewModel;
+    private HostVM viewModel;
 
     public void initialize() {
         HostModel model = new HostModel();
-        viewModel = new HostViewModel(model);
+        viewModel = new HostVM(model);
         welcomeText.textProperty().bind(viewModel.welcomeMessageProperty());
     }
 

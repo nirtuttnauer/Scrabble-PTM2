@@ -3,13 +3,12 @@ package vm;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import model.HostModel;
-import model.iModel;
 
-public class HostViewModel implements iVM{
+public class HostVM implements iVM{
     private final HostModel model;
     private final StringProperty welcomeMessage;
 
-    public HostViewModel(HostModel model) {
+    public HostVM(HostModel model) {
         this.model = model;
         welcomeMessage = new SimpleStringProperty();
     }
