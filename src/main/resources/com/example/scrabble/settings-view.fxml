@@ -8,5 +8,6 @@
     </padding>
 
     <Label fx:id="mainTitle" text="Settings" textAlignment="CENTER"/>
+    <Button fx:id="nameChangeButton" text="change name" textAlignment="CENTER" onAction="#onChangeNameButtonClick"/>
     <Button fx:id="menuButton" text="menu" textAlignment="CENTER" onAction="#onMenuButtonClick"/>
 </VBox>

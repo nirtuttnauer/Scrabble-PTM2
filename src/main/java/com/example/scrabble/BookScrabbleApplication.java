@@ -5,16 +5,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 public class BookScrabbleApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("menu-view.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("welcome-view.fxml"));
             Scene scene = new Scene(root, 600, 400);
-            stage.setTitle("Kvedim!");
+            stage.setTitle("BookScrabble");
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {

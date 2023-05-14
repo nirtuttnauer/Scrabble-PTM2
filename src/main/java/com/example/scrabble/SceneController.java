@@ -16,7 +16,6 @@ public class SceneController {
     public void setScene(ActionEvent event, String resourceName) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(resourceName));
         Parent root = loader.load();
-
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);

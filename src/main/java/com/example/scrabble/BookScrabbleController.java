@@ -11,13 +11,17 @@ import com.example.scrabble.vm.iVM;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 import java.io.IOException;
 
 public class BookScrabbleController {
     @FXML
+    String nicknameString;
+    @FXML
+    public TextField nickname;
+    @FXML
     private Label MainTitle;
-
     private iVM viewModel;
 
     private SceneController sc = new SceneController();
@@ -43,20 +47,34 @@ public class BookScrabbleController {
         sc.setScene(event, "host-view.fxml");
         viewModel = new HostVM(new HostModel());
     }
+
     @FXML
     public void onLobbyButtonClick(ActionEvent event) throws IOException {
         sc.setScene(event, "lobby-view.fxml");
     }
 
+    @FXML
     public void onGameButtonClick(ActionEvent event) throws IOException {
-          sc.setScene(event, "game-view.fxml");
+        sc.setScene(event, "game-view.fxml");
     }
 
+    @FXML
     public void onMenuButtonClick(ActionEvent event) throws IOException {
         sc.setScene(event, "menu-view.fxml");
     }
 
+    @FXML
     public void onFinishButtonClick(ActionEvent event) throws IOException {
         sc.setScene(event, "leaderboard-view.fxml");
+    }
+
+    @FXML
+    public void onChangeNameButtonClick(ActionEvent event) throws IOException {
+        sc.setScene(event, "welcome-view.fxml");
+    }
+
+    public void onNameSubmitButtonClick(ActionEvent event) throws IOException {
+        nicknameString = nickname.getText();
+        onMenuButtonClick(event);
     }
 }
