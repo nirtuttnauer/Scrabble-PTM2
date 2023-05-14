@@ -10,9 +10,10 @@
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
 
-    <Label fx:id="MainTitle" text="BookScrabble" textAlignment="CENTER"/>
+    <Label fx:id="title" text="BookScrabble" textAlignment="CENTER"/>
     <HBox alignment="CENTER">
-        <TextField fx:id="nickname" promptText="Enter your name"/>
+        <TextField fx:id="nicknameField" promptText="Enter your name"/>
         <Button onAction="#onNameSubmitButtonClick" text="submit" textAlignment="CENTER"/>
     </HBox>
+    <Button onAction="#onExitButtonClick" text="Exit" textAlignment="CENTER"/>
 </VBox>

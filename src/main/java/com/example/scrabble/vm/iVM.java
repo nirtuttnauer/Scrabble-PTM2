@@ -1,13 +1,17 @@
 package com.example.scrabble.vm;
 
+import com.example.scrabble.model.iModel;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 
 public interface iVM {
-    ObservableValue<String> welcomeMessageProperty();
+    void setNickname(String String);
 
-    void onHelloButtonClick();
+    public String getNickname();
 
-    void onJoinButtonClick();
+    public StringProperty nicknameProperty();
 
-    void onSettingButtonClick();
+
+
+    void serverStart();
 }

@@ -1,34 +1,30 @@
 package com.example.scrabble.vm;
 
 import com.example.scrabble.model.GuestModel;
+import com.example.scrabble.model.HostModel;
+import com.example.scrabble.model.Model;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
-import java.util.Observable;
-import java.util.Observer;
-
-public class GuestVM implements Observer {
-    private final GuestModel model;
-    //private final View view;
+public class GuestVM extends VM {
+    private final Model model;
+    private final StringProperty welcomeMessage;
 
     public GuestVM(GuestModel model) {
-        this.model = model;
-        model.addObserver(this);
+        super(model);
+        this.model = new GuestModel();
+        welcomeMessage = new SimpleStringProperty();
+
     }
 
     @Override
-    public void update(Observable o, Object arg) {
-        if(o.getClass()==model.getClass()){}
+    public void setNickname(String String) {
+        model.setNickname(String);
     }
+
+    @Override
+    public void serverStart() {
+        System.out.println("this cannot start a server");
+    }
+
 }
-   // public StringProperty welcomeMessageProperty() {
-//        return welcomeMessage;
-//    }
-//
-//    public void onHelloButtonClick() {
-//        model.setWelcomeMessage("Lama Omer Kaha Kaved?!");
-//        welcomeMessage.set(model.getWelcomeMessage());
-//    }
-//
-//    public void onJoinButtonClick() {
-//        model.setWelcomeMessage("Lama");
-//        welcomeMessage.set(model.getWelcomeMessage());
-//    }

@@ -1,54 +1,49 @@
 package com.example.scrabble.model;
 
 import com.example.scrabble.server.MyServer;
+import com.example.scrabble.server.managers.BookScrabbleHandler;
+import com.example.scrabble.server.managers.DictionaryManager;
 
-import java.util.Observable;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.Random;
+import java.util.Scanner;
 
-public class HostModel extends Observable implements iModel {
-    MyServer server; // use myServer to get the game server
-    Client host; // connect the client that host the game
+public class HostModel extends Model {
+    MyServer server;
 
-
-    public HostModel(MyServer server, Client host) {
-        this.server = server;
-        this.host = host;
+    public static void runClient(int port, String query, boolean result) {
+        try {
+            Socket server = new Socket("localhost", port);
+            PrintWriter out = new PrintWriter(server.getOutputStream());
+            Scanner in = new Scanner(server.getInputStream());
+            out.println(query);
+            out.flush();
+            String res = in.next();
+            if ((result && !res.equals("true")) || (!result && !res.equals("false")))
+                System.out.println("problem getting the right answer from the com.example.scrabble.server (-10)");
+            in.close();
+            out.close();
+            server.close();
+        } catch (IOException e) {
+            System.out.println("your code ran into an IOException (-10)");
+        }
     }
 
-
-    @Override
-    public boolean checkClient() {
-        return host.isActive();
+    public void startServer() {
+        Random r = new Random();
+        int port = 6000 + r.nextInt(1000);
+        MyServer server = new MyServer(port, new BookScrabbleHandler());
+        server.start();
+        System.out.println("Server started on port " + port);
+        closeServer();
+        System.out.println("Server closed on port " + port);
     }
 
-    @Override
-    public void increaseScore(int value) throws IllegalArgumentException{
-        if(value<0)
-            throw new IllegalArgumentException("Increment value must be positive!");
-        host.setScore(value);
+    public void closeServer() {
+        if (server != null)
+            server.close();
     }
 
-    @Override
-    public void decreaseScore(int value) throws IllegalArgumentException{
-        if(host.getScore()<=0 || value<0)
-            throw new IllegalArgumentException("Decrement value must be positive!");
-        host.setScore(-value); // decrease the score
-    }
 }
-
-
-// Define properties and methods representing the application's data and behavior
-// For example:
-//    private String welcomeMessage;
-//
-//    public HostModel() {
-//        welcomeMessage = "";
-//    }
-//
-//    public void setWelcomeMessage(String message) {
-//        welcomeMessage = message;
-//    }
-//
-//    public String getWelcomeMessage() {
-//        return welcomeMessage;
-//    }
-

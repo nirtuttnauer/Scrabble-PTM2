@@ -11,7 +11,7 @@
     </padding>
 
 
-    <Label fx:id="MainTitle" text="Game" textAlignment="CENTER" />
+        <Label fx:id="title" text="This Is It For Now" textAlignment="CENTER"/>
         <Button onAction="#onFinishButtonClick" text="Finish Game" textAlignment="CENTER" />
         <Button fx:id="menuButton" text="menu" textAlignment="CENTER" onAction="#onMenuButtonClick"/>
 </VBox>
