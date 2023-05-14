@@ -2,12 +2,12 @@ package com.example.scrabble;
 
 import com.example.scrabble.model.Model;
 import com.example.scrabble.vm.VM;
-import com.example.scrabble.vm.iVM;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 
 public class BookScrabbleApplication extends Application {
@@ -18,12 +18,13 @@ public class BookScrabbleApplication extends Application {
             Parent root = loader.load();
 
             VM viewModel = new VM(new Model());
-            viewModel.setNickname("John"); // Replace "John" with the actual nickname
 
             BookScrabbleController controller = loader.getController();
-            controller.setViewModel(viewModel);
+            controller.setVm(viewModel);
+
 
             Scene scene = new Scene(root, 300, 200);
+//            scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
             stage.setTitle("BookScrabble");
             stage.setScene(scene);
             stage.show();

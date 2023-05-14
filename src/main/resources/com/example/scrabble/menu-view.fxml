@@ -11,7 +11,7 @@
     </padding>
 
     <Label fx:id="title" text="Main Menu" textAlignment="CENTER"/>
-    <Label fx:id="nickname" textAlignment="CENTER"/>
+    <Label fx:id="nickname" text="name" textAlignment="CENTER"/>
 
     <Button onAction="#onHostButtonClick" text="Host" textAlignment="CENTER"/>
     <Button onAction="#onJoinButtonClick" text="Join" textAlignment="CENTER"/>

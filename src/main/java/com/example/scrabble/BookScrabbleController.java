@@ -3,12 +3,11 @@ package com.example.scrabble;
 import com.example.scrabble.model.GuestModel;
 import com.example.scrabble.model.HostModel;
 import com.example.scrabble.model.Model;
-import com.example.scrabble.model.iModel;
 import com.example.scrabble.vm.GuestVM;
 import com.example.scrabble.vm.HostVM;
 import com.example.scrabble.vm.VM;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -16,39 +15,36 @@ import javafx.scene.control.TextField;
 
 import java.io.IOException;
 
-public class BookScrabbleController {
+public class BookScrabbleController implements Observable {
 
-    @FXML
-    public TextField nicknameField;
-    @FXML
-    private Label title;
-    @FXML
-    private VM viewModel;
-    @FXML
+
+    private VM vm;
+
     private SceneController sc;
 
     @FXML
     private Label nickname;
+    @FXML
+    public TextField nicknameField;
+    @FXML
+    private Label title;
 
     @FXML
     public void initialize() {
         Model model = new Model();
-        viewModel = new VM(model);
-        title.textProperty().bind(viewModel.nicknameProperty());
-        if (nickname!=null){
-                    nickname.textProperty().bind(viewModel.nicknameProperty());
-        }
+        vm = new VM(model);
         sc = new SceneController();
+//        bindViewModel();
     }
 
-    private void bindViewModel() {
-        title.textProperty().bind(viewModel.nicknameProperty());
-    }
+//    private void bindViewModel() {
+//        nickname.textProperty().bind(vm.nicknameProperty().get());
+//    }
 
     @FXML
     protected void onJoinButtonClick(ActionEvent event) throws IOException {
         sc.setScene(event, "join-view.fxml");
-        viewModel = new GuestVM(new GuestModel());
+        setVm(new GuestVM(new GuestModel()));
     }
 
     @FXML
@@ -59,8 +55,8 @@ public class BookScrabbleController {
     @FXML
     public void onHostButtonClick(ActionEvent event) throws IOException {
         sc.setScene(event, "host-view.fxml");
-        viewModel = new HostVM(new HostModel());
-        viewModel.serverStart();
+        vm = new HostVM(new HostModel());
+        vm.serverStart();
     }
 
     @FXML
@@ -91,19 +87,35 @@ public class BookScrabbleController {
     @FXML
     public void onNameSubmitButtonClick(ActionEvent event) throws IOException {
         String nickname = nicknameField.getText().trim();
-        if (!nickname.isEmpty()) {
-            viewModel.setNickname(nickname);
-            System.out.println("Nickname set to: " + viewModel.getNickname());
-        }
         onMenuButtonClick(event);
+        if (!nickname.isEmpty()) {
+            vm.setNickname(nickname);
+            System.out.println("Nickname set to: " + vm.getNickname());
+        }
     }
 
-    public void setViewModel(VM viewModel) {
-        this.viewModel = viewModel;
+    public void setVm(VM vm) {
+        this.vm = vm;
     }
 
     @FXML
     public void onExitButtonClick(ActionEvent event) {
         System.exit(0);
+    }
+
+    public void onGameJoinButtonClick(ActionEvent event) {
+    }
+
+    public void onRunTestsButtonClick(ActionEvent event) {
+    }
+
+    @Override
+    public void addListener(InvalidationListener invalidationListener) {
+
+    }
+
+    @Override
+    public void removeListener(InvalidationListener invalidationListener) {
+
     }
 }
