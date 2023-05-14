@@ -27,4 +27,9 @@ public class GuestVM implements iVM{
         model.setWelcomeMessage("Lama");
         welcomeMessage.set(model.getWelcomeMessage());
     }
+
+    @Override
+    public void onSettingButtonClick() {
+
+    }
 }

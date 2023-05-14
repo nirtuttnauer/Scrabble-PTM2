@@ -1,5 +1,9 @@
 package com.example.scrabble;
 
+import com.example.scrabble.model.StartModel;
+import com.example.scrabble.model.iModel;
+import com.example.scrabble.vm.StartVM;
+import com.example.scrabble.vm.iVM;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -10,11 +14,11 @@ public class BookScrabbleController {
     @FXML
     private Label welcomeText;
 
-    private HostVM viewModel;
+    private iVM viewModel;
 
     public void initialize() {
-        HostModel model = new HostModel();
-        viewModel = new HostVM(model);
+        iModel model = new StartModel();
+        viewModel = new StartVM(model);
         welcomeText.textProperty().bind(viewModel.welcomeMessageProperty());
     }
 
