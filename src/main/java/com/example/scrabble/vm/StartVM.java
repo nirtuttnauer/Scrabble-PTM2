@@ -1,14 +1,15 @@
 package com.example.scrabble.vm;
 
+import com.example.scrabble.model.HostModel;
+import com.example.scrabble.model.StartModel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import com.example.scrabble.model.HostModel;
 
-public class HostVM implements iVM{
-    private final HostModel model;
+public class StartVM implements iVM{
+    private final StartModel model;
     private final StringProperty welcomeMessage;
 
-    public HostVM(HostModel model) {
+    public StartVM(StartModel model) {
         this.model = model;
         welcomeMessage = new SimpleStringProperty();
     }

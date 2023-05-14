@@ -1,5 +1,6 @@
 package com.example.scrabble;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import com.example.scrabble.model.HostModel;
@@ -25,5 +26,9 @@ public class BookScrabbleController {
     @FXML
     protected void onJoinButtonClick() {
         viewModel.onJoinButtonClick();
+    }
+
+    public void onSettingButtonClick() {
+        viewModel.onSettingButtonClick();
     }
 }
