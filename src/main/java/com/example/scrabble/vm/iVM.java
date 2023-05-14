@@ -4,11 +4,8 @@ import com.example.scrabble.model.iModel;
 import javafx.beans.value.ObservableValue;
 
 public interface iVM {
-    ObservableValue<String> welcomeMessageProperty();
+    void setNickname(String String);
 
-    void onHelloButtonClick();
 
-    void onJoinButtonClick();
-
-    void onSettingButtonClick();
+    void serverStart();
 }

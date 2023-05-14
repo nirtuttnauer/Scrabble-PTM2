@@ -7,7 +7,7 @@
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
 
-    <Label fx:id="mainTitle" text="Settings" textAlignment="CENTER"/>
+    <Label fx:id="MainTitle" text="Settings" textAlignment="CENTER"/>
     <Button fx:id="nameChangeButton" text="change name" textAlignment="CENTER" onAction="#onChangeNameButtonClick"/>
     <Button fx:id="menuButton" text="menu" textAlignment="CENTER" onAction="#onMenuButtonClick"/>
 </VBox>

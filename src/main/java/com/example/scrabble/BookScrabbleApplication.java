@@ -1,5 +1,8 @@
 package com.example.scrabble;
 
+import com.example.scrabble.model.StartModel;
+import com.example.scrabble.vm.VM;
+import com.example.scrabble.vm.iVM;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,8 +14,16 @@ public class BookScrabbleApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("welcome-view.fxml"));
-            Scene scene = new Scene(root, 600, 400);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("welcome-view.fxml"));
+            Parent root = loader.load();
+
+            iVM viewModel = new VM(new StartModel());
+            viewModel.setNickname("John"); // Replace "John" with the actual nickname
+
+            BookScrabbleController controller = loader.getController();
+            controller.setViewModel(viewModel);
+
+            Scene scene = new Scene(root, 300, 200);
             stage.setTitle("BookScrabble");
             stage.setScene(scene);
             stage.show();

@@ -4,30 +4,21 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import com.example.scrabble.model.HostModel;
 
-public class HostVM implements iVM{
+public class HostVM extends VM{
     private final HostModel model;
     private final StringProperty welcomeMessage;
 
     public HostVM(HostModel model) {
+        super(model);
         this.model = model;
         welcomeMessage = new SimpleStringProperty();
     }
-
-    public StringProperty welcomeMessageProperty() {
-        return welcomeMessage;
+    @Override
+    public void setNickname(String String) {
+        model.setNickname(String);
     }
 
-    public void onHelloButtonClick() {
-        model.setWelcomeMessage("Lama Omer Kaha Kaved?!");
-        welcomeMessage.set(model.getWelcomeMessage());
-    }
-
-    public void onJoinButtonClick() {
-        model.setWelcomeMessage("Lama");
-        welcomeMessage.set(model.getWelcomeMessage());
-    }
-
-    public void onSettingButtonClick() {
-
+    public void serverStart() {
+        model.startServer();
     }
 }

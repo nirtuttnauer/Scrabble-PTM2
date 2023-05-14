@@ -13,4 +13,6 @@
     <Button onAction="#onHostButtonClick" text="Host" textAlignment="CENTER" />
     <Button onAction="#onJoinButtonClick" text="Join" textAlignment="CENTER" />
     <Button onAction="#onSettingButtonClick" text="Settings" textAlignment="CENTER" />
+    <Button onAction="#onExitButtonClick" text="Exit" textAlignment="CENTER" />
+
 </VBox>

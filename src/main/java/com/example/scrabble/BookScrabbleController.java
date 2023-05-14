@@ -6,7 +6,7 @@ import com.example.scrabble.model.StartModel;
 import com.example.scrabble.model.iModel;
 import com.example.scrabble.vm.GuestVM;
 import com.example.scrabble.vm.HostVM;
-import com.example.scrabble.vm.StartVM;
+import com.example.scrabble.vm.VM;
 import com.example.scrabble.vm.iVM;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,7 +30,8 @@ public class BookScrabbleController {
     @FXML
     public void initialize() {
         iModel model = new StartModel();
-        viewModel = new StartVM(model);
+        viewModel = new VM(model);
+        MainTitle.setText("BookScrabble");
     }
 
     @FXML
@@ -48,6 +49,7 @@ public class BookScrabbleController {
     public void onHostButtonClick(ActionEvent event) throws IOException {
         sc.setScene(event, "host-view.fxml");
         viewModel = new HostVM(new HostModel());
+        viewModel.serverStart();
     }
 
     @FXML
@@ -62,7 +64,9 @@ public class BookScrabbleController {
 
     @FXML
     public void onMenuButtonClick(ActionEvent event) throws IOException {
+
         sc.setScene(event, "menu-view.fxml");
+        MainTitle.setText("Welcome, " + nicknameString + "!");
     }
 
     @FXML
@@ -79,5 +83,14 @@ public class BookScrabbleController {
     public void onNameSubmitButtonClick(ActionEvent event) throws IOException {
         nicknameString = nickname.getText();
         onMenuButtonClick(event);
+        System.out.println(MainTitle.getText());
+    }
+
+    public void setViewModel(iVM viewModel) {
+        this.viewModel = viewModel;
+    }
+
+    public void onExitButtonClick(ActionEvent event) {
+        System.exit(0);
     }
 }
