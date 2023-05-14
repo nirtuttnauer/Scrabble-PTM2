@@ -22,10 +22,12 @@ public class BookScrabbleController {
     public TextField nickname;
     @FXML
     private Label MainTitle;
+    @FXML
     private iVM viewModel;
-
+    @FXML
     private SceneController sc = new SceneController();
 
+    @FXML
     public void initialize() {
         iModel model = new StartModel();
         viewModel = new StartVM(model);
@@ -73,6 +75,7 @@ public class BookScrabbleController {
         sc.setScene(event, "welcome-view.fxml");
     }
 
+    @FXML
     public void onNameSubmitButtonClick(ActionEvent event) throws IOException {
         nicknameString = nickname.getText();
         onMenuButtonClick(event);
