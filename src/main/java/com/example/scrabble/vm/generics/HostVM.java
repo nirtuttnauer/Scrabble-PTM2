@@ -1,4 +1,4 @@
-package com.example.scrabble.vm;
+package com.example.scrabble.vm.generics;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -9,7 +9,7 @@ public class HostVM extends VM{
     private final StringProperty welcomeMessage;
 
     public HostVM(HostModel model) {
-        super(model);
+
         this.model = model;
         welcomeMessage = new SimpleStringProperty();
     }
@@ -18,7 +18,10 @@ public class HostVM extends VM{
         model.setNickname(String);
     }
 
-    public void serverStart() {
+    public void startServer() {
         model.startServer();
+    }
+    public void closeServer() {
+        model.closeServer();
     }
 }

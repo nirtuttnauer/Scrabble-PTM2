@@ -10,8 +10,9 @@ import java.net.Socket;
 import java.util.Random;
 import java.util.Scanner;
 
-public class HostModel extends Model {
+public class HostModel extends Model implements IHostModel {
     MyServer server;
+    int port;
 
     public static void runClient(int port, String query, boolean result) {
         try {
@@ -31,19 +32,21 @@ public class HostModel extends Model {
         }
     }
 
+    @Override
+    public void closeServer() {
+        if (server != null)
+            server.close();
+        System.out.println("Server closed on port " + port);
+
+    }
+
+    @Override
     public void startServer() {
         Random r = new Random();
         int port = 6000 + r.nextInt(1000);
         MyServer server = new MyServer(port, new BookScrabbleHandler());
         server.start();
         System.out.println("Server started on port " + port);
-        closeServer();
-        System.out.println("Server closed on port " + port);
-    }
-
-    public void closeServer() {
-        if (server != null)
-            server.close();
     }
 
 }
