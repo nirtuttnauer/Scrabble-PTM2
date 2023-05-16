@@ -30,6 +30,6 @@ public class SettingsView extends View implements Observer, IView{
 
     @FXML
     public void onChangeNameButtonClick(ActionEvent event) throws IOException {
-         Main.setScene("welcome-view.fxml");
+         Main.setScene("WelcomeView");
     }
 }

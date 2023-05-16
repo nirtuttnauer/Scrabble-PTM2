@@ -7,8 +7,6 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 
 public class MyServer {
-
-
     private final int port;
     private final ClientHandler ch;
     private volatile boolean stop;
