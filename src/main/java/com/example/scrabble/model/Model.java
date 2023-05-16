@@ -1,19 +1,26 @@
 package com.example.scrabble.model;
 
-public class Model implements iModel {
-    String nickname;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
-    @Override
+import java.util.Observable;
+
+public class Model extends Observable implements iModel {
+    private StringProperty nickname;
+
+    public Model() {
+        nickname = new SimpleStringProperty();
+    }
+
     public void setNickname(String name) {
-        nickname = name;
+        nickname.set(name);
     }
 
-    @Override
     public String getNickname() {
-        return nickname;
+        return nickname.get();
     }
 
-    public void serverStart() {
-        System.out.println("serverStart() was not implemented for Model");
+    public StringProperty nicknameProperty() {
+        return nickname;
     }
 }
