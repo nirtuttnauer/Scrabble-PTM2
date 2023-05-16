@@ -17,6 +17,7 @@ public class BookScrabbleHandler implements ClientHandler {
 
     public BookScrabbleHandler() {
         this.dictionaryManager = DictionaryManager.get();
+
     }
 
     @Override

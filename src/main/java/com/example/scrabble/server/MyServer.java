@@ -64,5 +64,4 @@ public class MyServer {
         this.stop = stop;
     }
 
-
 }

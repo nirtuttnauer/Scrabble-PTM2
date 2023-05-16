@@ -18,7 +18,7 @@ public class Main extends Application {
         return window;
     }
 
-    private static void setWindow(Stage window) throws IOException {
+    static void setWindow(Stage window) throws IOException {
         Main.window = window;
         sceneFactory = new SceneFactory();
     }
