@@ -5,7 +5,8 @@ module com.example.scrabble {
 
     opens com.example.scrabble to javafx.fxml;
     exports com.example.scrabble;
-    exports com.example.scrabble.model;
-    opens com.example.scrabble.model to javafx.fxml;
-    opens com.example.scrabble.modelAviv to javafx.fxml;
+    exports com.example.scrabble.view;
+    opens com.example.scrabble.view to javafx.fxml;
+    exports com.example.scrabble.factories;
+    opens com.example.scrabble.factories to javafx.fxml;
 }

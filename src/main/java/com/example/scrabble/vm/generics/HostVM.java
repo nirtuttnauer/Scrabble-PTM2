@@ -1,16 +1,17 @@
-package com.example.scrabble.vm;
+package com.example.scrabble.vm.generics;
 
+import com.example.scrabble.model.ScrabbleFacade;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import com.example.scrabble.model.HostModel;
 
 public class HostVM extends VM{
-    private final HostModel model;
+    private final ScrabbleFacade model;
     private final StringProperty welcomeMessage;
 
-    public HostVM(HostModel model) {
-        super(model);
-        this.model = model;
+    public HostVM() {
+
+        this.model = new ScrabbleFacade();
         welcomeMessage = new SimpleStringProperty();
     }
     @Override
@@ -18,7 +19,10 @@ public class HostVM extends VM{
         model.setNickname(String);
     }
 
-    public void serverStart() {
+    public void startServer() {
         model.startServer();
+    }
+    public void closeServer() {
+        model.stopServer();
     }
 }
