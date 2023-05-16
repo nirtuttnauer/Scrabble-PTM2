@@ -1,7 +1,5 @@
 package com.example.scrabble.view;
 
-import com.example.scrabble.model.Model;
-import com.example.scrabble.vm.generics.VM;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 

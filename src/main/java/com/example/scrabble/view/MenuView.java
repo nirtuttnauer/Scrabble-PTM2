@@ -46,7 +46,7 @@ public class MenuView extends View implements Observer, IView {
     @FXML
     public void onHostButtonClick() throws IOException {
         Main.setScene("HostView");
-        View.setVm(new HostVM(new HostModel()));
+        View.setVm(new HostVM());
     }
 
 }

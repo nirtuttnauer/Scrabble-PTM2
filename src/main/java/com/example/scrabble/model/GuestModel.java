@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 import static com.example.scrabble.model.SocketUtil.finallyClose;
 
-public class GuestModel extends Model {
+public class GuestModel implements iModel {
     private String serverAddress;
     private int serverPort;
 

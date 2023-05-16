@@ -5,10 +5,10 @@ import javafx.beans.property.StringProperty;
 
 import java.util.Observable;
 
-public class Model extends Observable implements iModel {
+public class ModelData extends Observable implements iModel {
     private StringProperty nickname;
 
-    public Model() {
+    public ModelData() {
         nickname = new SimpleStringProperty();
     }
 

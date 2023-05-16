@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 import static com.example.scrabble.model.SocketUtil.finallyClose;
 
-public class HostModel extends Model {
+public class HostModel implements iModel {
     private MyServer server;
 
     public HostModel() {

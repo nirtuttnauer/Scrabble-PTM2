@@ -1,15 +1,15 @@
 package com.example.scrabble.vm.generics;
-import com.example.scrabble.model.Model;
+import com.example.scrabble.model.ScrabbleFacade;
 import javafx.beans.property.SimpleStringProperty;
 import java.util.Observable;
 import java.util.Observer;
 
 public class VM extends Observable implements Observer, IVM {
-    private final Model model;
+    private final ScrabbleFacade model;
     public SimpleStringProperty vm_nickname;
 
     public VM() {
-        this.model = new Model();
+        this.model = new ScrabbleFacade();
         vm_nickname = new SimpleStringProperty();
     }
 

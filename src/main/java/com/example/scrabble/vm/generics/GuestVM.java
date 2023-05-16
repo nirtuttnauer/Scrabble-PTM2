@@ -1,17 +1,18 @@
 package com.example.scrabble.vm.generics;
 
 import com.example.scrabble.model.GuestModel;
-import com.example.scrabble.model.Model;
+import com.example.scrabble.model.ModelData;
+import com.example.scrabble.model.ScrabbleFacade;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class GuestVM extends VM {
-    private final Model model;
+    private final ScrabbleFacade model;
     private final StringProperty welcomeMessage;
 
     public GuestVM(GuestModel model) {
 
-        this.model = new GuestModel();
+        this.model = new ScrabbleFacade();
         welcomeMessage = new SimpleStringProperty();
 
     }

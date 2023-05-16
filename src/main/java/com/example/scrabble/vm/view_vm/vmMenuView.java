@@ -1,6 +1,6 @@
 package com.example.scrabble.vm.view_vm;
 
-import com.example.scrabble.model.Model;
+import com.example.scrabble.model.ModelData;
 import com.example.scrabble.vm.generics.IVM;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -11,7 +11,7 @@ import java.util.Observer;
 public class vmMenuView extends vmView implements Observer, IVM {
 
     StringProperty nickname;
-    Model m;
+    ModelData m;
 
     public vmMenuView() {
         nickname = new SimpleStringProperty("Omer");
