@@ -22,6 +22,6 @@ public class HostVM extends VM{
         model.startServer();
     }
     public void closeServer() {
-        model.closeServer();
+        model.stopServer();
     }
 }

@@ -1,8 +1,6 @@
 package com.example.scrabble.view;
 
-import com.example.scrabble.App;
-import com.example.scrabble.model.GuestModel;
-import com.example.scrabble.vm.generics.GuestVM;
+import com.example.scrabble.Main;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
@@ -24,7 +22,7 @@ public class JoinView extends View implements Observer, IView{
     }
 
     public void onGameJoinButtonClick() throws IOException {
-         App.setScene("LobbyView");
+         Main.setScene("LobbyView");
     }
 
 

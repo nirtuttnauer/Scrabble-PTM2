@@ -1,6 +1,6 @@
 package com.example.scrabble.factories;
 
-import com.example.scrabble.App;
+import com.example.scrabble.Main;
 import com.example.scrabble.AppSettings;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -24,7 +24,7 @@ public class SceneFactory {
     }
 
     public static Scene createScene(String path) throws IOException {
-        FXMLLoader loader = new FXMLLoader(App.class.getResource(path));
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource(path));
         Scene scene = new Scene(loader.load(), AppSettings.getHEIGHT(), AppSettings.getWIDTH());
         return scene;
     }

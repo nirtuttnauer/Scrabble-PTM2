@@ -1,6 +1,6 @@
 package com.example.scrabble.vm.view_vm;
 
-import com.example.scrabble.App;
+import com.example.scrabble.Main;
 import com.example.scrabble.vm.generics.IVM;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -25,7 +25,7 @@ public class vmJoinView extends vmView implements Observer, IVM {
     }
 
     public void onGameJoinButtonClick() throws IOException {
-         App.setScene("lobby-view.fxml");
+         Main.setScene("lobby-view.fxml");
     }
 
 

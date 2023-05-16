@@ -1,6 +1,6 @@
 package com.example.scrabble.view;
 
-import com.example.scrabble.App;
+import com.example.scrabble.Main;
 import javafx.fxml.FXML;
 
 import java.io.IOException;
@@ -17,6 +17,6 @@ public class LobbyView extends View implements Observer, IView{
 
     @FXML
     public void onGameButtonClick() throws IOException {
-        App.setScene("GameView");
+        Main.setScene("GameView");
     }
 }

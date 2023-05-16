@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class App extends Application {
+public class Main extends Application {
     private static Stage stage;
     static SceneFactory sceneFactory;
 
@@ -19,7 +19,7 @@ public class App extends Application {
     }
 
     private static void setStage(Stage stage) throws IOException {
-        App.stage = stage;
+        Main.stage = stage;
         sceneFactory = new SceneFactory();
     }
 

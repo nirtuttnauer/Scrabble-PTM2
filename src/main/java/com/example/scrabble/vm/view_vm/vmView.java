@@ -1,6 +1,6 @@
 package com.example.scrabble.vm.view_vm;
 
-import com.example.scrabble.App;
+import com.example.scrabble.Main;
 import com.example.scrabble.vm.generics.VM;
 
 import java.io.IOException;
@@ -14,7 +14,7 @@ public abstract class vmView implements vmIView {
     }
 
     public void onMenuButtonClick() throws IOException {
-        App.setScene("menu-view.fxml");
+        Main.setScene("menu-view.fxml");
     }
 
     public void onExitButtonClick() throws IOException {

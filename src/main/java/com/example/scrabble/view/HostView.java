@@ -1,7 +1,6 @@
 package com.example.scrabble.view;
 
-import com.example.scrabble.App;
-import com.example.scrabble.model.HostModel;
+import com.example.scrabble.Main;
 import com.example.scrabble.vm.generics.HostVM;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,7 +29,7 @@ public class HostView extends View implements Observer, IView{
     public void onLobbyButtonClick() throws IOException {
         HostVM hvm = (HostVM) View.vm;
         hvm.startServer();
-        App.setScene("LobbyView");
+        Main.setScene("LobbyView");
     }
 
 }

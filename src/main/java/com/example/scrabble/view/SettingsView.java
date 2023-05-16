@@ -1,8 +1,6 @@
 package com.example.scrabble.view;
 
-import com.example.scrabble.App;
-import com.example.scrabble.model.Model;
-import com.example.scrabble.vm.generics.VM;
+import com.example.scrabble.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -32,6 +30,6 @@ public class SettingsView extends View implements Observer, IView{
 
     @FXML
     public void onChangeNameButtonClick(ActionEvent event) throws IOException {
-         App.setScene("welcome-view.fxml");
+         Main.setScene("welcome-view.fxml");
     }
 }

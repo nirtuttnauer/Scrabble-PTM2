@@ -1,8 +1,6 @@
 package com.example.scrabble.view;
 
-import com.example.scrabble.App;
-import com.example.scrabble.model.Model;
-import com.example.scrabble.vm.generics.IVM;
+import com.example.scrabble.Main;
 import com.example.scrabble.vm.generics.VM;
 
 import java.io.IOException;
@@ -17,7 +15,7 @@ public abstract class View implements IView {
 
     public void onMenuButtonClick() throws IOException {
         setVm(new VM());
-        App.setScene("MenuView");
+        Main.setScene("MenuView");
     }
 
     public void onExitButtonClick() throws IOException {

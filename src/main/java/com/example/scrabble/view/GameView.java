@@ -1,6 +1,6 @@
 package com.example.scrabble.view;
 
-import com.example.scrabble.App;
+import com.example.scrabble.Main;
 import com.example.scrabble.vm.generics.HostVM;
 import javafx.fxml.FXML;
 
@@ -17,7 +17,7 @@ public class GameView extends View implements Observer, IView{
 
     @FXML
     public void onFinishButtonClick() throws IOException {
-        App.setScene("LeaderboardView");
+        Main.setScene("LeaderboardView");
         HostVM hvm = (HostVM) View.vm;
         hvm.closeServer();
     }
