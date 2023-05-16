@@ -14,7 +14,7 @@ public class ScrabbleFacade extends Observable {
     }
 
     public void sendRequestToHost(String request) {
-        ((GuestModel) guestModel).sendRequestToHost(request);
+        guestModel.sendRequestToHost(request);
     }
 
     public String getNickname() {
@@ -26,11 +26,11 @@ public class ScrabbleFacade extends Observable {
     }
 
     public void startServer() {
-        ((HostModel) hostModel).startServer();
+         hostModel.startServer();
     }
 
     public void stopServer() {
-        ((HostModel) hostModel).stopServer();
+        hostModel.stopServer();
     }
 
     // Other methods for interacting with the models and performing operations

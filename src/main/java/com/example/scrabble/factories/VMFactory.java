@@ -21,6 +21,7 @@ public class VMFactory {
         map.put("HostView", new vmHostView());
         map.put("JoinView", new vmJoinView());
     }
+
     public HashMap<String, IVM> getVMMap() {
         return map;
     }
