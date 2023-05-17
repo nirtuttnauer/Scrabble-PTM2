@@ -1,6 +1,6 @@
 package com.Seals.scrabble.factories;
 
-import com.Seals.scrabble.vm.generics.IVM;
+import com.Seals.scrabble.vm.IVM;
 
 import java.util.HashMap;
 

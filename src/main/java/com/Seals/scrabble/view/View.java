@@ -1,7 +1,7 @@
 package com.Seals.scrabble.view;
 
 import com.Seals.scrabble.Main;
-import com.Seals.scrabble.vm.generics.VM;
+import com.Seals.scrabble.vm.VM;
 import javafx.fxml.Initializable;
 
 import java.io.IOException;

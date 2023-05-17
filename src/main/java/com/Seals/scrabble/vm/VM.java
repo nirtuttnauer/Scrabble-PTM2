@@ -1,4 +1,4 @@
-package com.Seals.scrabble.vm.generics;
+package com.Seals.scrabble.vm;
 
 import com.Seals.scrabble.model.HostModel;
 import com.Seals.scrabble.model.Model;

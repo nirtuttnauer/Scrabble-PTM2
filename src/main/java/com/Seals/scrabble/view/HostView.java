@@ -1,7 +1,7 @@
 package com.Seals.scrabble.view;
 
 import com.Seals.scrabble.Main;
-import com.Seals.scrabble.vm.generics.HostVM;
+import com.Seals.scrabble.vm.HostVM;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
