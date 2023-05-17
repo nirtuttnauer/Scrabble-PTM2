@@ -1,6 +1,6 @@
 package com.Seals.scrabble.factories;
 
-import com.Seals.scrabble.AppSettings;
+import com.Seals.scrabble.Settings;
 import com.Seals.scrabble.Main;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -25,7 +25,7 @@ public class SceneFactory {
 
     public static Scene createScene(String path) throws IOException {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource(path));
-        Scene scene = new Scene(loader.load(), AppSettings.getHEIGHT(), AppSettings.getWIDTH());
+        Scene scene = new Scene(loader.load(), Settings.getHEIGHT(), Settings.getWIDTH());
         return scene;
     }
     public HashMap<String, Scene> getSceneMap() {
