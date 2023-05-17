@@ -1,12 +1,9 @@
 package com.Seals.scrabble.view;
 
 import java.io.IOException;
-import java.util.Observer;
 
-public interface IView extends Observer {
+public interface IView {
+    void onMenuButtonClick() throws IOException;
 
-    public void onMenuButtonClick() throws IOException;
-
-    public void onExitButtonClick() throws IOException;
-
+    void onExitButtonClick() throws IOException;
 }

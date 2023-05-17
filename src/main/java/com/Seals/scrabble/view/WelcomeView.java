@@ -4,32 +4,28 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
-import java.util.Observable;
-import java.util.Observer;
 
-public class WelcomeView extends View implements Observer, IView {
+public class WelcomeView extends View implements IView {
     @FXML
     public TextField nicknameField;
 
-
-
-    @Override
-    public void update(Observable o, Object arg) {
-
+    public WelcomeView() {
+//        bindVM();
     }
 
-
-       @FXML
-    public void onNameSubmitButtonClick() throws IOException {
-        String nickname = nicknameField.getText().trim();
-        onMenuButtonClick();
-        if (!nickname.isEmpty()) {
-            View.vm.setNickname(nickname);
-            System.out.println("Nickname set to: " + View.vm.getNickname());
+    public void bindVM() {
+        if (vm != null) {
+            nicknameField.textProperty().bindBidirectional(vm.nicknameProperty());
+        } else {
+            System.out.println("vm is null");
         }
     }
 
-
-
-
+    @FXML
+    public void onNameSubmitButtonClick() throws IOException {
+        String nickname = nicknameField.getText().trim();
+        onMenuButtonClick();
+        vm.setNickname(nickname);
+        System.out.println("Nickname set to: " + vm.getNickname());
+    }
 }

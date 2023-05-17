@@ -16,7 +16,8 @@ public class HostModel extends Model {
     private MyServer gameServer;
     private GameManager gameManager;
 
-    public HostModel() {
+    public HostModel(iModel model) {
+        super(model);
         Random r = new Random();
         int port = 6000 + r.nextInt(1000);
         gameServer = new MyServer(port, new GameHandler());
@@ -77,7 +78,7 @@ public class HostModel extends Model {
 
     public void testDMServerConnection() {
         System.out.println("Testing DM server connection");
-        String response = sendRequestToServer("test");
+        String response = sendRequestToServer("test" + getNickname());
         System.out.println("Received response: " + response);
     }
 }

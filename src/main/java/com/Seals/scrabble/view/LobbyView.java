@@ -4,16 +4,8 @@ import com.Seals.scrabble.Main;
 import javafx.fxml.FXML;
 
 import java.io.IOException;
-import java.util.Observable;
-import java.util.Observer;
 
-public class LobbyView extends View implements Observer, IView{
-
-    @Override
-    public void update(Observable o, Object arg) {
-
-    }
-
+public class LobbyView extends View{
 
     @FXML
     public void onGameButtonClick() throws IOException {

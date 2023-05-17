@@ -6,35 +6,31 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 import java.io.IOException;
-import java.util.Observable;
-import java.util.Observer;
 
-public class HostView extends View implements Observer, IView{
-
-
-
-    @Override
-    public void update(Observable o, Object arg) {
-
-    }
+public class HostView extends View {
 
     @FXML
     public void onHostButtonClick(ActionEvent event) throws IOException {
-//        sc.setScene(event, "host-view.fxml");
-//        HostVM hvm = vm;
-//        hvm.startServer();
+        // Handle host button click event
     }
 
     @FXML
     public void onLobbyButtonClick() throws IOException {
-        HostVM hvm = (HostVM) View.vm;
-        hvm.startServer();
+        if (View.vm instanceof HostVM) {
+            HostVM hostVM = (HostVM) View.vm;
+            hostVM.startServer();
+        }
         Main.setScene("LobbyView");
     }
 
     public void onTestDMServerConnection(ActionEvent event) {
-        HostVM hvm = (HostVM) View.vm;
-        hvm.testDMServerConnection();
+        if (View.vm instanceof HostVM) {
+            HostVM hostVM = (HostVM) View.vm;
+            hostVM.testDMServerConnection();
+        }
+    }
 
+    public HostView() {
+        super();
     }
 }

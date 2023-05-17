@@ -1,31 +1,37 @@
 package com.Seals.scrabble.vm.generics;
 
 import com.Seals.scrabble.model.HostModel;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
-public class HostVM extends VM{
-    private final HostModel model;
-    private final StringProperty welcomeMessage;
-
+public class HostVM extends VM {
     public HostVM() {
-
-        this.model = new HostModel();
-        welcomeMessage = new SimpleStringProperty();
+        super();
+        super.toggleModel();
     }
+
+    public HostVM(VM vm) {
+        toggleModel();
+        this.vm_nickname = vm.vm_nickname;
+    }
+
     @Override
-    public void setNickname(String String) {
-        model.setNickname(String);
+    public void setNickname(String nickname) {
+        model.setNickname(nickname);
     }
 
     public void startServer() {
-        model.startServer();
+        ((HostModel) model).startServer();
     }
+
     public void closeServer() {
-        model.stopServer();
+        ((HostModel) model).stopServer();
     }
 
     public void testDMServerConnection() {
-        model.testDMServerConnection();
+        if (model instanceof HostModel) {
+            ((HostModel) model).testDMServerConnection();
+        } else {
+            toggleModel();
+            ((HostModel) model).testDMServerConnection();
+        }
     }
 }

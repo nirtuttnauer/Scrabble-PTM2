@@ -16,7 +16,11 @@ public class Model extends Observable implements iModel {
     private int serverPort;
 
     public Model() {
-        nickname = new SimpleStringProperty();
+        nickname = new SimpleStringProperty(); // Initialize the nickname StringProperty
+    }
+
+    public Model(iModel model) {
+        this.nickname = new SimpleStringProperty(model.getNickname()); // Initialize the nickname StringProperty with the provided model's nickname
     }
 
     public void setNickname(String name) {
@@ -48,7 +52,7 @@ public class Model extends Observable implements iModel {
 
             out.println(query);
             out.flush();
-            String response = in.next();
+            String response = in.nextLine(); // Use nextLine() instead of next() to read the complete response
             // Process the response from the host as needed
             System.out.println("Response from server: " + response);
         } catch (IOException e) {

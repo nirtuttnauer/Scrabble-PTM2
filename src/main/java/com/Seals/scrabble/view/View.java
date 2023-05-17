@@ -2,19 +2,20 @@ package com.Seals.scrabble.view;
 
 import com.Seals.scrabble.Main;
 import com.Seals.scrabble.vm.generics.VM;
+import javafx.fxml.Initializable;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public abstract class View implements IView {
-    protected static VM vm = new VM();
+public class View implements IView, Initializable {
+    protected static VM vm;
 
-    public static void setVm(VM vm) {
-        System.out.println(vm.toString());
-        View.vm = vm;
+    public View() {
+        if (vm == null) vm = new VM();
     }
 
     public void onMenuButtonClick() throws IOException {
-        setVm(new VM());
         Main.setScene("MenuView");
     }
 
@@ -22,5 +23,8 @@ public abstract class View implements IView {
         System.exit(0);
     }
 
-
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        // Initialization logic goes here
+    }
 }
