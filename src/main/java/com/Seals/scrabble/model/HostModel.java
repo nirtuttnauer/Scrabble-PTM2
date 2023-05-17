@@ -1,5 +1,6 @@
 package com.Seals.scrabble.model;
 
+import com.Seals.scrabble.Settings;
 import com.Seals.scrabble.model.hostSide.GameHandler;
 import com.Seals.scrabble.model.hostSide.manager.GameManager;
 import com.Seals.scrabble.model.socketUtil.MyServer;
@@ -32,16 +33,6 @@ public class HostModel extends Model {
         System.out.println("Server closed on port " + gameServer.getPort());
     }
 
-//    public void handleClientRequest(Socket client) throws IOException {
-//        try {
-//            gameServer.getCh().handleClient(client.getInputStream(), client.getOutputStream());
-//        } catch (IOException e) {
-//            System.out.println("Error handling client request: " + e.getMessage());
-//        } finally {
-//            SocketUtil.finallyClose(client, client.getOutputStream(),client.getInputStream());
-//        }
-//    }
-
     public String sendRequestToServer(String query) {
         Socket client = null;
         PrintWriter out = null;
@@ -49,13 +40,13 @@ public class HostModel extends Model {
         String response = "";
 
         try {
-            client = new Socket("localhost", gameServer.getPort());
+            client = new Socket("localhost", Settings.getDefaultPort());
             out = new PrintWriter(client.getOutputStream());
             in = new Scanner(client.getInputStream());
 
             out.println(query);
             out.flush();
-            response = in.next();
+            if (in.hasNext()) response = in.nextLine();
         } catch (IOException e) {
             System.out.println("Your code ran into an IOException: " + e.getMessage());
         } finally {
@@ -82,5 +73,11 @@ public class HostModel extends Model {
 
     public MyServer getGameServer() {
         return gameServer;
+    }
+
+    public void testDMServerConnection() {
+        System.out.println("Testing DM server connection");
+        String response = sendRequestToServer("test");
+        System.out.println("Received response: " + response);
     }
 }

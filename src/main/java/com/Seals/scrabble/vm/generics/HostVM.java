@@ -24,4 +24,8 @@ public class HostVM extends VM{
     public void closeServer() {
         model.stopServer();
     }
+
+    public void testDMServerConnection() {
+        model.testDMServerConnection();
+    }
 }

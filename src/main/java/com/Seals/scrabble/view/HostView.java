@@ -32,4 +32,9 @@ public class HostView extends View implements Observer, IView{
         Main.setScene("LobbyView");
     }
 
+    public void onTestDMServerConnection(ActionEvent event) {
+        HostVM hvm = (HostVM) View.vm;
+        hvm.testDMServerConnection();
+
+    }
 }

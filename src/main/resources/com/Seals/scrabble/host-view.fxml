@@ -12,6 +12,7 @@
 
 
     <Label fx:id="title" text="Host Game" textAlignment="CENTER"/>
-    <Button onAction="#onLobbyButtonClick" text="Start Lobby" textAlignment="CENTER" />
-        <Button fx:id="menuButton" text="menu" textAlignment="CENTER" onAction="#onMenuButtonClick"/>
-   </VBox>
+    <Button onAction="#onLobbyButtonClick" text="Start Lobby" textAlignment="CENTER"/>
+    <Button onAction="#onTestDMServerConnection" text="Test Server" textAlignment="CENTER"/>
+    <Button fx:id="menuButton" text="menu" textAlignment="CENTER" onAction="#onMenuButtonClick"/>
+</VBox>
