@@ -78,7 +78,7 @@ public class HostModel extends Model {
 
     public void testDMServerConnection() {
         System.out.println("Testing DM server connection");
-        String response = sendRequestToServer("test" + getNickname());
+        String response = sendRequestToServer("q,mobidick,the");
         System.out.println("Received response: " + response);
     }
 }

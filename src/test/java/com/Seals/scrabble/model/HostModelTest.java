@@ -23,7 +23,8 @@ class HostModelTest {
         int port = 6000 + r.nextInt(1000);
         server = new MyServer(port, new BookScrabbleHandler());
         serverPort = server.getPort();
-        hostModel = new HostModel();
+        //needs fixing: should be empty ctor
+        hostModel = new HostModel(new Model());
     }
 
     @AfterEach

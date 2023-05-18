@@ -5,7 +5,7 @@ import javafx.scene.control.TextField;
 
 import java.io.IOException;
 
-public class WelcomeView extends View implements IView {
+public class WelcomeView extends View {
     @FXML
     public TextField nicknameField;
 
