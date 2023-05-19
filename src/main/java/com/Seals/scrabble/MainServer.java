@@ -41,7 +41,7 @@ public class MainServer {
         System.out.println("Server closed on port: " + DMServer.getPort());
     }
 
-    public MyServer getServer() {
+    public static MyServer getServer() {
         return DMServer;
     }
 

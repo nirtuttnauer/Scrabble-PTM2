@@ -1,13 +1,15 @@
 package com.example.scrabble.model;
 
-import com.example.scrabble.server.MyServer;
-import com.example.scrabble.server.maintrains.MainTrain3;
+import com.Seals.scrabble.maintrains.MainTrain3;
+import com.Seals.scrabble.model.iModel;
+import com.Seals.scrabble.model.socketUtil.MyServer;
+
 
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Random;
 
-import static com.example.scrabble.server.maintrains.MainTrain3.client1;
+import static com.Seals.scrabble.maintrains.MainTrain3.client1;
 
 public class Client {
     private String name;
