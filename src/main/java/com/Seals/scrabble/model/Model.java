@@ -11,12 +11,15 @@ import java.util.Observable;
 import java.util.Scanner;
 
 public class Model extends Observable implements iModel {
-    private StringProperty nickname;
-    private String serverAddress;
+    private StringProperty nickname = new SimpleStringProperty();
+    private String serverAddress = "localhost";
     private int serverPort;
 
     public Model() {
-        nickname = new SimpleStringProperty();
+    }
+
+    public Model(iModel model) {
+        this.nickname = model.nicknameProperty();
     }
 
     public void setNickname(String name) {
@@ -48,7 +51,7 @@ public class Model extends Observable implements iModel {
 
             out.println(query);
             out.flush();
-            String response = in.next();
+            String response = in.nextLine(); // Use nextLine() instead of next() to read the complete response
             // Process the response from the host as needed
             System.out.println("Response from server: " + response);
         } catch (IOException e) {
@@ -58,4 +61,6 @@ public class Model extends Observable implements iModel {
             SocketUtil.finallyClose(client, out, in);
         }
     }
+
+    // Rest of the Model code...
 }

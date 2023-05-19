@@ -4,3 +4,4 @@ Jira: <img width="852" alt="Screenshot 2023-05-01 at 16 59 22" src="https://user
 <br/>
 Figma: https://www.figma.com/community/file/1234863428671713218
 
+![Current UML Diagram.png](Current%20UML%20Diagram.png)

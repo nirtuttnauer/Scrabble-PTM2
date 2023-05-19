@@ -235,7 +235,7 @@ public class Board {
         return SingleBoard.Places[7][7].tile != null;
     }
 
-    private boolean dictionaryLegal(Word word) {
+    public boolean dictionaryLegal(Word word) {
         return true;
     }
 

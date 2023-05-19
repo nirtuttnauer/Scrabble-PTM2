@@ -1,4 +1,33 @@
-.my-button {
-    -fx-font-size: 16px;
-    -fx-padding: 10px;
+/* styles.css */
+
+.root {
+    -fx-background-color: #f4f4f4;
 }
+
+.label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.button {
+    -fx-font-size: 14px;
+    -fx-padding: 8px 16px;
+}
+
+.button:hover {
+    -fx-background-color: #e0e0e0;
+}
+
+.button:pressed {
+    -fx-background-color: #c0c0c0;
+}
+
+.button:focused {
+    -fx-background-color: #c0c0c0;
+}
+
+.button:default {
+    -fx-background-color: #007bff;
+    -fx-text-fill: white;
+}
+
