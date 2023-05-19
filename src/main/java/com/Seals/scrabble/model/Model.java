@@ -11,16 +11,15 @@ import java.util.Observable;
 import java.util.Scanner;
 
 public class Model extends Observable implements iModel {
-    private StringProperty nickname;
-    private String serverAddress;
+    private StringProperty nickname = new SimpleStringProperty();
+    private String serverAddress = "localhost";
     private int serverPort;
 
     public Model() {
-        nickname = new SimpleStringProperty(); // Initialize the nickname StringProperty
     }
 
     public Model(iModel model) {
-        this.nickname = new SimpleStringProperty(model.getNickname()); // Initialize the nickname StringProperty with the provided model's nickname
+        this.nickname = model.nicknameProperty();
     }
 
     public void setNickname(String name) {
@@ -62,4 +61,6 @@ public class Model extends Observable implements iModel {
             SocketUtil.finallyClose(client, out, in);
         }
     }
+
+    // Rest of the Model code...
 }

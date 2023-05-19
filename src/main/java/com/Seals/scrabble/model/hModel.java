@@ -2,7 +2,8 @@ package com.Seals.scrabble.model;
 
 import com.Seals.scrabble.Settings;
 import com.Seals.scrabble.model.hostSide.GameHandler;
-import com.Seals.scrabble.model.hostSide.manager.GameManager;
+import com.Seals.scrabble.model.hostSide.game.GameManager;
+import com.Seals.scrabble.model.hostSide.game.Player;
 import com.Seals.scrabble.model.socketUtil.MyServer;
 import com.Seals.scrabble.model.socketUtil.SocketUtil;
 
@@ -12,16 +13,19 @@ import java.net.Socket;
 import java.util.Random;
 import java.util.Scanner;
 
-public class HostModel extends Model {
+public class hModel extends Model {
     private MyServer gameServer;
     private GameManager gameManager;
+    private Player currentPlayer;
 
-    public HostModel(iModel model) {
+    public hModel(iModel model) {
         super(model);
+        System.out.println("HostModel constructor called");
         Random r = new Random();
         int port = 6000 + r.nextInt(1000);
         gameServer = new MyServer(port, new GameHandler());
         gameManager = new GameManager();
+        currentPlayer = null;
     }
 
     public void startServer() {
@@ -53,7 +57,6 @@ public class HostModel extends Model {
         } finally {
             SocketUtil.finallyClose(client, out, in);
         }
-
         return response;
     }
 
@@ -67,9 +70,11 @@ public class HostModel extends Model {
         System.out.println("Game ended");
     }
 
-    public void performGameAction(String action) {
-        gameManager.performAction(action);
-        System.out.println("Performed game action: " + action);
+    public void performGameAction(String action, int playerId) {
+        currentPlayer = gameManager.getPlayer(playerId);
+        gameManager.performAction(action, currentPlayer.getId());
+
+        System.out.println("Player " + playerId + " performed game action: " + action);
     }
 
     public MyServer getGameServer() {
@@ -78,7 +83,20 @@ public class HostModel extends Model {
 
     public void testDMServerConnection() {
         System.out.println("Testing DM server connection");
-        String response = sendRequestToServer("q,mobidick,the");
-        System.out.println("Received response: " + response);
+      sendRequestToServer("q,mobidick," + getNickname());
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    @Override
+    public String getNickname() {
+        // Implement the getNickname method
+        return null;
     }
 }

@@ -4,18 +4,17 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" prefHeight="280.0" prefWidth="345.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Seals.scrabble.view.WelcomeView">
+<VBox alignment="CENTER" prefHeight="280.0" prefWidth="345.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Seals.scrabble.controller.LoginController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
 
     <Label text="BookScrabble" textAlignment="CENTER" />
-    <Label layoutX="144.0" layoutY="74.0" text="Login" textAlignment="CENTER" />
+    <Label text="Login" textAlignment="CENTER" />
     <HBox alignment="CENTER">
-        <TextField fx:id="nicknameField" promptText="Enter your name" />
-        <Button onAction="#onNameSubmitButtonClick" text="submit" textAlignment="CENTER" />
+        <TextField fx:id="nameField" promptText="Enter your name" />
+        <Button fx:id="submitButton" onAction="#onSubmitButtonClick" text="Submit" textAlignment="CENTER" />
     </HBox>
     <Button onAction="#onExitButtonClick" styleClass="my-button" text="Exit" textAlignment="CENTER" />
     <Button onAction="#onMenuButtonClick" text="(Skip)" textAlignment="CENTER" />
-
 </VBox>

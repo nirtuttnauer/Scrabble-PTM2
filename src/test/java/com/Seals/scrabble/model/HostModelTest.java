@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class HostModelTest {
 
-    private HostModel hostModel;
+    private hModel hostModel;
     private MyServer server;
     private int serverPort;
     private Thread serverThread;
@@ -24,7 +24,7 @@ class HostModelTest {
         server = new MyServer(port, new BookScrabbleHandler());
         serverPort = server.getPort();
         //needs fixing: should be empty ctor
-        hostModel = new HostModel(new Model());
+        hostModel = new hModel(new Model());
     }
 
     @AfterEach

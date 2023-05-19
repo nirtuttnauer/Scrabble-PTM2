@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class GameHandler implements ClientHandler {
+
     @Override
     public void handleClient(InputStream inFromClient, OutputStream outToClient) {
         Scanner scanner = new Scanner(inFromClient);
