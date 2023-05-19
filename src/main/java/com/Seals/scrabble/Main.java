@@ -8,7 +8,7 @@ import static com.Seals.scrabble.factories.SceneFactory.setScene;
 
 public class Main extends Application {
     private static Stage window;
-    private static SceneFactory sceneFactory = new SceneFactory();
+    private static final SceneFactory sceneFactory = new SceneFactory();
 
     public static SceneFactory getSceneFactory() {
         return sceneFactory;

@@ -1,6 +1,7 @@
-package com.Seals.scrabble.model.serverSide.manager;
+package com.Seals.scrabble.model.serverSide.handler;
 
 
+import com.Seals.scrabble.model.serverSide.manager.DictionaryManager;
 import com.Seals.scrabble.model.socketUtil.ClientHandler;
 
 import java.io.InputStream;

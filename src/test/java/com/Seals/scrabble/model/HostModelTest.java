@@ -1,6 +1,6 @@
 package com.Seals.scrabble.model;
 
-import com.Seals.scrabble.model.serverSide.manager.BookScrabbleHandler;
+import com.Seals.scrabble.model.serverSide.handler.BookScrabbleHandler;
 import com.Seals.scrabble.model.socketUtil.MyServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

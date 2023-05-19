@@ -4,7 +4,7 @@ public class Settings {
         private static int WIDTH = 720;
         private static int HEIGHT = 720;
 
-        private static int defaultPort = 5555;
+        private static final int defaultPort = 5555;
 
         public static int getWIDTH() {
             return WIDTH;

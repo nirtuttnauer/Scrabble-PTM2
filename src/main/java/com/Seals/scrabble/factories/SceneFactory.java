@@ -14,8 +14,8 @@ import java.util.HashMap;
 import static com.Seals.scrabble.Main.getWindow;
 
 public class SceneFactory {
-    private static HashMap<String, String> viewPaths = new HashMap<>();
-    private static HashMap<String, iController> controllers = new HashMap<>();
+    private static final HashMap<String, String> viewPaths = new HashMap<>();
+    private static final HashMap<String, iController> controllers = new HashMap<>();
 
     public SceneFactory() {
         viewPaths.put("LoginView", "login-view.fxml");
@@ -24,6 +24,7 @@ public class SceneFactory {
         viewPaths.put("LeaderboardView", "leaderboard-view.fxml");
         viewPaths.put("SettingsView", "settings-view.fxml");
         viewPaths.put("LobbyView", "lobby-view.fxml");
+        viewPaths.put("HostView", "host-view.fxml");
     }
 
     public static void setScene(String viewName) {

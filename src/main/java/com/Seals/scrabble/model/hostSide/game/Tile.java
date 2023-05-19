@@ -33,7 +33,7 @@ public class Tile {
     }
 
     int getPoints(char L) {
-        int index = (int) (L - 'A');
+        int index = L - 'A';
         return Values[index];
     }
 

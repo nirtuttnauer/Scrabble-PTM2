@@ -21,7 +21,7 @@ public class MainTrain3 {
 			out=new PrintWriter(outToClient);
 			in=new Scanner(inFromclient);
 			String text = in.next();
-			out.println(new StringBuilder(text).reverse().toString());
+			out.println(new StringBuilder(text).reverse());
 			out.flush();
 		}
 
@@ -37,7 +37,7 @@ public class MainTrain3 {
 	public static void client1(int port) throws Exception{
 		Socket server=new Socket("localhost", port);		
 		Random r=new Random();
-		String text = ""+(1000+r.nextInt(100000));
+		String text = String.valueOf(1000 + r.nextInt(100000));
 		String rev=new StringBuilder(text).reverse().toString();
 		PrintWriter outToServer=new PrintWriter(server.getOutputStream());
 		Scanner in=new Scanner(server.getInputStream());
@@ -79,9 +79,9 @@ public class MainTrain3 {
 
 	public static String[] writeFile(String name) {
 		Random r=new Random();
-		String txt[]=new String[10];
+		String[] txt =new String[10];
 		for(int i=0;i<txt.length;i++) 
-			txt[i]=""+(10000+r.nextInt(10000));
+			txt[i]= String.valueOf(10000 + r.nextInt(10000));
 		
 		try {
 			PrintWriter out=new PrintWriter(new FileWriter(name));
@@ -96,9 +96,9 @@ public class MainTrain3 {
 	}
 	
 	public static void testDM() {
-		String t1[]=writeFile("t1.txt");
-		String t2[]=writeFile("t2.txt");
-		String t3[]=writeFile("t3.txt");
+		String[] t1 =writeFile("t1.txt");
+		String[] t2 =writeFile("t2.txt");
+		String[] t3 =writeFile("t3.txt");
 		
 		DictionaryManager dm=DictionaryManager.get();
 		

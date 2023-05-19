@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Board {
     private static Board SingleBoard;
     private final Place[][] Places = new Place[15][15];
-    private ArrayList<Word> PlacedWords = new ArrayList<>();
+    private final ArrayList<Word> PlacedWords = new ArrayList<>();
 
 
     //ctor

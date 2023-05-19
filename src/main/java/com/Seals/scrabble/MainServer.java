@@ -1,6 +1,6 @@
 package com.Seals.scrabble;
 
-import com.Seals.scrabble.model.serverSide.manager.BookScrabbleHandler;
+import com.Seals.scrabble.model.serverSide.handler.BookScrabbleHandler;
 import com.Seals.scrabble.model.socketUtil.MyServer;
 
 import java.io.InputStream;

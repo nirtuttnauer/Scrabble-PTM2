@@ -8,6 +8,8 @@ import javafx.scene.control.Label;
 
 import java.io.IOException;
 
+import static com.Seals.scrabble.factories.SceneFactory.setScene;
+
 public class MenuController implements iController{
     private ViewModel viewModel;
 
@@ -52,6 +54,7 @@ public class MenuController implements iController{
     }
 
     public void onHostButtonClick(ActionEvent event) {
+        setScene("HostView");
     }
 
         @Override

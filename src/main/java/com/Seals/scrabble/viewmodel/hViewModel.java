@@ -4,12 +4,12 @@ import com.Seals.scrabble.model.hModel;
 import javafx.beans.property.SimpleStringProperty;
 
 public class hViewModel extends ViewModel {
-    public hViewModel() {
+    public hViewModel(iViewModel vm) {
         super();
         toggleModel();
     }
 
-    public hViewModel(iViewModel vm) {
+    public hViewModel(ViewModel vm) {
         super();
         toggleModel();
         if (vm != null) {

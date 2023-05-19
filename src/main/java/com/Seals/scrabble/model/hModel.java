@@ -14,8 +14,8 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class hModel extends Model {
-    private MyServer gameServer;
-    private GameManager gameManager;
+    private final MyServer gameServer;
+    private final GameManager gameManager;
     private Player currentPlayer;
 
     public hModel(iModel model) {

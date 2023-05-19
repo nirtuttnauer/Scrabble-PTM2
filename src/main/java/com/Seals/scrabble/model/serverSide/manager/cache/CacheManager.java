@@ -15,10 +15,7 @@ public class CacheManager {
     }
 
     public boolean query(String word) {
-        if (cache.contains(word)) {
-            return true;
-        }
-        return false;
+        return cache.contains(word);
     }
 
     public void add(String word) {

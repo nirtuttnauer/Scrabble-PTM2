@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Player {
     private static int nextId = 1;
-    private int id;
+    private final int id;
     private List<Tile> tiles;
 
     public Player() {

@@ -38,9 +38,9 @@ public class ViewModel extends Observable implements Observer, iViewModel {
 
     public void toggleModel() {
         if (!(model instanceof hModel)) {
-            this.model = new hModel((Model) model);
+            this.model = new hModel(model);
         } else {
-            this.model = new Model((hModel) model);
+            this.model = new Model(model);
         }
     }
 
@@ -89,6 +89,6 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         if (!(model instanceof Model)) {
             toggleModel();
         }
-        ((Model) model).setGuestModel(serverAddress, serverPort);
+        model.setGuestModel(serverAddress, serverPort);
     }
 }
