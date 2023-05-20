@@ -10,13 +10,13 @@ import javafx.scene.control.TextField;
 import java.io.IOException;
 
 public class LoginController implements iController {
-    private ViewModel viewModel;
+    ViewModel viewModel;
 
     @FXML
-    private TextField nameField;
+    TextField nameField;
 
     @FXML
-    private Button submitButton;
+    Button submitButton;
 
     public void setViewModel(ViewModel viewModel) {
         this.viewModel = viewModel;
