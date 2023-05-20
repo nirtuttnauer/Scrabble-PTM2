@@ -1,0 +1,6 @@
+dependencies {
+    // Other dependencies
+    implementation 'org.openjfx:javafx-controls:19.0.2'
+    implementation 'org.openjfx:javafx-fxml:19.0.2'
+    // More JavaFX dependencies
+}

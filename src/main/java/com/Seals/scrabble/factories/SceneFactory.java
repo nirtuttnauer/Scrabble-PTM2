@@ -63,6 +63,10 @@ public class SceneFactory {
         }
     }
 
+    public static HashMap<String, iController> getControllers() {
+        return controllers;
+    }
+
     public <T> T getController(String viewName) {
         return (T) controllers.get(viewName);
     }

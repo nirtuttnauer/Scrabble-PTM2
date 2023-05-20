@@ -2,13 +2,12 @@ package com.Seals.scrabble;
 
 import com.Seals.scrabble.factories.SceneFactory;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
-
-import static com.Seals.scrabble.factories.SceneFactory.setScene;
 
 public class Main extends Application {
     private static Stage window;
-    private static SceneFactory sceneFactory = new SceneFactory();
+    private static SceneFactory sceneFactory;
 
     public static SceneFactory getSceneFactory() {
         return sceneFactory;
@@ -24,7 +23,10 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        window = primaryStage;
-        setScene("LoginView");
+        Platform.runLater(() -> {
+            window = primaryStage;
+            sceneFactory = new SceneFactory();
+            sceneFactory.setScene("LoginView");
+        });
     }
 }

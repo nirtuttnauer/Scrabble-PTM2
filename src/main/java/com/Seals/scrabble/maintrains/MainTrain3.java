@@ -17,9 +17,9 @@ public class MainTrain3 {
 		PrintWriter out;
 		Scanner in;		
 		@Override
-		public void handleClient(InputStream inFromclient, OutputStream outToClient) {
+		public void handleClient(InputStream inFromClient, OutputStream outToClient) {
 			out=new PrintWriter(outToClient);
-			in=new Scanner(inFromclient);
+			in=new Scanner(inFromClient);
 			String text = in.next();
 			out.println(new StringBuilder(text).reverse().toString());
 			out.flush();
