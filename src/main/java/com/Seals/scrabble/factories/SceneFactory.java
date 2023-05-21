@@ -38,7 +38,7 @@ public class SceneFactory {
                 FXMLLoader loader = new FXMLLoader(Main.class.getResource(viewPath));
                 Scene scene = new Scene(loader.load(), Settings.getWIDTH(), Settings.getHEIGHT());
                 iController controller = loader.getController();
-
+                scene.getStylesheets().add("com/Seals/scrabble/css/style.css");
                 // Store the controller for later use
                 controllers.put(viewName, controller);
 
@@ -50,7 +50,8 @@ public class SceneFactory {
                 } else if (controller instanceof MenuController) {
                     MenuController menuController = (MenuController) controller;
                     menuController.setViewModel(ViewModelFactory.getVM());
-                }
+                }//task add more controllers here;
+
 
 
                 // Set the scene and show the window

@@ -236,6 +236,7 @@ public class Board {
     }
 
     public boolean dictionaryLegal(Word word) {
+        //needs to be written again!
         return true;
     }
 

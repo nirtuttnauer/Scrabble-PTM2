@@ -17,7 +17,6 @@ public class Main extends Application {
     public static Stage getWindow() {
         return window;
     }
-
     public static void main(String[] args) {
         launch(args);
     }

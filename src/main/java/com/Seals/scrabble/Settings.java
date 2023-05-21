@@ -4,7 +4,8 @@ public class Settings {
         private static int WIDTH = 720;
         private static int HEIGHT = 720;
 
-        private static final int defaultPort = 5555;
+        private static final int defaultDMServerPort = 5555;
+        private static final int defaultHostPort = 6000;
 
         public static int getWIDTH() {
             return WIDTH;
@@ -22,8 +23,8 @@ public class Settings {
             Settings.HEIGHT = HEIGHT;
         }
 
-    public static int getDefaultPort() {
-        return defaultPort;
+    public static int getDefaultDMServerPort() {
+        return defaultDMServerPort;
     }
 
 

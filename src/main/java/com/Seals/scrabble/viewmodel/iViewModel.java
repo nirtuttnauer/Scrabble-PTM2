@@ -1,5 +1,6 @@
 package com.Seals.scrabble.viewmodel;
 
+import com.Seals.scrabble.model.facades.iModelFacade;
 import javafx.beans.value.ObservableValue;
 
 import java.util.Observer;
@@ -18,4 +19,6 @@ public interface iViewModel extends Observer {
     void addObserver(java.util.Observer observer);
 
     void deleteObserver(java.util.Observer observer);
+
+    iModelFacade getModelFacade();
 }

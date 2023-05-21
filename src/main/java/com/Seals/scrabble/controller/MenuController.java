@@ -3,14 +3,17 @@ package com.Seals.scrabble.controller;
 import com.Seals.scrabble.viewmodel.ViewModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 import static com.Seals.scrabble.factories.SceneFactory.setScene;
 
-public class MenuController implements iController{
+public class MenuController implements iController, Initializable {
     private ViewModel viewModel;
 
     @FXML
@@ -68,4 +71,8 @@ public class MenuController implements iController{
         }
 
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+    }
 }

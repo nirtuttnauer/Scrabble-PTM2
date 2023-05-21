@@ -31,7 +31,7 @@ public class MainServer {
     }
 
     public void startServer() {
-        DMServer = new MyServer(Settings.getDefaultPort(), new CustomBookScrabbleHandler());
+        DMServer = new MyServer(Settings.getDefaultDMServerPort(), new CustomBookScrabbleHandler());
         DMServer.start();
         System.out.println("Server started on port: " + DMServer.getPort());
     }

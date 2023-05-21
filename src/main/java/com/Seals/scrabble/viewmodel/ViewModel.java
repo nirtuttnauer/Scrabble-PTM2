@@ -1,94 +1,79 @@
 package com.Seals.scrabble.viewmodel;
 
-import com.Seals.scrabble.model.Model;
-import com.Seals.scrabble.model.hModel;
-import com.Seals.scrabble.model.iModel;
+import com.Seals.scrabble.model.facades.ModelFacade;
+import com.Seals.scrabble.model.facades.hModelFacade;
+import com.Seals.scrabble.model.facades.iModelFacade;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import java.util.Observable;
 import java.util.Observer;
 
-public class ViewModel extends Observable implements Observer, iViewModel {
-    private static iViewModel sharedInstance;
-    protected iModel model;
-    StringProperty vm_nickname;
+public class ViewModel implements iViewModel, Observer {
+    private iModelFacade modelFacade;
+    StringProperty nickname;
 
-    public ViewModel() {
-        sharedInstance = this;
-        this.model = new Model();
-        vm_nickname = new SimpleStringProperty();
-    }
-
-    public static iViewModel getSharedInstance() {
-        return sharedInstance;
-    }
-
-    public static void setSharedInstance(iViewModel instance) {
-        System.out.println("Setting shared instance");
-        System.out.println(instance);
-        sharedInstance = instance;
-    }
-
-    public ViewModel(hViewModel hostVM) {
-        sharedInstance = this;
-        toggleModel();
-        this.setNickname(hostVM.getNickname());
-    }
-
-    public void toggleModel() {
-        if (!(model instanceof hModel)) {
-            this.model = new hModel(model);
-        } else {
-            this.model = new Model(model);
-        }
-    }
-
-    public void setNickname(String nickname) {
-        this.vm_nickname.set(nickname);
-        model.setNickname(nickname);
-        setChanged();
-        notifyObservers();
-    }
-
-    public String getNickname() {
-        return model.getNickname();
+    public ViewModel(iModelFacade modelFacade) {
+        this.modelFacade = modelFacade;
+        this.nickname = new SimpleStringProperty();
+        modelFacade.addObserver(this);
     }
 
     public StringProperty nicknameProperty() {
-        return vm_nickname;
+        return nickname;
+    }
+
+    @Override
+    public void setGuestModel(String nickname, int port) {
+        modelFacade.setNickname(nickname);
+        // Set up the guest model with the provided nickname and port
+    }
+
+    public void setNickname(String nickname) {
+        modelFacade.setNickname(nickname);
+    }
+
+    @Override
+    public void testDMServerConnection() {
+        if (modelFacade instanceof hModelFacade) {
+            hModelFacade hModelFacade = (hModelFacade) modelFacade;
+            hModelFacade.testDMServerConnection();
+        } else {
+            // Handle non-host model behavior
+        }
+    }
+
+    public String getNickname() {
+        return modelFacade.getNickname();
+    }
+
+    @Override
+    public void addObserver(Observer observer) {
+
+    }
+
+    @Override
+    public void deleteObserver(Observer observer) {
+
     }
 
     @Override
     public void update(Observable o, Object arg) {
-        if (o == model) {
-            vm_nickname.set(model.getNickname());
+        // Update the ViewModel based on changes in the modelFacade
+        if (o == modelFacade) {
+            nickname.set(modelFacade.getNickname());
         }
     }
 
-    // Additional methods and functionality specific to VM
-
-    public void testDMServerConnection() {
-        System.out.println("Testing DM server connection");
-
-        // Ensure the appropriate casting is performed
-        if (model instanceof hModel) {
-            hModel hModel = (hModel) model;
-            String response = hModel.sendRequestToServer(this.getNickname());
-            System.out.println("Received response: " + response);
+    void toggleModel() {
+        if (modelFacade instanceof hModelFacade) {
+            modelFacade = new ModelFacade();
         } else {
-            System.out.println("The model is not an instance of hModel");
+            modelFacade = new hModelFacade(modelFacade);
         }
     }
 
-    public StringProperty getVm_nickname() {
-        return vm_nickname;
-    }
-
-    public void setGuestModel(String serverAddress, int serverPort) {
-        if (!(model instanceof Model)) {
-            toggleModel();
-        }
-        model.setGuestModel(serverAddress, serverPort);
+    public iModelFacade getModelFacade() {
+        return modelFacade;
     }
 }

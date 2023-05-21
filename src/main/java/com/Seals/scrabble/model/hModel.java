@@ -45,7 +45,7 @@ public class hModel extends Model {
         String response = "";
 
         try {
-            client = new Socket("localhost", Settings.getDefaultPort());
+            client = new Socket("localhost", Settings.getDefaultDMServerPort());
             out = new PrintWriter(client.getOutputStream());
             in = new Scanner(client.getInputStream());
 

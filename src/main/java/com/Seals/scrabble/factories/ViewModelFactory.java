@@ -1,13 +1,14 @@
 package com.Seals.scrabble.factories;
 
+import com.Seals.scrabble.model.facades.ModelFacade;
 import com.Seals.scrabble.viewmodel.ViewModel;
 
 public class ViewModelFactory {
-    public static ViewModel SingleViewModel;
+    private static ViewModel SingleViewModel;
 
     public static ViewModel getVM() {
         if (SingleViewModel == null) {
-            SingleViewModel = new ViewModel();
+            SingleViewModel = new ViewModel(new ModelFacade());
         }
         return SingleViewModel;
     }

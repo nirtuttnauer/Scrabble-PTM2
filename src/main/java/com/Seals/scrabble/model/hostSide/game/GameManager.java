@@ -5,8 +5,8 @@ import java.util.List;
 
 public class GameManager {
     private Board gameBoard;
-    private final Tile.Bag tileBag;
-    private final List<Player> players;
+    private Tile.Bag tileBag;
+    private List<Player> players;
 
     public GameManager() {
         this.gameBoard = Board.getBoard();
