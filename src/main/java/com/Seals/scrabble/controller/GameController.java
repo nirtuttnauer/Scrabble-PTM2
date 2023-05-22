@@ -6,7 +6,7 @@ import javafx.fxml.Initializable;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class GameController extends MainController implements Initializable {
+public class GameController  implements Initializable {
     // Add your game-related logic and event handlers here
 
     @Override
@@ -14,10 +14,7 @@ public class GameController extends MainController implements Initializable {
         // Initialize the game view
     }
 
-    @Override
-    public void onSwitchButtonClick(ActionEvent event) {
 
-    }
 
     public void onFinishButtonClick(ActionEvent event) {
     }

@@ -7,8 +7,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 import java.io.IOException;
+import java.util.Observable;
+import java.util.Observer;
 
-public class MenuController implements iController{
+public class MenuController extends Observable implements iController, Observer {
     private ViewModel viewModel;
 
     @FXML
@@ -18,16 +20,16 @@ public class MenuController implements iController{
     private Label nickname;
 
     @FXML
-    private Button hostButton;
+    private Button hostBtn;
 
     @FXML
-    private Button joinButton;
+    private Button joinBtn;
 
     @FXML
-    private Button settingsButton;
+    private Button settingsBtn;
 
     @FXML
-    private Button exitButton;
+    private Button exitBtn;
 
     public void setViewModel(ViewModel viewModel) {
         this.viewModel = viewModel;
@@ -52,6 +54,8 @@ public class MenuController implements iController{
     }
 
     public void onHostButtonClick(ActionEvent event) {
+        setChanged();
+        notifyObservers();
     }
 
         @Override
@@ -65,4 +69,8 @@ public class MenuController implements iController{
         }
 
 
+    @Override
+    public void update(Observable o, Object arg) {
+
+    }
 }

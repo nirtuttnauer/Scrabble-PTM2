@@ -6,7 +6,7 @@ import javafx.fxml.Initializable;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class HostController extends MainController implements Initializable {
+public class HostController implements Initializable {
     // Add your host-related logic and event handlers here
 
     @Override
@@ -14,10 +14,6 @@ public class HostController extends MainController implements Initializable {
         // Initialize the host view
     }
 
-    @Override
-    public void onSwitchButtonClick(ActionEvent event) {
-
-    }
 
     public void onLobbyButtonClick(ActionEvent event) {
     }
