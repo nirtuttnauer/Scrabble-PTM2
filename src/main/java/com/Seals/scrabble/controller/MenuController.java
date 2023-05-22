@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
-public class MenuController extends Observable implements iController, Observer {
+public class MenuController  implements iController, Observer {
     private ViewModel viewModel;
 
     @FXML
@@ -33,6 +33,8 @@ public class MenuController extends Observable implements iController, Observer 
 
     public void setViewModel(ViewModel viewModel) {
         this.viewModel = viewModel;
+        viewModel.addObserver(this);
+        System.out.println(" This Observer added from" + this.getClass().toString() + "to " + viewModel.getClass().toString());
     }
 
     @FXML
@@ -54,8 +56,6 @@ public class MenuController extends Observable implements iController, Observer 
     }
 
     public void onHostButtonClick(ActionEvent event) {
-        setChanged();
-        notifyObservers();
     }
 
         @Override
@@ -71,6 +71,8 @@ public class MenuController extends Observable implements iController, Observer 
 
     @Override
     public void update(Observable o, Object arg) {
+        if(o instanceof ViewModel){
 
+        }
     }
 }
