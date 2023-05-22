@@ -28,6 +28,6 @@ public class HostController implements Initializable, Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-
+        System.out.println("Update from" + this.getClass().toString());
     }
 }

@@ -24,7 +24,7 @@ public class LeaderboardController implements Initializable, Observer {
     @Override
     public void update(Observable o, Object arg) {
         if(o instanceof ViewModel){
-
+            System.out.println("Update from " + this.getClass().toString());
         }
     }
 }
