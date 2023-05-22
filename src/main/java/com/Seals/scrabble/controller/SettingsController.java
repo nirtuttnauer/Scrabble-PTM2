@@ -1,12 +1,15 @@
 package com.Seals.scrabble.controller;
 
+import com.Seals.scrabble.viewmodel.ViewModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 
 import java.net.URL;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.ResourceBundle;
 
-public class SettingsController extends MainController implements Initializable {
+public class SettingsController implements Initializable, Observer {
     // Add your settings-related logic and event handlers here
 
     @Override
@@ -14,10 +17,6 @@ public class SettingsController extends MainController implements Initializable 
         // Initialize the settings view
     }
 
-    @Override
-    public void onSwitchButtonClick(ActionEvent event) {
-
-    }
 
     public void onChangeNameButtonClick(ActionEvent event) {
     }
@@ -26,5 +25,11 @@ public class SettingsController extends MainController implements Initializable 
     }
 
     public void onMenuButtonClick(ActionEvent event) {
+    }
+    @Override
+    public void update(Observable o, Object arg) {
+        if(o instanceof ViewModel){
+
+        }
     }
 }
