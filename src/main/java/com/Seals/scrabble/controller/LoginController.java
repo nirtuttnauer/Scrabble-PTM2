@@ -8,8 +8,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
+import java.util.Observable;
+import java.util.Observer;
 
-public class LoginController implements iController {
+public class LoginController implements iController, Observer {
     ViewModel viewModel;
 
     @FXML
@@ -20,6 +22,8 @@ public class LoginController implements iController {
 
     public void setViewModel(ViewModel viewModel) {
         this.viewModel = viewModel;
+        viewModel.addObserver(this);
+        System.out.println(" This Observer added from" + this.getClass().toString() + "to " + viewModel.getClass().toString());
     }
 
     @FXML
@@ -49,5 +53,13 @@ public class LoginController implements iController {
 
     public void onSubmitButtonClick(ActionEvent event) {
         System.out.println("Submit button clicked");
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o instanceof ViewModel) {
+            // Handle the update from the ViewModel
+            // You can perform necessary actions here
+        }
     }
 }

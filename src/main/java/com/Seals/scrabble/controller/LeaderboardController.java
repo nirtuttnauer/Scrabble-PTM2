@@ -1,12 +1,15 @@
 package com.Seals.scrabble.controller;
 
+import com.Seals.scrabble.viewmodel.ViewModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 
 import java.net.URL;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.ResourceBundle;
 
-public class LeaderboardController extends MainController implements Initializable {
+public class LeaderboardController implements Initializable, Observer {
     // Add your leaderboard-related logic and event handlers here
 
     @Override
@@ -14,11 +17,14 @@ public class LeaderboardController extends MainController implements Initializab
         // Initialize the leaderboard view
     }
 
-    @Override
-    public void onSwitchButtonClick(ActionEvent event) {
-
-    }
 
     public void onMenuButtonClick(ActionEvent event) {
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if(o instanceof ViewModel){
+
+        }
     }
 }

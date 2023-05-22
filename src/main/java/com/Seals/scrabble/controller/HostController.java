@@ -4,9 +4,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 
 import java.net.URL;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.ResourceBundle;
 
-public class HostController extends MainController implements Initializable {
+public class HostController implements Initializable, Observer {
     // Add your host-related logic and event handlers here
 
     @Override
@@ -14,10 +16,6 @@ public class HostController extends MainController implements Initializable {
         // Initialize the host view
     }
 
-    @Override
-    public void onSwitchButtonClick(ActionEvent event) {
-
-    }
 
     public void onLobbyButtonClick(ActionEvent event) {
     }
@@ -26,5 +24,10 @@ public class HostController extends MainController implements Initializable {
     }
 
     public void onMenuButtonClick(ActionEvent event) {
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
     }
 }
