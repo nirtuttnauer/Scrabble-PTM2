@@ -58,8 +58,7 @@ public class LoginController implements iController, Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (o instanceof ViewModel) {
-            // Handle the update from the ViewModel
-            // You can perform necessary actions here
+            System.out.println("Update from" + this.getClass().toString());
         }
     }
 }

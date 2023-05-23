@@ -55,6 +55,8 @@ public class SceneFactory {
                 // Set the scene and show the window
                 getWindow().setScene(scene);
                 getWindow().show();
+
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
