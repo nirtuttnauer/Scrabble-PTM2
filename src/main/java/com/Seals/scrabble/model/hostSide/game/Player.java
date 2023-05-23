@@ -8,9 +8,17 @@ public class Player {
     private int id;
     private List<Tile> tiles;
 
-    public Player() {
+    private Player() {
         this.id = nextId++;
         this.tiles = new ArrayList<>();
+    }
+    public static Player createPlayer() {
+        if (nextId == 4){
+            return null;
+        }
+        else {
+            return new Player();
+        }
     }
 
     public List<Tile> getTiles() {

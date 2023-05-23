@@ -7,8 +7,6 @@ import java.util.Observer;
 public interface iViewModel extends Observer {
     ObservableValue<String> nicknameProperty();
 
-    void setGuestModel(String nickname, int port);
-
     void setNickname(String nickname);
 
     void testDMServerConnection();

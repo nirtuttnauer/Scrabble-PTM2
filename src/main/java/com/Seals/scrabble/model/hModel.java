@@ -27,11 +27,14 @@ public class hModel extends Model {
         gameServer = new MyServer(port, new GameHandler());
         gameManager = new GameManager();
         currentPlayer = null;
+
     }
 
     public void startServer() {
         gameServer.start();
         System.out.println("Server started on port " + gameServer.getPort());
+        super.connectToHost();
+
     }
 
     public void stopServer() {
