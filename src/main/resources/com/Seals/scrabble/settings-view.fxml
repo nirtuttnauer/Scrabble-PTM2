@@ -13,4 +13,5 @@
     <Button fx:id="nameChangeButton" text="change name" textAlignment="CENTER" onAction="#onChangeNameButtonClick"/>
         <Button fx:id="runTests" text="Run Tests" textAlignment="CENTER" onAction="#onRunTestsButtonClick"/>
     <Button fx:id="menuButton" text="menu" textAlignment="CENTER" onAction="#onMenuButtonClick"/>
+    <Button onAction="#onExitButtonClick" text="Exit" textAlignment="CENTER" />
 </VBox>

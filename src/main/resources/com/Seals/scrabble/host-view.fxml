@@ -15,4 +15,5 @@
     <Button onAction="#onLobbyButtonClick" text="Start Lobby" textAlignment="CENTER"/>
     <Button onAction="#onTestDMServerConnection" text="Test Server" textAlignment="CENTER"/>
     <Button fx:id="menuButton" text="menu" textAlignment="CENTER" onAction="#onMenuButtonClick"/>
+    <Button onAction="#onExitButtonClick" text="Exit" textAlignment="CENTER" />
 </VBox>

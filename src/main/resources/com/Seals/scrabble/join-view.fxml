@@ -16,5 +16,6 @@
         <Button onAction="#onGameJoinButtonClick" text="join" textAlignment="CENTER"/>
     </HBox>
     <Button fx:id="menuButton" text="menu" textAlignment="CENTER" onAction="#onMenuButtonClick"/>
+    <Button onAction="#onExitButtonClick" styleClass="my-button" text="Exit" textAlignment="CENTER" />
 
 </VBox>

@@ -24,6 +24,8 @@ public class SceneFactory {
         viewPaths.put("LeaderboardView", "leaderboard-view.fxml");
         viewPaths.put("SettingsView", "settings-view.fxml");
         viewPaths.put("LobbyView", "lobby-view.fxml");
+        viewPaths.put("JoinView", "join-view.fxml");
+        viewPaths.put("HostView", "host-view.fxml");
     }
 
     public static void setScene(String viewName) {
