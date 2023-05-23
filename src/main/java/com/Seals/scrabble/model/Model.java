@@ -12,15 +12,66 @@ import java.util.Observable;
 import java.util.Scanner;
 
 public class Model extends Observable implements iModel {
-    private StringProperty nickname = new SimpleStringProperty();
+    private StringProperty nickname;
     private String serverAddress = "localhost";
-    private int serverPort;
+    private int hostPort;
+    private Socket guestSocket;
+    private PrintWriter out = null;
+    private Scanner in = null;
 
     public Model() {
+        this.nickname = new SimpleStringProperty();
+        hostPort = Settings.getHostServerPort();
     }
 
-    public Model(iModel model) {
+    public Model(iModel model)  {
+
         this.nickname = model.nicknameProperty();
+        this.serverAddress = model.getServerAddress();
+        this.hostPort = model.getHostPort();
+        this.guestSocket = model.getGuestSocket();
+        this.out = model.getOut();
+        this.in = model.getIn();
+    }
+
+    public String getServerAddress() {
+        return serverAddress;
+    }
+
+    public void setServerAddress(String serverAddress) {
+        this.serverAddress = serverAddress;
+    }
+
+    public int getHostPort() {
+        return hostPort;
+    }
+
+    public void setHostPort(int hostPort) {
+        this.hostPort = hostPort;
+    }
+
+    public Socket getGuestSocket() {
+        return guestSocket;
+    }
+
+    public void setGuestSocket(Socket guestSocket) {
+        this.guestSocket = guestSocket;
+    }
+
+    public PrintWriter getOut() {
+        return out;
+    }
+
+    public void setOut(PrintWriter out) {
+        this.out = out;
+    }
+
+    public Scanner getIn() {
+        return in;
+    }
+
+    public void setIn(Scanner in) {
+        this.in = in;
     }
 
     public void setNickname(String name) {
@@ -35,20 +86,27 @@ public class Model extends Observable implements iModel {
         return nickname;
     }
 
-    public void setGuestModel(String serverAddress, int serverPort) {
-        this.serverAddress = serverAddress;
-        this.serverPort = serverPort;
+    public void connectToHost() {
+        try {
+            System.out.println("Connecting to host on port" + hostPort);
+            ((Model)this).guestSocket = new Socket(serverAddress, Settings.getHostServerPort());
+            System.out.println("Just connected to " + guestSocket.getRemoteSocketAddress());
+        } catch (IOException e) {
+            // Handle any exceptions
+            e.printStackTrace();
+        }
     }
 
-    public void sendRequestToHost(String query) {
-        Socket client = null;
-        PrintWriter out = null;
-        Scanner in = null;
+    public void disconnectFromHost() {
+        SocketUtil.finallyClose(guestSocket, out, in);
+        System.out.println("Disconnected from host");
+    }
 
+
+    public void sendRequestToHost(String query) {
         try {
-            client = new Socket(serverAddress, Settings.getHostServerPort());
-            out = new PrintWriter(client.getOutputStream());
-            in = new Scanner(client.getInputStream());
+            out = new PrintWriter(guestSocket.getOutputStream());
+            in = new Scanner(guestSocket.getInputStream());
 
             out.println(query);
             out.flush();
@@ -58,8 +116,6 @@ public class Model extends Observable implements iModel {
         } catch (IOException e) {
             // Handle any IO exceptions
             e.printStackTrace();
-        } finally {
-            SocketUtil.finallyClose(client, out, in);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.Seals.scrabble.viewmodel;
 
+import com.Seals.scrabble.Settings;
 import com.Seals.scrabble.model.Model;
 import com.Seals.scrabble.model.hModel;
 import com.Seals.scrabble.model.iModel;
@@ -85,10 +86,4 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         return vm_nickname;
     }
 
-    public void setGuestModel(String serverAddress, int serverPort) {
-        if (!(model instanceof Model)) {
-            toggleModel();
-        }
-        ((Model) model).setGuestModel(serverAddress, serverPort);
-    }
 }
