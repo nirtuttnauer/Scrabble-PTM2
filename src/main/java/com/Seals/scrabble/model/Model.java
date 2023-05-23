@@ -1,5 +1,6 @@
 package com.Seals.scrabble.model;
 
+import com.Seals.scrabble.Settings;
 import com.Seals.scrabble.model.socketUtil.SocketUtil;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -45,7 +46,7 @@ public class Model extends Observable implements iModel {
         Scanner in = null;
 
         try {
-            client = new Socket(serverAddress, serverPort);
+            client = new Socket(serverAddress, Settings.getHostServerPort());
             out = new PrintWriter(client.getOutputStream());
             in = new Scanner(client.getInputStream());
 
