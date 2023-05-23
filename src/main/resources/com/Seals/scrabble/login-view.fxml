@@ -11,6 +11,7 @@
 
     <Label text="BookScrabble" textAlignment="CENTER" />
     <Label text="Login" textAlignment="CENTER" />
+
     <HBox alignment="CENTER">
         <TextField fx:id="nameField" promptText="Enter your name" />
         <Button fx:id="submitButton" onAction="#onSubmitButtonClick" text="Submit" textAlignment="CENTER" />

@@ -6,9 +6,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
-import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
+
+import static com.Seals.scrabble.factories.SceneFactory.setScene;
 
 public class MenuController  implements iController, Observer {
     private ViewModel viewModel;
@@ -56,17 +57,10 @@ public class MenuController  implements iController, Observer {
     }
 
     public void onHostButtonClick(ActionEvent event) {
+        setScene("HostView");
     }
 
-        @Override
-        public void onMenuButtonClick() throws IOException {
 
-        }
-
-        @Override
-        public void onExitButtonClick() throws IOException {
-
-        }
 
 
     @Override

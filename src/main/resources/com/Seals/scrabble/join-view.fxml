@@ -12,7 +12,9 @@
 
     <Label fx:id="title" text="Join Game" textAlignment="CENTER"/>
     <HBox alignment="CENTER">
-        <TextField fx:id="gamecode" promptText="Enter your name" text="${vm_nickname}"/>
+        <TextField fx:id="gamecode" promptText="Enter your name">
+            <text>${vm_nickname}</text>
+        </TextField>
         <Button onAction="#onGameJoinButtonClick" text="join" textAlignment="CENTER"/>
     </HBox>
     <Button fx:id="menuButton" text="menu" textAlignment="CENTER" onAction="#onMenuButtonClick"/>
