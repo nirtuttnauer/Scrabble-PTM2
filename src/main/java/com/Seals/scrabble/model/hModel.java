@@ -21,8 +21,9 @@ public class hModel extends Model {
     public hModel(iModel model) {
         super(model);
         System.out.println("HostModel constructor called");
-        Random r = new Random();
-        int port = 6000 + r.nextInt(1000);
+//        Random r = new Random();
+//        int port = 6000 + r.nextInt(1000);
+        int port = Settings.getHostServerPort();
         gameServer = new MyServer(port, new GameHandler());
         gameManager = new GameManager();
         currentPlayer = null;
@@ -45,7 +46,7 @@ public class hModel extends Model {
         String response = "";
 
         try {
-            client = new Socket("localhost", Settings.getDefaultPort());
+            client = new Socket("localhost", Settings.getDMServerPort());
             out = new PrintWriter(client.getOutputStream());
             in = new Scanner(client.getInputStream());
 
