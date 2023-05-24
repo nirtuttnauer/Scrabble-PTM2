@@ -12,14 +12,15 @@ public class Player {
         this.id = nextId++;
         this.tiles = new ArrayList<>();
     }
+
     public static Player createPlayer() {
-        if (nextId == 4){
+        if (nextId > 4) { // Allows for 4 players
             return null;
-        }
-        else {
+        } else {
             return new Player();
         }
     }
+
 
     public List<Tile> getTiles() {
         return tiles;

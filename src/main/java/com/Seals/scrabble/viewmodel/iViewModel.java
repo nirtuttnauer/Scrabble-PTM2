@@ -9,8 +9,6 @@ public interface iViewModel extends Observer {
 
     void setNickname(String nickname);
 
-    void testDMServerConnection();
-
     String getNickname();
 
     void addObserver(java.util.Observer observer);

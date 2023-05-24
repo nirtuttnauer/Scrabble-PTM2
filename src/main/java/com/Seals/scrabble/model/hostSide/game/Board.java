@@ -2,6 +2,8 @@ package com.Seals.scrabble.model.hostSide.game;
 
 import java.util.ArrayList;
 
+import static com.Seals.scrabble.model.hModel.sendRequestToServer;
+
 public class Board {
     private static Board SingleBoard;
     private final Place[][] Places = new Place[15][15];
@@ -138,7 +140,7 @@ public class Board {
         return newWords;
     }
 
-    private Word createWord(Tile tile, int i, int j, boolean vertical) {
+    public Word createWord(Tile tile, int i, int j, boolean vertical) {
         ArrayList<Tile> tilesLL = new ArrayList<>();
         int start = (vertical) ? j : i;
         int len = 0;

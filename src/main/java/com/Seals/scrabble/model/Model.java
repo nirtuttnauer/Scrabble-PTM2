@@ -15,6 +15,7 @@ public class Model extends Observable implements iModel {
     private StringProperty nickname;
     private String serverAddress = "localhost";
     private int hostPort;
+    private int ID;
     private Socket guestSocket;
     private PrintWriter out = null;
     private Scanner in = null;
@@ -24,7 +25,7 @@ public class Model extends Observable implements iModel {
         hostPort = Settings.getHostServerPort();
     }
 
-    public Model(iModel model)  {
+    public Model(iModel model) {
 
         this.nickname = model.nicknameProperty();
         this.serverAddress = model.getServerAddress();
@@ -74,6 +75,15 @@ public class Model extends Observable implements iModel {
         this.in = in;
     }
 
+    @Override
+    public int getID() {
+        return this.ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
     public void setNickname(String name) {
         nickname.set(name);
     }
@@ -88,8 +98,11 @@ public class Model extends Observable implements iModel {
 
     public void connectToHost() {
         try {
-            System.out.println("Connecting to host on port" + hostPort);
-            ((Model)this).guestSocket = new Socket(serverAddress, Settings.getHostServerPort());
+            System.out.println("Connecting to host on port " + hostPort);
+            guestSocket = new Socket(serverAddress, Settings.getHostServerPort());
+            guestSocket.setSoTimeout(1000); // Set the timeout to 5 seconds (5000 milliseconds)
+            out = new PrintWriter(guestSocket.getOutputStream(), true); // Sending request to server
+            in = new Scanner(guestSocket.getInputStream());
             System.out.println("Just connected to " + guestSocket.getRemoteSocketAddress());
         } catch (IOException e) {
             // Handle any exceptions
@@ -97,27 +110,45 @@ public class Model extends Observable implements iModel {
         }
     }
 
+
     public void disconnectFromHost() {
         SocketUtil.finallyClose(guestSocket, out, in);
         System.out.println("Disconnected from host");
     }
 
 
-    public void sendRequestToHost(String query) {
+    public String sendRequestToHost(String request) {
         try {
-            out = new PrintWriter(guestSocket.getOutputStream());
+            if (guestSocket.isClosed()) {
+                System.out.println("Socket is closed");
+                guestSocket = new Socket(serverAddress, Settings.getHostServerPort());
+                guestSocket.setSoTimeout(1000); // Set the timeout to 5 seconds (5000 milliseconds)
+                out = new PrintWriter(guestSocket.getOutputStream(), true); // Sending request to server
+                in = new Scanner(guestSocket.getInputStream());
+            }
             in = new Scanner(guestSocket.getInputStream());
 
-            out.println(query);
-            out.flush();
-            String response = in.nextLine(); // Use nextLine() instead of next() to read the complete response
-            // Process the response from the host as needed
-            System.out.println("Response from server: " + response);
+            out = new PrintWriter(guestSocket.getOutputStream(), true);
+            out.println(request);
+            String response = "";
+            // Receive response from server
+            System.out.println(in.hasNextLine());
+            if (in.hasNextLine()) {
+                response = in.nextLine();
+                System.out.println("Server response: " + response);
+            }
+            // Handle response
+
+            in.close();
+            out.close();
+            // Don't close socket here; it should be closed when done with all communication
+            return response;
         } catch (IOException e) {
-            // Handle any IO exceptions
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
+
     }
+
 
     // Rest of the Model code...
 }

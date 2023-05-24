@@ -31,7 +31,7 @@ public class MainServer {
     }
 
     public void startServer() {
-        DMServer = new MyServer(Settings.getDMServerPort(), new CustomBookScrabbleHandler());
+        DMServer = new MyServer(Settings.getDMServerPort(), new BookScrabbleHandler());
         DMServer.start();
         System.out.println("Server started on port: " + DMServer.getPort());
     }
@@ -45,36 +45,4 @@ public class MainServer {
         return DMServer;
     }
 
-    // Custom BookScrabbleHandler that extends BookScrabbleHandler
-    public static class CustomBookScrabbleHandler extends BookScrabbleHandler {
-// Inside the handleClient method of the CustomBookScrabbleHandler class
-
-        @Override
-        public void handleClient(InputStream inFromClient, OutputStream outToClient) {
-                String request = "";
-            // Implement the logic to handle the client request
-            try (Scanner scanner = new Scanner(inFromClient)) {
-                if (scanner.hasNextLine()) {
-                    request = scanner.nextLine();
-                    System.out.println("Received request from client: " + request);
-                    // Process the request as needed
-                } else {
-                    System.out.println("No request received from client.");
-                }
-            } catch (NoSuchElementException e) {
-                System.out.println("Error reading client request: " + e.getMessage());
-            }
-            try (PrintWriter out = new PrintWriter(outToClient)) {
-                // Send the response to the client
-                out.println("Response to client request" + request);
-
-            }
-        }
-
-
-        @Override
-        public void close() {
-            // Implement the cleanup logic if needed
-        }
-    }
 }
