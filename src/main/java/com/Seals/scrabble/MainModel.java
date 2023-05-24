@@ -3,6 +3,8 @@ package com.Seals.scrabble;
 import com.Seals.scrabble.model.Model;
 import com.Seals.scrabble.model.hModel;
 
+import java.io.IOException;
+
 public class MainModel {
     public static void main(String[] args) {
         //create host and it should join itself
