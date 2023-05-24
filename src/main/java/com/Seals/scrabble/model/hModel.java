@@ -15,7 +15,7 @@ import java.util.Scanner;
 
 public class hModel extends Model {
     private MyServer gameServer;
-    private GameManager gameManager;
+    static private GameManager single_instance_gm = null;
     private Player currentPlayer;
 
     public hModel(iModel model) {
@@ -24,8 +24,8 @@ public class hModel extends Model {
 //        Random r = new Random();
 //        int port = 6000 + r.nextInt(1000);
         int port = Settings.getHostServerPort();
-        gameServer = new MyServer(port, new GameHandler());
-        gameManager = new GameManager();
+        getGameManager();
+        gameServer = new MyServer(port, new GameHandler(this));
         currentPlayer = null;
 
     }
@@ -33,7 +33,7 @@ public class hModel extends Model {
     public void startServer() {
         gameServer.start();
         System.out.println("Server started on port " + gameServer.getPort());
-        super.connectToHost();
+        connectToHost();
 
     }
 
@@ -61,7 +61,7 @@ public class hModel extends Model {
         } finally {
             SocketUtil.finallyClose(client, out, in);
         }
-        return response;
+        return response.equals("true");
     }
 
     public void startGame() {
@@ -87,7 +87,7 @@ public class hModel extends Model {
 
     public void testDMServerConnection() {
         System.out.println("Testing DM server connection");
-      sendRequestToServer("q,mobidick," + getNickname());
+        sendRequestToServer("q,mobidick," + getNickname());
     }
 
     public Player getCurrentPlayer() {
@@ -102,5 +102,14 @@ public class hModel extends Model {
     public String getNickname() {
         // Implement the getNickname method
         return null;
+    }
+
+    public int getTotalPlayers() {
+        return single_instance_gm.getTotalPlayers();
+    }
+
+    public static GameManager getGameManager() {
+        if (single_instance_gm == null) single_instance_gm = new GameManager();
+        return single_instance_gm;
     }
 }

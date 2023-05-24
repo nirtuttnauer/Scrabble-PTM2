@@ -3,6 +3,8 @@ package com.Seals.scrabble.model.hostSide.game;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.Seals.scrabble.model.hostSide.game.Player.createPlayer;
+
 public class GameManager {
     private Board gameBoard;
     private Tile.Bag tileBag;
@@ -25,13 +27,23 @@ public class GameManager {
         System.out.println("Scrabble game ended");
     }
 
-    public void performAction(String action, int playerId) {
+    public void performAction(String action, int playerId, String word) {
         // Process game actions based on the provided action parameter
         switch (action) {
-            case "pass":
+            case "PL":
+                System.out.println("Player " + playerId + " wants to place a word");
+                Tile.Bag bag = Tile.Bag.getBag();
+                Tile[] ts = new Tile[10];
+                for (int i = 0; i < ts.length; i++)
+                    ts[i] = bag.getRand();
+                Word horn = new Word(ts, 7, 5, false);
+                getGameBoard().tryPlaceWord(horn);
+                // Place word
+                break;
+            case "PA":
                 System.out.println("Player " + playerId + " passed their turn");
                 break;
-            case "exchange":
+            case "EX":
                 System.out.println("Player " + playerId + " wants to exchange tiles");
                 // Exchange tiles
                 Player player = players.get(playerId - 1);
@@ -69,8 +81,11 @@ public class GameManager {
         }
     }
 
-    public void addPlayer(Player player) {
-        players.add(player);
+    public int addPlayer() {
+        Player p = createPlayer();
+        players.add(p);
+        System.out.println("total players: " + players.size());
+        return p.getId();
     }
 
     public Player getPlayer(int playerId) {
@@ -79,6 +94,10 @@ public class GameManager {
         } else {
             return null;
         }
+    }
+
+    public int getTotalPlayers() {
+        return players.size();
     }
 }
 

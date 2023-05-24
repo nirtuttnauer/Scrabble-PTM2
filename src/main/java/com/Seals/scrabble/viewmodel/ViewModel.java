@@ -69,18 +69,18 @@ public class ViewModel extends Observable implements Observer, iViewModel {
 
     // Additional methods and functionality specific to VM
 
-    public void testDMServerConnection() {
-        System.out.println("Testing DM server connection");
-
-        // Ensure the appropriate casting is performed
-        if (model instanceof hModel) {
-            hModel hModel = (hModel) model;
-            String response = hModel.sendRequestToServer(this.getNickname());
-            System.out.println("Received response: " + response);
-        } else {
-            System.out.println("The model is not an instance of hModel");
-        }
-    }
+//    public void testDMServerConnection() {
+//        System.out.println("Testing DM server connection");
+//
+//        // Ensure the appropriate casting is performed
+//        if (model instanceof hModel) {
+//            hModel hModel = (hModel) model;
+//            String response = hModel.sendRequestToServer(this.getNickname());
+//            System.out.println("Received response: " + response);
+//        } else {
+//            System.out.println("The model is not an instance of hModel");
+//        }
+//    }
 
     public StringProperty getVm_nickname() {
         return vm_nickname;

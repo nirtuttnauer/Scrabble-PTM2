@@ -1,6 +1,8 @@
 package com.Seals.scrabble.controller;
 
+import com.Seals.scrabble.factories.SceneFactory;
 import com.Seals.scrabble.viewmodel.ViewModel;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 
@@ -20,11 +22,8 @@ public class JoinController  implements Initializable, Observer, iController {
 
 
     public void onGameJoinButtonClick(ActionEvent event) {
-
     }
 
-    public void onMenuButtonClick(ActionEvent event) {
-    }
 
     @Override
     public void update(Observable o, Object arg) {
@@ -33,4 +32,13 @@ public class JoinController  implements Initializable, Observer, iController {
         }
     }
 
+    @Override
+    public void onMenuButtonClick() throws IOException {
+        SceneFactory.setScene("MenuView");
+    }
+
+    @Override
+    public void onExitButtonClick() throws IOException {
+        Platform.exit();
+    }
 }
