@@ -61,7 +61,7 @@ public class hModel extends Model {
         } finally {
             SocketUtil.finallyClose(client, out, in);
         }
-        return String.valueOf(response.equals("T"));
+        return String.valueOf(response.equals("N"));
     }
 //
 //    public void startGame() {
