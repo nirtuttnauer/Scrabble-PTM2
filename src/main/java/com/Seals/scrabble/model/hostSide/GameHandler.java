@@ -58,11 +58,18 @@ public class GameHandler implements ClientHandler {
             gm.performAction("EX", Integer.parseInt(split[1]), null);
             gm.getGameBoard().printBoard();
         }
-        if (split.equals("N") && gm.getTotalPlayers() < 4) {
-            request = String.valueOf(gm.addPlayer());
-        } else System.out.println("Player limit reached");
+        if (split[0].equals("N")) {
+            if (gm.getTotalPlayers() < 4) {
+                request = String.valueOf(gm.addPlayer());
+
+            } else {
+                System.out.println("Player limit reached");
+                request = "0";
+            }
+        }
         // Implement your logic to process the request and generate a response
         // Example: Echo the request as the response
         return request;
     }
 }
+

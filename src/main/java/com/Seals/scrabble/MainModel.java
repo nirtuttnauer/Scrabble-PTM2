@@ -8,7 +8,7 @@ import static java.lang.Thread.sleep;
 public class MainModel {
     public static void main(String[] args) {
         try {
-            sleep(10000);
+            sleep(1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -40,7 +40,7 @@ public class MainModel {
 //        System.out.println("Player 2 should be able to connect");
         model2.connectToHost();
         model2.sendRequestToHost("N");
-        id = Integer.parseInt(model.sendRequestToHost("N"));
+        id = Integer.parseInt(model2.sendRequestToHost("N"));
         model2.setID(id);
         System.out.println("------------------");
 
@@ -48,7 +48,7 @@ public class MainModel {
 //        System.out.println("Player 3 should be be able to connect");
         model3.connectToHost();
         model3.sendRequestToHost("N");
-                id = Integer.parseInt(model.sendRequestToHost("N"));
+        id = Integer.parseInt(model3.sendRequestToHost("N"));
         model3.setID(id);
         System.out.println("------------------");
 
@@ -57,7 +57,7 @@ public class MainModel {
 //        System.out.println("Player 4 should not be able to connect");
         model4.connectToHost();
         model4.sendRequestToHost("N");
-                id = Integer.parseInt(model.sendRequestToHost("N"));
+                id = Integer.parseInt(model4.sendRequestToHost("N"));
         model4.setID(id);
         System.out.println("------------------");
 
@@ -67,7 +67,7 @@ public class MainModel {
         model.sendRequestToHost("PL," + model.getID() + ",lolz");
 
         try {
-            sleep(10000);
+            sleep(1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
