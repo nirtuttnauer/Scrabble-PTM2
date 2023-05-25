@@ -61,25 +61,26 @@ public class hModel extends Model {
         } finally {
             SocketUtil.finallyClose(client, out, in);
         }
-        return response.equals("true");
+        return response;
+//        return response.equals("T");
     }
-
-    public void startGame() {
-        gameManager.startGame();
-        System.out.println("Game started");
-    }
-
-    public void endGame() {
-        gameManager.endGame();
-        System.out.println("Game ended");
-    }
-
-    public void performGameAction(String action, int playerId) {
-        currentPlayer = gameManager.getPlayer(playerId);
-        gameManager.performAction(action, currentPlayer.getId());
-
-        System.out.println("Player " + playerId + " performed game action: " + action);
-    }
+//
+//    public void startGame() {
+//        gameManager.startGame();
+//        System.out.println("Game started");
+//    }
+//
+//    public void endGame() {
+//        gameManager.endGame();
+//        System.out.println("Game ended");
+//    }
+//
+//    public void performGameAction(String action, int playerId) {
+//        currentPlayer = gameManager.getPlayer(playerId);
+//        gameManager.performAction(action, currentPlayer.getId());
+//
+//        System.out.println("Player " + playerId + " performed game action: " + action);
+//    }
 
     public MyServer getGameServer() {
         return gameServer;
@@ -111,5 +112,32 @@ public class hModel extends Model {
     public static GameManager getGameManager() {
         if (single_instance_gm == null) single_instance_gm = new GameManager();
         return single_instance_gm;
+    }
+
+    public void connectToServer(String serverAdress, int port) {
+        Socket client = null;
+        PrintWriter out = null;
+        Scanner in = null;
+
+        try {
+            client = new Socket(serverAdress,port);
+            out = new PrintWriter(client.getOutputStream());
+            in = new Scanner(client.getInputStream());
+            out.println("Connect");
+            out.flush();
+            if(in.hasNext()){
+                String response = in.nextLine();
+                if(response.equals("Success"))
+                    System.out.println("connected to server!");
+                else
+                    System.out.println("Failed to connect to the server!");
+            }
+        } catch (IOException e) {
+            System.out.println("Your code run into an IOException");
+            throw new RuntimeException(e);
+        }
+        finally {
+            SocketUtil.finallyClose(client,out,in);
+        }
     }
 }

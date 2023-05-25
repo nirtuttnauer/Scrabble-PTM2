@@ -149,6 +149,32 @@ public class Model extends Observable implements iModel {
 
     }
 
+    public void joinToServer(String serverAddress, int serverPort) {
+        Socket client = null;
+        PrintWriter out = null;
+        Scanner in = null;
+
+        try {
+            client = new Socket(serverAddress,serverPort);
+            out = new PrintWriter(client.getOutputStream());
+            in = new Scanner(client.getInputStream());
+            if(in.hasNext()){
+                String res = in.nextLine();
+                if(res.equals("Connect")){
+                    System.out.println("The guest join to the server! ");
+                }
+                else {
+                    System.out.println("Failed to connect to the server!");
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        finally {
+            SocketUtil.finallyClose(client,out,in);
+        }
+    }
+
 
     // Rest of the Model code...
 }
