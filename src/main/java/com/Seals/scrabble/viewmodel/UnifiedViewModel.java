@@ -1,6 +1,7 @@
 package com.Seals.scrabble.viewmodel;
 
 import com.Seals.scrabble.Settings;
+import com.Seals.scrabble.facade.UnifiedModelFacade;
 import com.Seals.scrabble.model.Model;
 import com.Seals.scrabble.model.hModel;
 import com.Seals.scrabble.model.iModel;
@@ -15,10 +16,13 @@ public class UnifiedViewModel extends Observable implements Observer, iViewModel
     private iModel model;
     private StringProperty nickname;
 
-    public UnifiedViewModel() {
+    private UnifiedModelFacade modelFacade;
+
+    public UnifiedViewModel(UnifiedModelFacade mf) {
         sharedInstance = this;
         this.model = new hModel((iModel) this);
         this.nickname = new SimpleStringProperty();
+        modelFacade=mf;
     }
 
     public static iViewModel getSharedInstance() {
@@ -87,5 +91,13 @@ public class UnifiedViewModel extends Observable implements Observer, iViewModel
             ((hModel) model).testDMServerConnection();
             toggleModel(); // Toggle back to the original model
         }
+    }
+
+    public void connectToServerFromFacade(){
+        modelFacade.connectToServer(Settings.getServerAddress(),Settings.getHostServerPort());
+    }
+
+    public void joinToserverFromFacade(){
+        modelFacade.joinServerAsGuest(Settings.getServerAddress(),Settings.getHostServerPort());
     }
 }

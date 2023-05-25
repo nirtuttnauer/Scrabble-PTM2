@@ -15,14 +15,12 @@ public class UnifiedModelFacade implements iModelFacade  {
     private Model model;
     private StringProperty nickname;
 
-    private UnifiedViewModel vm;
 
-    public UnifiedModelFacade(UnifiedViewModel viewModel , Model gmodel, hModel hModel) {
-        this.hostModel = hModel;
+    public UnifiedModelFacade( Model gmodel) {
+        this.hostModel = null;
         this.model = gmodel;
         this.nickname = new SimpleStringProperty();
         model.addObserver(this);
-        this.vm=viewModel;
     }
 
     @Override
@@ -56,13 +54,27 @@ public class UnifiedModelFacade implements iModelFacade  {
     // Other methods specific to the HostModel can be added here
 
     public void connectToServer(String serverAddress , int port){
+        if(hostModel==null)
+            toggleModels();
         hostModel.connectToServer(serverAddress,port);
     }
 
     public void joinServerAsGuest(String serverAddress, int serverPort) {
-        // Connect to the server as a guest
-         model.joinToServer(serverAddress, serverPort);
+        if(model==null)
+            toggleModels();
+        model.joinToServer(serverAddress, serverPort);
         // Perform any additional actions or updates related to joining the server as a guest
     }
 
-}
+    public void toggleModels(){
+        if(model==null){
+            hostModel= new hModel(model);
+            model=null;
+        }
+        else {
+            model= new Model(hostModel);
+            hostModel=null;
+        }
+        }
+    }
+

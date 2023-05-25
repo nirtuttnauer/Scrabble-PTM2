@@ -7,6 +7,7 @@ public class Settings {
         private static int DMServerPort = 5555;
 
         private static int HostServerPort = 6000;
+    private static String serverAdress= "local host";
 
     public static int getHostServerPort() {
         return HostServerPort;
@@ -32,6 +33,10 @@ public class Settings {
 
     public static int getDMServerPort() {
         return DMServerPort;
+    }
+
+    public static String getServerAddress() {
+        return serverAdress;
     }
 
 
