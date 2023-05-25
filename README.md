@@ -5,11 +5,11 @@ Jira: <img width="852" alt="Screenshot 2023-05-01 at 16 59 22" src="https://user
 Figma: https://www.figma.com/community/file/1234863428671713218
 <br/>
 Gantt: <img alt = "screen shot gantt" src = "README resources/GANTT.png">
-<br/>
+<br/> 
 חלוקה לקבוצות :
 <br/>
-אביב ועומר- View, ViewModel
-<br/>
+אביב עומר- View
+אביב ועומר - view model
 ניר - Model
 <br/>
 ![Current UML Diagram.png](Current%20UML%20Diagram.png)
