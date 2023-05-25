@@ -18,7 +18,7 @@ public class GameHandler implements ClientHandler {
 
 
     public GameHandler(hModel hostModel) {
-        gm = getGameManager();
+        gm = hModel.getGameManager();
     }
 
     @Override

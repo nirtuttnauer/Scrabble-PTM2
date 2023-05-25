@@ -2,8 +2,6 @@ package com.Seals.scrabble.model.hostSide.game;
 
 import java.util.ArrayList;
 
-import static com.Seals.scrabble.model.hModel.sendRequestToServer;
-
 public class Board {
     private static Board SingleBoard;
     private final Place[][] Places = new Place[15][15];

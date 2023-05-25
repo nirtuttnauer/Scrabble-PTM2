@@ -84,7 +84,7 @@ public class GameManager {
     public int addPlayer() {
         Player p = createPlayer();
         players.add(p);
-        System.out.println("total players: " + players.size());
+        System.out.println("total players: " + getTotalPlayers());
         return p.getId();
     }
 
