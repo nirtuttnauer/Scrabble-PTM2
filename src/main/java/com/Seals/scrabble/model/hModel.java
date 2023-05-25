@@ -61,22 +61,22 @@ public class hModel extends Model {
         } finally {
             SocketUtil.finallyClose(client, out, in);
         }
-        return response.equals("true");
+        return String.valueOf(response.equals("true"));
     }
 
     public void startGame() {
-        gameManager.startGame();
+        getGameManager().startGame();
         System.out.println("Game started");
     }
 
     public void endGame() {
-        gameManager.endGame();
+        getGameManager().endGame();
         System.out.println("Game ended");
     }
 
     public void performGameAction(String action, int playerId) {
-        currentPlayer = gameManager.getPlayer(playerId);
-        gameManager.performAction(action, currentPlayer.getId());
+        currentPlayer = getGameManager().getPlayer(playerId);
+        getGameManager().performAction(action, currentPlayer.getId(),null);
 
         System.out.println("Player " + playerId + " performed game action: " + action);
     }
