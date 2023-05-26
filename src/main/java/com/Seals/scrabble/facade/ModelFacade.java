@@ -50,13 +50,13 @@ public class ModelFacade implements iModelFacade {
 
     // Other methods specific to the HostModel can be added here
 
-    public void connectToServer(String serverAddress, int port) {
+    public void hostGame(String serverAddress, int port) {
         if (hostModel == null)
             toggleModels();
 //         hostModel.connectToServer(serverAddress,port);
     }
 
-    public void joinServerAsGuest(String serverAddress, int serverPort) {
+    public void joinGame(String serverAddress, int serverPort) {
         if (model == null)
             toggleModels();
 //         model.joinToServer(serverAddress, serverPort);

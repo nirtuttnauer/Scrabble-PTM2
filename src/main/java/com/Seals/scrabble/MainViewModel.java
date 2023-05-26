@@ -7,10 +7,10 @@ public class MainViewModel {
      ViewModel vm= new ViewModel();
 
      // create server
-         vm.connectToServerFromFacade();
+         vm.hostGame();
          System.out.println("line 14 works!");
          // join server
-         vm.joinToserverFromFacade();
+         vm.joinGame();
          System.out.println("line 18 works!");
      }
 }

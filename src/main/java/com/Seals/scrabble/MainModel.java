@@ -19,7 +19,6 @@ public class MainModel {
 
         hostmodel.startServer();
 
-        hostmodel.sendRequestToHost("N");
         System.out.println("------------------");
 
         //create guests... one should not be able to connect

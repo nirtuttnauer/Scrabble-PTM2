@@ -2,9 +2,6 @@ package com.Seals.scrabble.viewmodel;
 
 import com.Seals.scrabble.Settings;
 import com.Seals.scrabble.facade.ModelFacade;
-import com.Seals.scrabble.model.Model;
-import com.Seals.scrabble.model.hModel;
-import com.Seals.scrabble.model.iModel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -67,11 +64,11 @@ public class ViewModel extends Observable implements Observer, iViewModel {
 //         ((hModel) model).stopServer();
 //     }
 
-    public void connectToServerFromFacade() {
-        modelFacade.connectToServer(Settings.getServerAddress(), Settings.getHostServerPort());
+    public void hostGame() {
+        modelFacade.hostGame(Settings.getServerAddress(), Settings.getHostServerPort());
     }
 
-    public void joinToserverFromFacade() {
-        modelFacade.joinServerAsGuest(Settings.getServerAddress(), Settings.getHostServerPort());
+    public void joinGame() {
+        modelFacade.joinGame(Settings.getServerAddress(), Settings.getHostServerPort());
     }
 }
