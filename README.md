@@ -6,11 +6,25 @@
  
 <br/>
  
+ # Devision to groups 
+ - View
+   * Aviv
+   * Omer
+ - ViewModel
+   * Aviv
+   * Omer
+ - Model
+   * Nir
+ - Server
+   * Nir
+ - Devops
+   * Nir
+   * Omer
  
-# Devision to groups 
+<!-- # Devision to groups 
 - Omer and Aviv- View, ViewModel
 - Nir - Model
-<br/>
+<br/> -->
 
 <!-- 
 # Project UML Diagram
@@ -24,6 +38,7 @@
 # GAANT
 <img alt = "screen shot gantt" src = "README resources/GANTT.png">
 <br/>
+![scrabble_2023-05-25_11 40pm](https://github.com/nirtuttnauer/Scrabble-PTM2/assets/21014429/eac89ff6-ffe0-412c-9eb8-8ec34731dad5)
 
 <!-- 
 # Figma
