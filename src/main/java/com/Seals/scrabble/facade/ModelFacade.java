@@ -1,6 +1,7 @@
 package com.Seals.scrabble.facade;
 
 import com.Seals.scrabble.model.Model;
+import com.Seals.scrabble.model.hModel;
 import com.Seals.scrabble.viewmodel.ViewModel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -8,8 +9,10 @@ import javafx.beans.property.StringProperty;
 import java.util.Observable;
 
 public class ModelFacade implements iModelFacade {
-    private Model model;
+    private hModel hostModel = null;
+    private Model model = null;
     private StringProperty nickname;
+
 
     public ModelFacade() {
         this.model = new Model();
@@ -19,7 +22,8 @@ public class ModelFacade implements iModelFacade {
 
     @Override
     public void setNickname(String nickname) {
-        model.setNickname(nickname);
+        if (hostModel != null) hostModel.setNickname(nickname);
+        else model.setNickname(nickname);
     }
 
     @Override
@@ -29,6 +33,7 @@ public class ModelFacade implements iModelFacade {
 
     @Override
     public void addObserver(ViewModel viewModel) {
+        hostModel.addObserver(viewModel);
         model.addObserver(viewModel);
     }
 
@@ -36,6 +41,36 @@ public class ModelFacade implements iModelFacade {
     public void update(Observable o, Object arg) {
         if (o == model) {
             nickname.set(model.getNickname());
+        }
+    }
+
+    public void testDMServerConnection() {
+        hostModel.testDMServerConnection();
+    }
+
+    // Other methods specific to the HostModel can be added here
+
+    public void connectToServer(String serverAddress, int port) {
+        if (hostModel == null)
+            toggleModels();
+//         hostModel.connectToServer(serverAddress,port);
+    }
+
+    public void joinServerAsGuest(String serverAddress, int serverPort) {
+        if (model == null)
+            toggleModels();
+//         model.joinToServer(serverAddress, serverPort);
+        // Perform any additional actions or updates related to joining the server as a guest
+    }
+
+    public void toggleModels() {
+        System.out.println(hostModel + " " + model);
+        if (model == null) {
+            model = new Model(hostModel);
+            hostModel = null;
+        } else {
+            hostModel = new hModel(model);
+            model = null;
         }
     }
 }

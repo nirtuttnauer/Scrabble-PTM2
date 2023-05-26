@@ -2,7 +2,6 @@ package com.Seals.scrabble.model.hostSide;
 
 import com.Seals.scrabble.model.hModel;
 import com.Seals.scrabble.model.hostSide.game.GameManager;
-import com.Seals.scrabble.model.hostSide.game.Player;
 import com.Seals.scrabble.model.socketUtil.ClientHandler;
 
 import java.io.InputStream;
