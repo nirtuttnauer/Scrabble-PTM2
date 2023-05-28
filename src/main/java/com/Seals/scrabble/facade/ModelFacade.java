@@ -10,7 +10,7 @@ import java.util.Observable;
 
 public class ModelFacade implements iModelFacade {
     private hModel hostModel = null;
-    private Model model = null;
+    private Model model;
     private StringProperty nickname;
 
 

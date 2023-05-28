@@ -37,6 +37,8 @@ public class SceneFactory {
             try {
                 FXMLLoader loader = new FXMLLoader(Main.class.getResource(viewPath));
                 Scene scene = new Scene(loader.load(), Settings.getWIDTH(), Settings.getHEIGHT());
+                scene.getStylesheets().add(SceneFactory.class.getResource(Settings.getCssPath()).toExternalForm());
+
                 iController controller = loader.getController();
 
                 // Store the controller for later use

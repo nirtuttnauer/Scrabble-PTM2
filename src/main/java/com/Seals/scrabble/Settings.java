@@ -8,16 +8,14 @@ public class Settings {
     private static int DMServerPort = 5555;
 
     private static int HostServerPort = 6000;
-    private static String serverAdress = "local host";
+    private static String serverAdress = "localhost";
+    private static String Css = "/com/Seals/scrabble/application.css";
 
 
     //methods:
     public static int getHostServerPort() {
         return HostServerPort;
     }
-
-//        private static int GuestPort = 5555;
-
     public static int getWIDTH() {
         return WIDTH;
     }
@@ -42,8 +40,7 @@ public class Settings {
         return serverAdress;
     }
 
-
-//    public static void setDefaultPort(int defaultPort) {
-//        AppSettings.defaultPort = defaultPort;
-//    }
+    public static String getCssPath() {
+        return Css;
+    }
 }

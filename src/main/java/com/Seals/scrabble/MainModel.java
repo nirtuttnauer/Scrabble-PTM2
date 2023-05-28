@@ -56,7 +56,7 @@ public class MainModel {
 //        System.out.println("Player 4 should not be able to connect");
         model4.connectToHost();
         model4.sendRequestToHost("N");
-                id = Integer.parseInt(model4.sendRequestToHost("N"));
+        id = Integer.parseInt(model4.sendRequestToHost("N"));
         model4.setID(id);
         System.out.println("------------------");
 
