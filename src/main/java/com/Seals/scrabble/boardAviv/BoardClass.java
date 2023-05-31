@@ -11,6 +11,9 @@ public class BoardClass {
         this.board = new int[width][height];
     }
 
+    public int getState(int i, int j){
+        return this.board[i][j];
+    }
     public void printBoard(){
         System.out.println("---");
         for (int i = 0; i < height; i++) {
@@ -37,17 +40,17 @@ public class BoardClass {
         printBoard();
     }
 
-    public static void main(String[] args) {
-        BoardClass board = new BoardClass(8, 6);
-        board.stepFoword(2, 2);
-        board.stepFoword(3, 2);
-        board.stepFoword(4, 2);
-        board.printBoard();
-
-        board.stepBack(2,2);
-        board.stepBack(3,2);
-        board.stepBack(4,2);
-        board.printBoard();
-    }
+//    public static void main(String[] args) {
+//        BoardClass board = new BoardClass(8, 6);
+//        board.stepFoword(2, 2);
+//        board.stepFoword(3, 2);
+//        board.stepFoword(4, 2);
+//        board.printBoard();
+//
+//        board.stepBack(2,2);
+//        board.stepBack(3,2);
+//        board.stepBack(4,2);
+//        board.printBoard();
+//    }
 
 }
