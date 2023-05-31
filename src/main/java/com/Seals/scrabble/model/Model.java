@@ -149,6 +149,9 @@ public class Model extends Observable implements iModel {
 
     }
 
+    public void setGuestModel(String serverAddress, int serverPort) {
+    }
+
 
     // Rest of the Model code...
 }
