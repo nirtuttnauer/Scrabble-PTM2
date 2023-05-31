@@ -34,7 +34,7 @@ public class hModel extends Model {
         gameServer.start();
         System.out.println("Server started on port " + gameServer.getPort());
         connectToHost();
-        sendRequestToHost("N");
+        sendRequestToHost("NP");
     }
 
     public void stopServer() {
