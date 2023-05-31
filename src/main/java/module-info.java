@@ -9,4 +9,6 @@ module com.example.scrabble {
     opens com.Seals.scrabble.controller to javafx.fxml;
     exports com.Seals.scrabble.factories;
     opens com.Seals.scrabble.factories to javafx.fxml;
+    exports com.Seals.scrabble.factories.command;
+    opens com.Seals.scrabble.factories.command to javafx.fxml;
 }
