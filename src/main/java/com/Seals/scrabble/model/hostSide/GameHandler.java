@@ -17,7 +17,7 @@ public class GameHandler implements ClientHandler {
 
     public GameHandler(hModel hostModel) {
         gm = hModel.getGameManager();
-        commandFactory = new CommandFactory(gm);
+        commandFactory = new CommandFactory();
     }
 
     @Override

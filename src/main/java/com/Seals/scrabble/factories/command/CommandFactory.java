@@ -9,7 +9,7 @@ import java.util.Map;
 public class CommandFactory {
     private final Map<String, ICommand> commands;
 
-    public CommandFactory(GameManager gm) {
+    public CommandFactory() {
         commands = new HashMap<>();
         commands.put("PL", new PLCommand());
         commands.put("PA", new PACommand());
