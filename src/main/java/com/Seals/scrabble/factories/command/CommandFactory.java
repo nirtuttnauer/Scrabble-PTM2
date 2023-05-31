@@ -11,8 +11,8 @@ public class CommandFactory {
 
     public CommandFactory(GameManager gm) {
         commands = new HashMap<>();
-        commands.put("PL", new PLCommand(gm));
-        commands.put("PA", new PACommand(gm));
+        commands.put("PL", new PLCommand());
+        commands.put("PA", new PACommand());
         commands.put("EX", new EXCommand());
         commands.put("NP", new NPCommand());
     }

@@ -1,7 +1,9 @@
 package com.Seals.scrabble.model.hostSide.game;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.Seals.scrabble.model.hostSide.game.Player.createPlayer;
 
@@ -9,11 +11,15 @@ public class GameManager {
     private Board gameBoard;
     private Tile.Bag tileBag;
     private List<Player> players;
+    private int currentPlayerIndex; // New attribute for turn management
+    private Map<Player, Integer> scoreBoard; // New attribute for scoreboard
 
     public GameManager() {
         this.gameBoard = Board.getBoard();
         this.tileBag = Tile.Bag.getBag();
         this.players = new ArrayList<>();
+        this.currentPlayerIndex = 0; // Initialize the current player index
+        this.scoreBoard = new HashMap<>(); // Initialize the scoreboard
     }
 
     public void startGame() {
@@ -27,39 +33,69 @@ public class GameManager {
         System.out.println("Scrabble game ended");
     }
 
-    public void performAction(String action, int playerId, String word) {
-        // Process game actions based on the provided action parameter
+    public void performAction(String action, int playerId, String[] words) {
+        Player player = getPlayer(playerId);
+        if (player == null) {
+            System.out.println("Player " + playerId + " not found");
+            return;
+        }
+
+        int score = 0;
         switch (action) {
             case "PL":
-                System.out.println("Player " + playerId + " wants to place a word");
-                Tile.Bag bag = Tile.Bag.getBag();
-                Tile[] ts = new Tile[10];
-                for (int i = 0; i < ts.length; i++)
-                    ts[i] = bag.getRand();
-                Word horn = new Word(ts, 7, 5, false);
-                getGameBoard().tryPlaceWord(horn);
-                // Place word
+                score = placeWordAction(player, words);
                 break;
             case "PA":
-                System.out.println("Player " + playerId + " passed their turn");
+                passTurnAction(player);
                 break;
             case "EX":
-                System.out.println("Player " + playerId + " wants to exchange tiles");
-                // Exchange tiles
-                Player player = players.get(playerId - 1);
-                List<Tile> playerTiles = player.getTiles();
-                List<Tile> exchangedTiles = new ArrayList<>();
-                for (Tile tile : playerTiles) {
-                    exchangedTiles.add(tileBag.getTile(tile.getLetter()));
-                    tileBag.put(tile);
-                }
-                player.setTiles(exchangedTiles);
+                exchangeTilesAction(player, words);
                 break;
-            // Add more game actions as needed
             default:
                 System.out.println("Unknown game action: " + action);
+                return;
         }
+
+        // Update score and advance to next turn
+        updateScore(player, score);
+        nextTurn();
     }
+
+    private int placeWordAction(Player player, String[] words) {
+        Word wordToPlace = createWordFromStrings(words);
+        int score = 0;
+
+        if (wordToPlace != null) {
+            score = gameBoard.tryPlaceWord(wordToPlace);
+            System.out.println("Player " + player.getId() + " placed a word. Score: " + score);
+        } else {
+            System.out.println("Word placement failed.");
+        }
+        return score;
+    }
+
+    private void passTurnAction(Player player) {
+        System.out.println("Player " + player.getId() + " passed their turn");
+    }
+
+    private void exchangeTilesAction(Player player, String[] lettersToExchange) {
+        for (String letter : lettersToExchange) {
+            Tile tile = null;
+            if (tile != null) {
+                player.removeTile(tile);
+                player.addTile(tileBag.getRand());
+                tileBag.put(tile);
+            }
+        }
+        System.out.println("Player " + player.getId() + " exchanged tiles");
+    }
+
+    private Word createWordFromStrings(String[] wordStrings) {
+        // Implementation depends on the structure of Word and Tile classes.
+        // This is a placeholder method to be replaced with the actual implementation.
+        return null;
+    }
+
 
     public Board getGameBoard() {
         return this.gameBoard;
@@ -81,13 +117,6 @@ public class GameManager {
         }
     }
 
-    public int addPlayer() {
-        Player p = createPlayer();
-        players.add(p);
-        System.out.println("total players: " + getTotalPlayers());
-        return p.getId();
-    }
-
     public Player getPlayer(int playerId) {
         if (playerId >= 1 && playerId <= players.size()) {
             return players.get(playerId - 1);
@@ -95,6 +124,42 @@ public class GameManager {
             return null;
         }
     }
+
+
+    public Player getCurrentPlayer() {
+        return players.get(currentPlayerIndex);
+    }
+
+
+    public void nextTurn() {
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+        System.out.println("It's now " + getCurrentPlayer() + "'s turn");
+    }
+
+    public void updateScore(Player player, int score) {
+        scoreBoard.put(player, scoreBoard.getOrDefault(player, 0) + score);
+        System.out.println(getCurrentPlayer() + " now has " + scoreBoard.get(player) + " points");
+    }
+
+    public void displayScoreboard() {
+        for (Player player : players) {
+            System.out.println(player + ": " + scoreBoard.getOrDefault(player, 0) + " points");
+        }
+    }
+
+
+    public int addPlayer() {
+        Player p = createPlayer();
+        if (p != null) {
+            players.add(p);
+            scoreBoard.put(p, 0); // Add player to scoreboard with 0 points
+            System.out.println("total players: " + getTotalPlayers());
+            return p.getId();
+        }
+        System.out.println("Player limit reached");
+        return 0;
+    }
+
 
     public int getTotalPlayers() {
         return players.size();
