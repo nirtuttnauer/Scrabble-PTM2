@@ -26,7 +26,9 @@ public class Model extends Observable implements iModel {
     }
 
     public Model(iModel model) {
-
+        if (model == null) {
+            throw new IllegalArgumentException("model cannot be null");
+        }
         this.nickname = model.nicknameProperty();
         this.serverAddress = model.getServerAddress();
         this.hostPort = model.getHostPort();
@@ -132,7 +134,6 @@ public class Model extends Observable implements iModel {
             out.println(request);
             String response = "";
             // Receive response from server
-            System.out.println(in.hasNextLine());
             if (in.hasNextLine()) {
                 response = in.nextLine();
                 System.out.println("Server response: " + response);

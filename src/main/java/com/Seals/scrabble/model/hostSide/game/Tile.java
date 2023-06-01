@@ -1,6 +1,7 @@
 //
 package com.Seals.scrabble.model.hostSide.game;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 import java.util.Random;
@@ -19,6 +20,21 @@ public class Tile {
 
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tile tile = (Tile) o;
+        return letter == tile.letter && score == tile.score && Arrays.equals(Values, tile.Values);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(letter, score);
+        result = 31 * result + Arrays.hashCode(Values);
+        return result;
+    }
+
     //getters
     public char getLetter() {
         return letter;
@@ -35,19 +51,6 @@ public class Tile {
     int getPoints(char L) {
         int index = (int) (L - 'A');
         return Values[index];
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Tile tile = (Tile) o;
-        return letter == tile.letter && score == tile.score;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(letter, score);
     }
 
     public static class Bag {

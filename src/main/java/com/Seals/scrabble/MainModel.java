@@ -3,82 +3,63 @@ package com.Seals.scrabble;
 import com.Seals.scrabble.model.Model;
 import com.Seals.scrabble.model.hModel;
 
-import static java.lang.Thread.sleep;
-
 public class MainModel {
+
     public static void main(String[] args) {
-        try {
-            sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        delay(1000);
 
-        //create host and it should join itself
         hModel hostmodel = new hModel(new Model());
-        System.out.println("------------------");
-
         hostmodel.startServer();
 
-        hostmodel.sendRequestToHost("N");
-        System.out.println("------------------");
-
-        //create guests... one should not be able to connect
-        Model model = new Model();
-        Model model2 = new Model();
-        Model model3 = new Model();
-        Model model4 = new Model();
-        //start host server
-
-        //player 1 connects;
-//        System.out.println("Player 1 should be able to connect");
-        model.connectToHost();
-        int id = Integer.parseInt(model.sendRequestToHost("N"));
-        model.setID(id);
-        System.out.println("------------------");
-
-        //player 2 connects;
-//        System.out.println("Player 2 should be able to connect");
-        model2.connectToHost();
-        model2.sendRequestToHost("N");
-        id = Integer.parseInt(model2.sendRequestToHost("N"));
-        model2.setID(id);
-        System.out.println("------------------");
-
-        //player 3 connects;
-//        System.out.println("Player 3 should be be able to connect");
-        model3.connectToHost();
-        model3.sendRequestToHost("N");
-        id = Integer.parseInt(model3.sendRequestToHost("N"));
-        model3.setID(id);
-        System.out.println("------------------");
-
-        //player 4 connects;
-        //should not be able to connect
-//        System.out.println("Player 4 should not be able to connect");
-        model4.connectToHost();
-        model4.sendRequestToHost("N");
-                id = Integer.parseInt(model4.sendRequestToHost("N"));
-        model4.setID(id);
-        System.out.println("------------------");
-
+        // Create and connect guests
+        Model model = createAndConnectGuest();
+        Model model2 = createAndConnectGuest();
+        Model model3 = createAndConnectGuest();
+        Model model4 = createAndConnectGuest();
 
         hostmodel.startGame();
-
         model.sendRequestToHost("PL," + model.getID() + ",lolz");
 
+        delay(1000);
+
+        hostmodel.endGame();
+        disconnectGuests(model, model2, model3, model4);
+        hostmodel.stopServer();
+    }
+
+    private static Model createAndConnectGuest() {
+        Model model = new Model();
+        model.connectToHost();
+
+        // Send a request to host and get an ID
+        String response = model.sendRequestToHost("NP"); // Request for ID of new player
+        int id = parseIdFromResponse(response);
+        model.setID(id);
+
+        return model;
+    }
+
+    private static void disconnectGuests(Model... models) {
+        for (Model model : models) {
+            model.disconnectFromHost();
+        }
+    }
+
+    private static void delay(int millis) {
         try {
-            sleep(1000);
+            Thread.sleep(millis);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
-        hostmodel.endGame();
-//        hostmodel.performGameAction("Hello", 1);
-        model.disconnectFromHost();
-        model2.disconnectFromHost();
-        model3.disconnectFromHost();
-        model4.disconnectFromHost();
-        hostmodel.stopServer();
-
     }
+
+    // Assumes the ID is an integer returned as a response.
+    public static int parseIdFromResponse(String response) {
+        if (response.matches("\\d+")) {
+            return Integer.parseInt(response);
+        } else {
+        return 0;
+        }
+    }
+
 }
