@@ -6,10 +6,13 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
+import javafx.scene.transform.NonInvertibleTransformException;
 
 import java.io.IOException;
 import java.net.URL;
@@ -34,12 +37,9 @@ public class GameController  implements  Observer , iController {
         this.affine=new Affine();
         this.affine.appendScale(400/10,400/10);
         this.boardClass= new BoardClass(10,10);
-        this.boardClass.stepFoword(2,2);
-        this.boardClass.stepFoword(3,2);
-        this.boardClass.stepFoword(4,2);
-        this.boardClass.stepFoword(5,5);
         draw();
     }
+
 
     public GameController() {
     }
@@ -63,12 +63,19 @@ public class GameController  implements  Observer , iController {
 
     public void stepFoword(int x, int y){ //step on the board
        this.boardClass.setBoard(x,y,1);
-        printBoard();
+       draw();
     }
 
     public void stepBack(int x, int y){ // set the place in the matrix to 0 because we left
         this.boardClass.setBoard(x,y,0);
-        printBoard();
+        draw();
+    }
+
+    public void handleSteps(int x , int y){
+        if(this.boardClass.getState(x,y)==0)
+            stepFoword(x,y);
+        else
+            stepBack(x,y);
     }
 
 
@@ -124,8 +131,30 @@ public class GameController  implements  Observer , iController {
         for (int i = 0; i <5 ; i++) {
             Random randoWidth= new Random();
             Random randomHieght = new Random();
-            this.boardClass.stepFoword(randoWidth.nextInt(boardClass.width),randomHieght.nextInt(boardClass.height));
+            handleSteps(randoWidth.nextInt(boardClass.width),randomHieght.nextInt(boardClass.height));
         }
         draw();
+    }
+
+
+
+    @FXML
+    private void handleDraw(MouseEvent mouseEvent) {
+        double mouseX= mouseEvent.getX();
+        double mouseY = mouseEvent.getY();
+
+        // show the point exactly
+        try {
+            Point2D cordinate = this.affine.inverseTransform(mouseX, mouseY);
+            //we have to cast to int because we have a int[][] board!
+            int simX = (int) cordinate.getX();
+            int simY = (int) cordinate.getY();
+
+            System.out.println(simX+","+simY);
+
+            handleSteps(simX,simY);
+        } catch (NonInvertibleTransformException e) {
+            System.out.println("Could not invert transform");
+        }
     }
 }

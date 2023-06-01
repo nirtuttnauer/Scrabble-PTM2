@@ -5,6 +5,14 @@ public class BoardClass {
     int height;
 
     public void setBoard(int i, int j,int val) {
+        try {
+            if (i < 0 || i > width)
+                throw new Exception("Index i is out of bounds!");
+            if (j < 0 || j > height)
+                throw new Exception("Index j is out of bounds!");
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
         this.board[i][j]=val;
     }
 
@@ -21,6 +29,14 @@ public class BoardClass {
     }
 
     public int getState(int i, int j){
+        try {
+            if (i < 0 || i > width)
+                throw new Exception("Index i is out of bounds!");
+            if (j < 0 || j > height)
+                throw new Exception("Index j is out of bounds!");
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
         return this.board[i][j];
     }
     public void printBoard(){
@@ -39,15 +55,13 @@ public class BoardClass {
         System.out.println("---\n");
     }
 
-    public void stepFoword(int x, int y){ //step on the board
-        board[x][y] = 1;
-        printBoard();
-    }
-
-    public void stepBack(int x, int y){ // set the place in the matrix to 0 because we left
-        board[x][y] = 0;
-        printBoard();
-    }
+//    public void stepFoword(int x, int y){ //step on the board
+//        board[x][y] = 1;
+//    }
+//
+//    public void stepBack(int x, int y){ // set the place in the matrix to 0 because we left
+//        board[x][y] = 0;
+//    }
 
 
 //    public static void main(String[] args) {
