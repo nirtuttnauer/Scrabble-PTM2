@@ -11,6 +11,8 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 
+import static com.Seals.scrabble.factories.SceneFactory.setScene;
+
 public class HostController implements Initializable, Observer, iController{
     // Add your host-related logic and event handlers here
 
@@ -21,6 +23,7 @@ public class HostController implements Initializable, Observer, iController{
 
 
     public void onLobbyButtonClick(ActionEvent event) {
+        setScene("LobbyView");
     }
 
     public void onTestDMServerConnection(ActionEvent event) {
@@ -35,7 +38,7 @@ public class HostController implements Initializable, Observer, iController{
 
     @Override
     public void onMenuButtonClick() throws IOException {
-        SceneFactory.setScene("MenuView");
+        setScene("MenuView");
     }
 
     @Override
