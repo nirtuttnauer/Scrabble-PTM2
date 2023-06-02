@@ -8,13 +8,15 @@ import com.Seals.scrabble.model.socketUtil.ClientHandler;
 
 import java.io.*;
 
+import static com.Seals.scrabble.model.hModel.getGameManager;
+
 public class GameHandler implements ClientHandler {
     private final GameManager gameManager;
     private final CommandFactory commandFactory;
     private BufferedWriter clientWriter;
 
-    public GameHandler(hModel hostModel) {
-        this.gameManager = hostModel.getGameManager();
+    public GameHandler() {
+        this.gameManager = getGameManager();
         this.commandFactory = new CommandFactory();
     }
 

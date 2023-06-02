@@ -25,7 +25,7 @@ public class hModel extends Model {
 //        int port = 6000 + r.nextInt(1000);
         int port = Settings.getHostServerPort();
         getGameManager();
-        gameServer = new MyServer(port, new GameHandler(this));
+        gameServer = new MyServer(port, new GameHandler());
 
 
         currentPlayer = null;
