@@ -26,6 +26,8 @@ public class hModel extends Model {
         int port = Settings.getHostServerPort();
         getGameManager();
         gameServer = new MyServer(port, new GameHandler(this));
+
+
         currentPlayer = null;
 
     }
@@ -76,7 +78,7 @@ public class hModel extends Model {
 
     public void performGameAction(String action, int playerId) {
         currentPlayer = getGameManager().getPlayer(playerId);
-        getGameManager().performAction(action, currentPlayer.getId(),null);
+        getGameManager().performAction(action, currentPlayer.getId(), null);
 
         System.out.println("Player " + playerId + " performed game action: " + action);
     }

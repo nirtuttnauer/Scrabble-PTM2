@@ -1,40 +1,91 @@
 package com.Seals.scrabble.model.hostSide.game;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.Seals.scrabble.model.hostSide.game.Player.createPlayer;
 
 public class GameManager {
     private Board gameBoard;
     private Tile.Bag tileBag;
-    private List<Player> players;
-    private int currentPlayerIndex; // New attribute for turn management
-    private Map<Player, Integer> scoreBoard; // New attribute for scoreboard
+    private PlayerManager playerManager;
+    private TurnManager turnManager;
+    private ScoreBoard scoreBoard;
 
     public GameManager() {
         this.gameBoard = Board.getBoard();
         this.tileBag = Tile.Bag.getBag();
-        this.players = new ArrayList<>();
-        this.currentPlayerIndex = 0; // Initialize the current player index
-        this.scoreBoard = new HashMap<>(); // Initialize the scoreboard
+        this.playerManager = new PlayerManager();
     }
 
+    public void updateScore(Player player, int score) {
+        scoreBoard.updateScore(player, score);
+    }
+
+    public void displayScoreboard() {
+        scoreBoard.displayScoreboard();
+    }
+
+    public int getTotalPlayers() {
+        return playerManager.getTotalPlayers();
+    }
+
+
+    public Player getPlayer(int playerId) {
+        return playerManager.getPlayer(playerId);
+    }///
+
+
+    public Player getCurrentPlayer() {
+        return turnManager.getCurrentPlayer();
+    }
+
+    public void nextTurn() {
+        turnManager.nextTurn();
+        displayScoreboard(); // Display the scoreboard after each turn
+    }
+
+
+    public Player addPlayer(PrintWriter outputStream) {
+        Player player = createPlayer(outputStream);
+        if (player != null) {
+            for (int i = 0; i < 7; i++) { // give player 7 tiles
+                player.addTile(tileBag.getRand());
+            }
+            playerManager.addPlayer(player); // Add player to player manager
+            System.out.println("Total players: " + getTotalPlayers() + "(addPlayer)");
+            // print the player's hand
+            player.printHand();
+            return player;
+        } else {
+//            System.out.println("Player limit reached");
+            return null;
+        }
+    }
+
+
+    public void sendMessageToPlayer(int playerId, String message) {
+        Player player = getPlayer(playerId);
+        if (player != null) {
+            player.sendToPlayer(playerId, message);
+        }
+    }
+
+
     public void startGame() {
-        // Perform any necessary initialization for starting the game
         System.out.println("Scrabble game started");
+        this.turnManager = new TurnManager(playerManager.getPlayers()); // Initialize the turn manager
+        this.scoreBoard = new ScoreBoard(); // Initialize the scoreboard
         gameBoard.printBoard();
     }
 
     public void endGame() {
-        // Perform any necessary cleanup for ending the game
         System.out.println("Scrabble game ended");
     }
 
     public void performAction(String action, int playerId, String[] words) {
-        Player player = getPlayer(playerId);
+        Player player = playerManager.getPlayer(playerId);
         if (player == null) {
             System.out.println("Player " + playerId + " not found");
             return;
@@ -90,10 +141,28 @@ public class GameManager {
         System.out.println("Player " + player.getId() + " exchanged tiles");
     }
 
-    private Word createWordFromStrings(String[] wordStrings) {
-        // Implementation depends on the structure of Word and Tile classes.
-        // This is a placeholder method to be replaced with the actual implementation.
-        return null;
+    public Word createWordFromStrings(String[] words) {
+        try {
+            boolean isVertical = !"H".equalsIgnoreCase(words[0]);
+            int x = Integer.parseInt(words[1]);
+            int y = Integer.parseInt(words[2]);
+            String wordString = words[3];
+
+            Tile[] tiles = createTilesFromString(wordString);
+
+            return new Word(tiles, x, y, isVertical);
+        } catch (NumberFormatException e) {
+            System.out.println("Error parsing word placement coordinates: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public Tile[] createTilesFromString(String wordString) {
+        Tile[] tiles = new Tile[wordString.length()];
+        for (int i = 0; i < wordString.length(); i++) {
+//            tiles[i] = new Tile(wordString.charAt(i));
+        }
+        return tiles;
     }
 
 
@@ -117,52 +186,21 @@ public class GameManager {
         }
     }
 
-    public Player getPlayer(int playerId) {
-        if (playerId >= 1 && playerId <= players.size()) {
-            return players.get(playerId - 1);
+    public PlayerManager getPlayerManager() {
+        return this.playerManager;
+    }
+
+    public int tryPlaceWordAction(Player player, String[] words) {
+        Word wordToPlace = createWordFromStrings(words);
+        int score = 0;
+
+        if (wordToPlace != null) {
+            score = gameBoard.tryPlaceWord(wordToPlace);
+            System.out.println("Player " + player.getId() + " placed a word. Score: " + score);
         } else {
-            return null;
+            System.out.println("Word placement failed.");
         }
+        return score;
     }
 
-
-    public Player getCurrentPlayer() {
-        return players.get(currentPlayerIndex);
-    }
-
-
-    public void nextTurn() {
-        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
-        System.out.println("It's now " + getCurrentPlayer() + "'s turn");
-    }
-
-    public void updateScore(Player player, int score) {
-        scoreBoard.put(player, scoreBoard.getOrDefault(player, 0) + score);
-        System.out.println(getCurrentPlayer() + " now has " + scoreBoard.get(player) + " points");
-    }
-
-    public void displayScoreboard() {
-        for (Player player : players) {
-            System.out.println(player + ": " + scoreBoard.getOrDefault(player, 0) + " points");
-        }
-    }
-
-
-    public int addPlayer() {
-        Player p = createPlayer();
-        if (p != null) {
-            players.add(p);
-            scoreBoard.put(p, 0); // Add player to scoreboard with 0 points
-            System.out.println("total players: " + getTotalPlayers());
-            return p.getId();
-        }
-        System.out.println("Player limit reached");
-        return 0;
-    }
-
-
-    public int getTotalPlayers() {
-        return players.size();
-    }
 }
-
