@@ -22,6 +22,7 @@ public class JoinController  implements Initializable, Observer, iController {
 
 
     public void onGameJoinButtonClick(ActionEvent event) {
+        SceneFactory.setScene("JoinView");
     }
 
 

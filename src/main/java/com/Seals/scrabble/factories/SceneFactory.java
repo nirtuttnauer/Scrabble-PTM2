@@ -5,7 +5,10 @@ import com.Seals.scrabble.Settings;
 import com.Seals.scrabble.controller.LoginController;
 import com.Seals.scrabble.controller.MenuController;
 import com.Seals.scrabble.controller.iController;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 
 import java.io.IOException;
@@ -25,6 +28,7 @@ public class SceneFactory {
         viewPaths.put("SettingsView", "settings-view.fxml");
         viewPaths.put("LobbyView", "lobby-view.fxml");
         viewPaths.put("HostView", "host-view.fxml");
+        viewPaths.put("JoinView", "join-view.fxml");
     }
 
     public static void setScene(String viewName) {
@@ -38,7 +42,6 @@ public class SceneFactory {
                 FXMLLoader loader = new FXMLLoader(Main.class.getResource(viewPath));
                 Scene scene = new Scene(loader.load(), Settings.getWIDTH(), Settings.getHEIGHT());
                 scene.getStylesheets().add(SceneFactory.class.getResource(Settings.getCssPath()).toExternalForm());
-
                 iController controller = loader.getController();
 
                 // Store the controller for later use
@@ -75,4 +78,8 @@ public class SceneFactory {
     public <T> T getController(String viewName) {
         return (T) controllers.get(viewName);
     }
+
+
+
+
 }
