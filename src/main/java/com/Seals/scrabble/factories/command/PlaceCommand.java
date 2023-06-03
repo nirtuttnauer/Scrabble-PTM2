@@ -10,9 +10,9 @@ class PlaceCommand implements ICommand {
     public String execute(String[] args) {
         try {
             boolean success = getGameManager().tryPlaceWordAction(getGameManager().getPlayerManager().getPlayer(getGameManager().getCurrentPlayer().getId()), args);
-            getGameManager().getGameBoard().printBoard();
             return success ? "Word successfully placed!" : "Word placement failed.";
         } catch (IllegalArgumentException e) {
+            System.out.println("error");
             return e.getMessage();
         }
     }

@@ -12,12 +12,12 @@ import static com.Seals.scrabble.model.hModel.getGameManager;
 
 public class GameHandler implements ClientHandler {
     private final GameManager gameManager;
-    private final CommandFactory commandFactory;
+    private static CommandFactory commandFactory = null;
     private BufferedWriter clientWriter;
 
     public GameHandler() {
         this.gameManager = getGameManager();
-        this.commandFactory = new CommandFactory();
+        commandFactory = new CommandFactory();
     }
 
     @Override
@@ -68,7 +68,7 @@ public class GameHandler implements ClientHandler {
         }
     }
 
-    public CommandFactory getCommandFactory() {
+    public static CommandFactory getCommandFactory() {
         return commandFactory;
     }
 }

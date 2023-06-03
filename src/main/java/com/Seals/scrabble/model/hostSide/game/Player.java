@@ -44,7 +44,12 @@ public class Player {
     public List<Tile> addTilesFromString(String w) {
         List<Tile> tiles = new ArrayList<>();
         for (int i = 0; i < getHand().size(); i++) {
+            try {
             tiles.add(Tile.Bag.getBag().getTile(w.charAt(i)));
+            }
+            catch (Exception e){
+                System.out.println("Cannot get tile (error)");
+            }
         }
         return tiles;
     }

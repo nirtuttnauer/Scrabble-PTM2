@@ -1,10 +1,14 @@
 package com.Seals.scrabble.model.hostSide.game;
 
+import com.Seals.scrabble.model.hostSide.GameHandler;
+
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+import static com.Seals.scrabble.model.hostSide.GameHandler.getCommandFactory;
 import static com.Seals.scrabble.model.hostSide.game.Player.createPlayer;
 import static com.Seals.scrabble.model.socketUtil.SocketUtil.delay;
 
@@ -61,6 +65,7 @@ public class GameManager {
     private void processTurn() {
         Player currentPlayer = getCurrentPlayer();
         currentPlayer.printHand();
+        getCommandFactory().getCommand(("PL")).execute(new String[]{"H","7","8","hi"});
         // wait for the response command (this will be game-specific, depending on your design)
         delay(5000);
     }
@@ -124,36 +129,42 @@ public class GameManager {
     }
 
     public boolean tryPlaceWordAction(Player player, String[] words) {
-    if (words.length < 4) {
-        throw new IllegalArgumentException("Insufficient arguments for placing a word");
-    }
-    boolean isVertical = !"H".equalsIgnoreCase(words[0]);
-    int x = 0, y = 0;
-    try {
-        x = Integer.parseInt(words[1]);
-        y = Integer.parseInt(words[2]);
-    } catch (NumberFormatException e) {
-        throw new IllegalArgumentException("Error parsing word placement coordinates: " + e.getMessage());
-    }
-    String wordString = words[3];
+        if (words.length < 4) {
+            throw new IllegalArgumentException("Insufficient arguments for placing a word");
+        }
+        boolean isVertical = !"H".equalsIgnoreCase(words[0]);
+        int x = 0, y = 0;
+        try {
+            x = Integer.parseInt(words[1]);
+            y = Integer.parseInt(words[2]);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Error parsing word placement coordinates: " + e.getMessage());
+        }
+        String wordString = words[3];
 
-    // create tiles from the wordString and get from player's hand
-    List<Tile> tiles = player.addTilesFromString(wordString);
-    if (tiles.isEmpty()) {
-        throw new IllegalArgumentException("Player doesn't have the necessary tiles to form this word.");
-    }
-    Word wordToPlace = new Word(tiles.toArray(new Tile[0]), x, y, isVertical);
+        // create tiles from the wordString and get from player's hand
+        List<Tile> tiles = new ArrayList<>();
+        try {
+            tiles = player.addTilesFromString(wordString);
+        }
+        catch (Exception e){
+            System.out.println("hey");
+            System.out.println(tiles.isEmpty());
+        }
+        if (tiles.isEmpty() || tiles == null) {
+            throw new IllegalArgumentException("Player doesn't have the necessary tiles to form this word.");
+        }
+        Word wordToPlace = new Word(tiles.toArray(new Tile[0]), x, y, isVertical);
 
-    // Place the word on the board
-    boolean isSuccessful = placeWord(wordToPlace);
-    if (isSuccessful) {
-        player.removeTilesFromHand(tiles.toArray(new Tile[0])); // remove the tiles used from player's hand
+        // Place the word on the board
         int score = gameBoard.tryPlaceWord(wordToPlace);
+        if (score==0) return false;
+        player.removeTilesFromHand(tiles.toArray(new Tile[0])); // remove the tiles used from player's hand
         updateScore(player, score);
         gameBoard.printBoard(); // Print the updated board
+
+        return true;
     }
-    return isSuccessful;
-}
 
 
     private void passTurnAction(Player player) {
@@ -203,18 +214,6 @@ public class GameManager {
 
     public void setGameBoard(Board gameBoard) {
         this.gameBoard = gameBoard;
-    }
-
-    public boolean placeWord(Word word) {
-        if (gameBoard.boardLegal(word) && gameBoard.dictionaryLegal(word)) {
-            int score = gameBoard.tryPlaceWord(word);
-            System.out.println("Word placed successfully. Score: " + score);
-            gameBoard.printBoard(); // Print the updated board
-            return true;
-        } else {
-            System.out.println("Invalid word placement");
-            return false;
-        }
     }
 
     public PlayerManager getPlayerManager() {
