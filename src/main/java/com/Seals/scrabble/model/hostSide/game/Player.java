@@ -1,41 +1,63 @@
 package com.Seals.scrabble.model.hostSide.game;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import static com.Seals.scrabble.model.hModel.getGameManager;
 
 public class Player {
+    public static final int MAX_TILES = 7;
     private static int nextId = 1;
+    private static final int MAX_PLAYERS = 4;
     private int id;
-    private List<Tile> tiles;
+    private List<Tile> hand;
+    private PrintWriter outputStream; // The stream for sending messages to this player
 
-    private Player() {
+    private Player(PrintWriter outputStream) {
         this.id = nextId++;
-        this.tiles = new ArrayList<>();
+        this.hand = new ArrayList<>();
+        this.outputStream = outputStream;
     }
 
-    public static Player createPlayer() {
-        if (nextId > 4) { // Allows for 4 players
-            return null;
+    public static Player createPlayer(PrintWriter outputStream) {
+        if (nextId <= MAX_PLAYERS) {
+            return new Player(outputStream);
         } else {
-            return new Player();
+            System.out.println("Player limit reached");
+            return null;
         }
     }
 
-
-    public List<Tile> getTiles() {
-        return tiles;
-    }
-
-    public void setTiles(List<Tile> tiles) {
-        this.tiles = tiles;
+    public List<Tile> getHand() {
+        return hand;
     }
 
     public void addTile(Tile tile) {
-        tiles.add(tile);
+        if (hand.size() < MAX_TILES) {
+            hand.add(Tile.Bag.getBag().getRand());
+        }
     }
 
-    public void removeTile(Tile tile) {
-        tiles.remove(tile);
+    public List<Tile> addTilesFromString(String w) {
+        List<Tile> tiles = new ArrayList<>();
+        for (int i = 0; i < getHand().size(); i++) {
+            try {
+            tiles.add(Tile.Bag.getBag().getTile(w.charAt(i)));
+            }
+            catch (Exception e){
+                System.out.println("Cannot get tile (error)");
+            }
+        }
+        return tiles;
+    }
+
+    public void removeTilesFromHand(Tile[] tiles) {
+        for (Tile tile : tiles) {
+            hand.remove(tile);
+        }
     }
 
     public int getId() {
@@ -45,6 +67,32 @@ public class Player {
     @Override
     public String toString() {
         return "Player " + getId();
+    }
+
+    public void sendMessage(String message) {
+        outputStream.println(message);
+    }
+
+    // It's a good idea to provide a way to close the output stream when we're done
+    public void closeStream() {
+        outputStream.close();
+    }
+
+    public void sendToPlayer(int playerId, String message) {
+        Player player = this.getPlayer(playerId);
+        if (player != null) {
+            player.sendMessage(message);
+        }
+    }
+
+    private Player getPlayer(int playerId) {
+        return getGameManager().getPlayer(playerId);
+    }
+
+    public void printHand() {
+        List<Tile> tiles = this.getHand();
+        String hand = tiles.stream().filter(Objects::nonNull).map(tile -> String.valueOf(tile.getLetter())).collect(Collectors.joining(", "));
+        System.out.println("Your hand: " + hand);
     }
 
 }

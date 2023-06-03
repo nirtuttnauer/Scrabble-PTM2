@@ -139,7 +139,7 @@ public class Model extends Observable implements iModel {
                 System.out.println("Server response: " + response);
             }
             // Handle response
-
+            System.out.println();
             in.close();
             out.close();
             // Don't close socket here; it should be closed when done with all communication
@@ -149,10 +149,4 @@ public class Model extends Observable implements iModel {
         }
 
     }
-
-    public void setGuestModel(String serverAddress, int serverPort) {
-    }
-
-
-    // Rest of the Model code...
 }

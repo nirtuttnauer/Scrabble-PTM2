@@ -3,28 +3,40 @@ package com.Seals.scrabble;
 import com.Seals.scrabble.model.Model;
 import com.Seals.scrabble.model.hModel;
 
+import static com.Seals.scrabble.model.socketUtil.SocketUtil.delay;
+
 public class MainModel {
 
     public static void main(String[] args) {
         delay(1000);
 
-        hModel hostmodel = new hModel(new Model());
-        hostmodel.startServer();
+        // Create and start the host server
+        hModel hostModel = new hModel(new Model());
+        hostModel.startServer();
 
         // Create and connect guests
-        Model model = createAndConnectGuest();
-        Model model2 = createAndConnectGuest();
-        Model model3 = createAndConnectGuest();
-        Model model4 = createAndConnectGuest();
+        Model[] models = {
+                createAndConnectGuest(),
+                createAndConnectGuest(),
+                createAndConnectGuest(),
+                createAndConnectGuest()
+        };
 
-        hostmodel.startGame();
-        model.sendRequestToHost("PL," + model.getID() + ",lolz");
+        hostModel.startGame();
+
+        // Test sending a request from one of the players
+        if (models.length > 0) {
+            models[0].sendRequestToHost("PL," + models[0].getID() + ",H,7,8,lolz");
+        }
 
         delay(1000);
 
-        hostmodel.endGame();
-        disconnectGuests(model, model2, model3, model4);
-        hostmodel.stopServer();
+        hostModel.endGame();
+
+        // Disconnect guests
+        disconnectGuests(models);
+
+        hostModel.stopServer();
     }
 
     private static Model createAndConnectGuest() {
@@ -34,7 +46,12 @@ public class MainModel {
         // Send a request to host and get an ID
         String response = model.sendRequestToHost("NP"); // Request for ID of new player
         int id = parseIdFromResponse(response);
-        model.setID(id);
+
+        if (id > 0) {
+            model.setID(id);
+        } else {
+            System.out.println("Failed to retrieve a valid player ID from the host.");
+        }
 
         return model;
     }
@@ -45,21 +62,14 @@ public class MainModel {
         }
     }
 
-    private static void delay(int millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 
     // Assumes the ID is an integer returned as a response.
-    public static int parseIdFromResponse(String response) {
-        if (response.matches("\\d+")) {
+    private static int parseIdFromResponse(String response) {
+        if (response != null && response.matches("\\d+")) {
             return Integer.parseInt(response);
         } else {
-        return 0;
+            return 0;
         }
     }
-
 }
