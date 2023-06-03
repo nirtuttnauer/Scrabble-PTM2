@@ -5,16 +5,15 @@ import com.Seals.scrabble.model.hostSide.game.GameManager;
 import static com.Seals.scrabble.model.hModel.getGameManager;
 
 class PlaceCommand implements ICommand {
-    private final GameManager gm;
-
-    public PlaceCommand() {
-        this.gm = getGameManager();
-    }
 
     @Override
     public String execute(String[] args) {
-        gm.tryPlaceWordAction(gm.getPlayerManager().getPlayer(gm.getCurrentPlayer().getId()), args);
-        gm.getGameBoard().printBoard();
-        return null;
+        try {
+            boolean success = getGameManager().tryPlaceWordAction(getGameManager().getPlayerManager().getPlayer(getGameManager().getCurrentPlayer().getId()), args);
+            getGameManager().getGameBoard().printBoard();
+            return success ? "Word successfully placed!" : "Word placement failed.";
+        } catch (IllegalArgumentException e) {
+            return e.getMessage();
+        }
     }
 }

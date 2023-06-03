@@ -13,7 +13,6 @@ class ExchangeCommand implements ICommand {
 
     @Override
     public String execute(String[] args) {
-        gm.performAction("EX", Integer.parseInt(args[1]), null);
         gm.getGameBoard().printBoard();
         return null;
     }

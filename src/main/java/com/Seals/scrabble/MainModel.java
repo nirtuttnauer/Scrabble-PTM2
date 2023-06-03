@@ -3,6 +3,8 @@ package com.Seals.scrabble;
 import com.Seals.scrabble.model.Model;
 import com.Seals.scrabble.model.hModel;
 
+import static com.Seals.scrabble.model.socketUtil.SocketUtil.delay;
+
 public class MainModel {
 
     public static void main(String[] args) {
@@ -60,13 +62,7 @@ public class MainModel {
         }
     }
 
-    private static void delay(int millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
+
 
     // Assumes the ID is an integer returned as a response.
     private static int parseIdFromResponse(String response) {

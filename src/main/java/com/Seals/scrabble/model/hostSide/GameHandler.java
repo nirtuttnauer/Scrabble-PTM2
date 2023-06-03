@@ -67,4 +67,8 @@ public class GameHandler implements ClientHandler {
             return "Unknown command: " + split[0];
         }
     }
+
+    public CommandFactory getCommandFactory() {
+        return commandFactory;
+    }
 }

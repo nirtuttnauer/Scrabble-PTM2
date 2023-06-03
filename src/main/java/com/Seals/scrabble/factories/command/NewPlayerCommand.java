@@ -11,11 +11,6 @@ import java.io.UnsupportedEncodingException;
 import static com.Seals.scrabble.model.hModel.getGameManager;
 
 class NewPlayerCommand implements ICommand {
-    private final GameManager gm;
-
-    public NewPlayerCommand() {
-        this.gm = getGameManager();
-    }
 
     @Override
     public String execute(String[] args) {
@@ -23,7 +18,8 @@ class NewPlayerCommand implements ICommand {
             System.out.println("Invalid player ID");
             return "0";
         }
-
+        //I want to use the gameHandler outputstream...
+        ///so this block needs replacing
         // Create a PrintWriter object for the output stream
         PrintWriter outputStream;
         try {
@@ -38,7 +34,7 @@ class NewPlayerCommand implements ICommand {
             e.printStackTrace();
             return "0";
         }
-        Player p = gm.addPlayer(outputStream);
+        Player p = getGameManager().addPlayer(outputStream);
         if (p != null) return String.valueOf(p.getId());
         return null;
     }

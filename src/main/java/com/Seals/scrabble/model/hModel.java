@@ -27,9 +27,6 @@ public class hModel extends Model {
         getGameManager();
         gameServer = new MyServer(port, new GameHandler());
 
-
-        currentPlayer = null;
-
     }
 
     public void startServer() {
@@ -75,14 +72,6 @@ public class hModel extends Model {
         getGameManager().endGame();
         System.out.println("Game ended");
     }
-
-    public void performGameAction(String action, int playerId) {
-        currentPlayer = getGameManager().getPlayer(playerId);
-        getGameManager().performAction(action, currentPlayer.getId(), null);
-
-        System.out.println("Player " + playerId + " performed game action: " + action);
-    }
-
     public MyServer getGameServer() {
         return gameServer;
     }

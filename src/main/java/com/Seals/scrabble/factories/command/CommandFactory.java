@@ -1,5 +1,7 @@
 package com.Seals.scrabble.factories.command;
 
+import com.Seals.scrabble.model.hostSide.GameHandler;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +22,6 @@ public class CommandFactory {
         commands.put("UP", new UpdateCommand());
         //
     }
-
     public ICommand getCommand(String commandName) {
         return commands.get(commandName);
     }

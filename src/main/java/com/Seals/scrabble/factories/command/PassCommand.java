@@ -13,7 +13,7 @@ class PassCommand implements ICommand {
 
     @Override
     public String execute(String[] args) {
-        gm.performAction("PA", Integer.parseInt(args[1]), null);
+        gm.getTurnManager().nextTurn();
         gm.getGameBoard().printBoard();
         return null;
     }

@@ -48,11 +48,25 @@ public class PlayerManager {
         Player player = Player.createPlayer(outputStream);
         if (player != null) {
             addPlayer(player); // Add player to player manager
-            System.out.println("Total players: " + getTotalPlayers() + "(addPlayer)");
+            System.out.println("Total players: " + getTotalPlayers());
             return player;
         } else {
 //            System.out.println("Player limit reached");
             return null;
         }
+    }
+
+    public void initializePlayerHands() {
+        for (Player player : players) {
+            for (int i = 0; i < Player.MAX_TILES; i++) {
+                player.addTile(Tile.Bag.getBag().getRand());
+            }
+        }
+    }
+
+    public void notifyCurrentPlayerTurn() {
+//        Player currentPlayer = getCurrentPlayer(); // or however you retrieve the current player
+//        currentPlayer.sendCommand("your_turn");
+        System.out.println("TM");
     }
 }

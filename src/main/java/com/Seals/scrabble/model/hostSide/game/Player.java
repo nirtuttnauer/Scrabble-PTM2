@@ -9,16 +9,16 @@ import java.util.stream.Collectors;
 import static com.Seals.scrabble.model.hModel.getGameManager;
 
 public class Player {
+    public static final int MAX_TILES = 7;
     private static int nextId = 1;
     private static final int MAX_PLAYERS = 4;
-    private static final int MAX_TILES = 7;
     private int id;
-    private List<Tile> tiles;
+    private List<Tile> hand;
     private PrintWriter outputStream; // The stream for sending messages to this player
 
     private Player(PrintWriter outputStream) {
         this.id = nextId++;
-        this.tiles = new ArrayList<>();
+        this.hand = new ArrayList<>();
         this.outputStream = outputStream;
     }
 
@@ -31,20 +31,28 @@ public class Player {
         }
     }
 
-    public List<Tile> getTiles() {
+    public List<Tile> getHand() {
+        return hand;
+    }
+
+    public void addTile(Tile tile) {
+        if (hand.size() < MAX_TILES) {
+            hand.add(Tile.Bag.getBag().getRand());
+        }
+    }
+
+    public List<Tile> addTilesFromString(String w) {
+        List<Tile> tiles = new ArrayList<>();
+        for (int i = 0; i < getHand().size(); i++) {
+            tiles.add(Tile.Bag.getBag().getTile(w.charAt(i)));
+        }
         return tiles;
     }
 
-    public boolean addTile(Tile tile) {
-        if (tiles.size() < MAX_TILES) {
-            tiles.add(tile);
-            return true;
+    public void removeTilesFromHand(Tile[] tiles) {
+        for (Tile tile : tiles) {
+            hand.remove(tile);
         }
-        return false;
-    }
-
-    public boolean removeTile(Tile tile) {
-        return tiles.remove(tile);
     }
 
     public int getId() {
@@ -77,11 +85,8 @@ public class Player {
     }
 
     public void printHand() {
-        List<Tile> tiles = this.getTiles();
-        String hand = tiles.stream()
-                .filter(Objects::nonNull)
-                .map(tile -> String.valueOf(tile.getLetter()))
-                .collect(Collectors.joining(", "));
+        List<Tile> tiles = this.getHand();
+        String hand = tiles.stream().filter(Objects::nonNull).map(tile -> String.valueOf(tile.getLetter())).collect(Collectors.joining(", "));
         System.out.println("Your hand: " + hand);
     }
 

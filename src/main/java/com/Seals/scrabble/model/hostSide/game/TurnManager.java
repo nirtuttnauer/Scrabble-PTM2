@@ -8,7 +8,7 @@ public class TurnManager {
 
     public TurnManager(List<Player> players) {
         this.players = players;
-        this.currentPlayerIndex = 0;
+        this.currentPlayerIndex = -1;
     }
 
     public Player getCurrentPlayer() {
