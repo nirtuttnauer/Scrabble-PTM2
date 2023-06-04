@@ -4,6 +4,7 @@ import com.Seals.scrabble.Settings;
 import com.Seals.scrabble.facade.ModelFacade;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -14,7 +15,19 @@ public class ViewModel extends Observable implements Observer, iViewModel {
 
     private final ModelFacade modelFacade;
 
+     private static StringProperty hand;
+
+    public static StringProperty getHand() {
+        return hand;
+    }
+
+    public StringProperty handProperty() {
+        return hand;
+    }
+
     public ViewModel() {
+        this.hand= new SimpleStringProperty();
+        hand.set("ABBBCAS");
         sharedInstance = this;
         modelFacade = new ModelFacade();
         this.nickname = new SimpleStringProperty();
