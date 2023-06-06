@@ -25,9 +25,6 @@ public class GameHandler implements ClientHandler {
             while ((request = clientReader.readLine()) != null) {
                 System.out.println("Received request: " + request);
                 String response = processRequest(request);
-                if (response != null) {
-                    clientWriter.println(response);
-                }
             }
         } catch (IOException e) {
             e.printStackTrace();
