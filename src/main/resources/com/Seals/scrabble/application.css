@@ -1,5 +1,6 @@
 .root {
     -fx-background-color: #1d2b36;
+
 }
 
 .label {
@@ -7,6 +8,7 @@
     -fx-font-weight: bold;
     -fx-text-fill: #cacfd6;
     -fx-padding: 10px; /* You can adjust the value as per your needs */
+
 }
 .button {
     -fx-font-size: 14px;
@@ -14,7 +16,16 @@
     -fx-text-fill: #cacfd6;
     -fx-border-radius: 50px;
     -fx-background-color: #3872a1;
-    -fx-effect: dropshadow(gaussian, rgba(48, 97, 137, 0.6), 20, 0, 2, 2);
+    -fx-effect: dropshadow(gaussian, rgba(154, 165, 176, 0.6), 20, 0, 2, 2);
+
+}.button:hover {
+    -fx-font-size: 14px;
+    -fx-padding: 8px 30px; /* Increased horizontal padding from 16px to 30px */
+    -fx-text-fill: #cacfd6;
+    -fx-border-radius: 50px;
+    -fx-background-color: rgba(56, 114, 161, 0.71);
+    -fx-effect: dropshadow(gaussian, rgba(154, 165, 176, 0.6), 20, 0, 2, 2);
+
 }
 
 .text-field {
@@ -23,6 +34,6 @@
     -fx-text-fill: #cacfd6;
     -fx-background-color: #3872a1;
     -fx-border-radius: 5px;
-    -fx-effect: dropshadow(gaussian, rgba(48, 97, 137, 0.6), 20, 0, 2, 2);
+    -fx-effect: dropshadow(gaussian, rgba(154, 165, 176, 0.6), 20, 0, 2, 2);
     -fx-margin: 10px; /* This line adds margins around the input field */
 }
