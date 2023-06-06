@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-import static com.Seals.scrabble.model.hostSide.GameHandler.getCommandFactory;
 import static com.Seals.scrabble.model.hostSide.game.Player.createPlayer;
 import static com.Seals.scrabble.model.socketUtil.SocketUtil.delay;
 
@@ -19,6 +18,7 @@ public class GameManager {
     private TurnManager turnManager;
     private ScoreBoard scoreBoard;
     private boolean isGameInProgress;
+    private GameHandler gameHandler;
 
     public GameManager() {
         this.gameBoard = Board.getBoard();
@@ -65,7 +65,8 @@ public class GameManager {
     private void processTurn() {
         Player currentPlayer = getCurrentPlayer();
         currentPlayer.printHand();
-        getCommandFactory().getCommand(("PL")).execute(new String[]{"H","7","8","hi"});
+        getGameHandler().getCommandFactory().getCommand("TU").execute(null);
+//        getGameHandler().getCommandFactory().getCommand(("PL")).execute(new String[]{"H", "7", "8", "HI"});
         // wait for the response command (this will be game-specific, depending on your design)
         delay(5000);
     }
@@ -104,22 +105,14 @@ public class GameManager {
     }
 
 
-    public Player addPlayer(PrintWriter outputStream) {
-        Player player = createPlayer(outputStream);
+    public Player addPlayer() {
+        Player player = createPlayer();
         if (player != null) {
             playerManager.addPlayer(player); // Add player to player manager
             System.out.println("Total players: " + getTotalPlayers());
             return player;
         } else {
             return null;
-        }
-    }
-
-
-    public void sendMessageToPlayer(int playerId, String message) {
-        Player player = getPlayer(playerId);
-        if (player != null) {
-            player.sendToPlayer(playerId, message);
         }
     }
 
@@ -146,8 +139,7 @@ public class GameManager {
         List<Tile> tiles = new ArrayList<>();
         try {
             tiles = player.addTilesFromString(wordString);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println("hey");
             System.out.println(tiles.isEmpty());
         }
@@ -158,7 +150,7 @@ public class GameManager {
 
         // Place the word on the board
         int score = gameBoard.tryPlaceWord(wordToPlace);
-        if (score==0) return false;
+        if (score == 0) return false;
         player.removeTilesFromHand(tiles.toArray(new Tile[0])); // remove the tiles used from player's hand
         updateScore(player, score);
         gameBoard.printBoard(); // Print the updated board
@@ -220,5 +212,14 @@ public class GameManager {
         return this.playerManager;
     }
 
+// game handler setter and getter
 
+
+    public GameHandler getGameHandler() {
+        return gameHandler;
+    }
+
+    public void setGameHandler(GameHandler gameHandler) {
+        this.gameHandler = gameHandler;
+    }
 }

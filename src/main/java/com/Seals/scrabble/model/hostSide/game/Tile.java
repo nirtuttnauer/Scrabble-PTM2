@@ -1,10 +1,7 @@
 //
 package com.Seals.scrabble.model.hostSide.game;
 
-import java.util.Arrays;
-import java.util.Objects;
-
-import java.util.Random;
+import java.util.*;
 
 import static java.lang.Math.abs;
 
@@ -57,11 +54,13 @@ public class Tile {
         private static Bag SingleBag;
         private final int[] amountsMax = {9, 2, 2, 4, 12, 2, 3, 2, 9, 1, 1, 4, 2, 6, 8, 2, 1, 6, 4, 6, 4, 2, 2, 1, 2, 1};
         private int[] amounts = new int[26];
-        private Tile[] Tiles = new Tile[26];
+        private List<Tile> Tiles = new ArrayList<Tile>();
+
         //ctor
         private Bag() {
             System.arraycopy(amountsMax, 0, amounts, 0, amountsMax.length);
         }
+
         //getters
         public static Bag getBag() {
             if (SingleBag == null) {
@@ -82,11 +81,11 @@ public class Tile {
             this.amounts = amounts;
         }
 
-        public Tile[] getTiles() {
+        public List<Tile> getTiles() {
             return Tiles;
         }
 
-        public void setTiles(Tile[] tiles) {
+        public void setTiles(List<Tile> tiles) {
             Tiles = tiles;
         }
 
@@ -105,6 +104,8 @@ public class Tile {
         }
 
         public Tile getRand() {
+            System.out.println(size());
+            System.out.println(Arrays.toString(getAmounts()));
             if (size() > 0) {
                 Random rn = new Random();
                 int i = abs(rn.nextInt() % 26);
@@ -112,6 +113,7 @@ public class Tile {
                     i++;
                 }
                 char ot = (char) ('A' + (i % 26));
+                System.out.println(ot);
                 return getTile(ot);
             }
             return null;
@@ -121,8 +123,8 @@ public class Tile {
         public void put(Tile tile) {
             if (amounts[tile.letter - 'A'] < amountsMax[tile.letter - 'A']) {
                 for (int j = 0; j < 26; j++) {
-                    if (Tiles[j] == tile) {
-                        Tiles[j] = null;
+                    if (Tiles.get(j) == tile) {
+                        Tiles.set(j, null);
                     }
                 }
                 this.amounts[tile.letter - 'A']++;
@@ -133,14 +135,10 @@ public class Tile {
             if ((a >= 'A' && a <= 'Z') && amounts[a - 'A'] != 0) {
                 amounts[a - 'A']--;
                 Tile tile = new Tile(a);
-                for (int j = 0; j < 26; j++) {
-                    if (Tiles[j] == null) {
-                        Tiles[j] = tile;
-                        return tile;
-                    }
-                }
-            }
+                Tiles.add(tile);
+                return tile;
 
+            }
             return null;
         }
 

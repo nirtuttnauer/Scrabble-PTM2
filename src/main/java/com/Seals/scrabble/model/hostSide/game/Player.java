@@ -14,17 +14,14 @@ public class Player {
     private static final int MAX_PLAYERS = 4;
     private int id;
     private List<Tile> hand;
-    private PrintWriter outputStream; // The stream for sending messages to this player
-
-    private Player(PrintWriter outputStream) {
+    private Player() {
         this.id = nextId++;
         this.hand = new ArrayList<>();
-        this.outputStream = outputStream;
     }
 
-    public static Player createPlayer(PrintWriter outputStream) {
+    public static Player createPlayer() {
         if (nextId <= MAX_PLAYERS) {
-            return new Player(outputStream);
+            return new Player();
         } else {
             System.out.println("Player limit reached");
             return null;
@@ -36,8 +33,11 @@ public class Player {
     }
 
     public void addTile(Tile tile) {
-        if (hand.size() < MAX_TILES) {
-            hand.add(Tile.Bag.getBag().getRand());
+        while (hand.size() != MAX_TILES) {
+            Tile t = Tile.Bag.getBag().getRand();
+//            if (t != null){
+            hand.add(t);
+//            }
         }
     }
 
@@ -69,29 +69,13 @@ public class Player {
         return "Player " + getId();
     }
 
-    public void sendMessage(String message) {
-        outputStream.println(message);
-    }
-
-    // It's a good idea to provide a way to close the output stream when we're done
-    public void closeStream() {
-        outputStream.close();
-    }
-
-    public void sendToPlayer(int playerId, String message) {
-        Player player = this.getPlayer(playerId);
-        if (player != null) {
-            player.sendMessage(message);
-        }
-    }
-
     private Player getPlayer(int playerId) {
         return getGameManager().getPlayer(playerId);
     }
 
     public void printHand() {
         List<Tile> tiles = this.getHand();
-        String hand = tiles.stream().filter(Objects::nonNull).map(tile -> String.valueOf(tile.getLetter())).collect(Collectors.joining(", "));
+        String hand = tiles.stream().map(tile -> String.valueOf(tile.getLetter())).collect(Collectors.joining(", "));
         System.out.println("Your hand: " + hand);
     }
 

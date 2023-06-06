@@ -1,10 +1,11 @@
-package com.Seals.scrabble.factories.command;
+package com.Seals.scrabble.factories.command.commands.gamecommands;
 
+import com.Seals.scrabble.factories.command.ICommand;
 import com.Seals.scrabble.model.hostSide.game.GameManager;
 
 import static com.Seals.scrabble.model.hModel.getGameManager;
 
-class PlaceCommand implements ICommand {
+public class PlaceCommand implements ICommand {
 
     @Override
     public String execute(String[] args) {

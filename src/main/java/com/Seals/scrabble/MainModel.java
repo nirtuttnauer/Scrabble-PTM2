@@ -26,7 +26,7 @@ public class MainModel {
 
         // Test sending a request from one of the players
         if (models.length > 0) {
-            models[0].sendRequestToHost("PL," + models[0].getID() + ",H,7,8,lolz");
+            models[0].sendRequestToHost("PL", new String[]{String.valueOf(models[0].getID()), ",H,7,8,lolz"});
         }
 
         delay(1000);
@@ -42,17 +42,8 @@ public class MainModel {
     private static Model createAndConnectGuest() {
         Model model = new Model();
         model.connectToHost();
-
         // Send a request to host and get an ID
-        String response = model.sendRequestToHost("NP"); // Request for ID of new player
-        int id = parseIdFromResponse(response);
-
-        if (id > 0) {
-            model.setID(id);
-        } else {
-            System.out.println("Failed to retrieve a valid player ID from the host.");
-        }
-
+        model.sendRequestToHost("NP", null); // Request for ID of new player
         return model;
     }
 

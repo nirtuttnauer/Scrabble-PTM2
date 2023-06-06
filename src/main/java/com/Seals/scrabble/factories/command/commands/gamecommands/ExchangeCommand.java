@@ -1,19 +1,19 @@
-package com.Seals.scrabble.factories.command;
+package com.Seals.scrabble.factories.command.commands.gamecommands;
 
+import com.Seals.scrabble.factories.command.ICommand;
 import com.Seals.scrabble.model.hostSide.game.GameManager;
 
 import static com.Seals.scrabble.model.hModel.getGameManager;
 
-class PassCommand implements ICommand {
+public class ExchangeCommand implements ICommand {
     private final GameManager gm;
 
-    public PassCommand() {
+    public ExchangeCommand() {
         this.gm = getGameManager();
     }
 
     @Override
     public String execute(String[] args) {
-        gm.getTurnManager().nextTurn();
         gm.getGameBoard().printBoard();
         return null;
     }

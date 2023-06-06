@@ -2,28 +2,23 @@ package com.Seals.scrabble.model.hostSide;
 
 import com.Seals.scrabble.factories.command.CommandFactory;
 import com.Seals.scrabble.factories.command.ICommand;
-import com.Seals.scrabble.model.hModel;
-import com.Seals.scrabble.model.hostSide.game.GameManager;
 import com.Seals.scrabble.model.socketUtil.ClientHandler;
 
 import java.io.*;
 
-import static com.Seals.scrabble.model.hModel.getGameManager;
-
 public class GameHandler implements ClientHandler {
-    private final GameManager gameManager;
-    private static CommandFactory commandFactory = null;
-    private BufferedWriter clientWriter;
+
+    private CommandFactory commandFactory;
+    private PrintWriter clientWriter;
 
     public GameHandler() {
-        this.gameManager = getGameManager();
-        commandFactory = new CommandFactory();
+        this.commandFactory = new CommandFactory();
     }
 
     @Override
     public void handleClient(InputStream inFromClient, OutputStream outToClient) {
         try {
-            clientWriter = new BufferedWriter(new PrintWriter(outToClient, true));
+            this.clientWriter = new PrintWriter(outToClient, true);
             BufferedReader clientReader = new BufferedReader(new InputStreamReader(inFromClient));
 
             String request;
@@ -31,9 +26,7 @@ public class GameHandler implements ClientHandler {
                 System.out.println("Received request: " + request);
                 String response = processRequest(request);
                 if (response != null) {
-                    clientWriter.write(response);
-                    clientWriter.newLine();
-                    clientWriter.flush();
+                    clientWriter.println(response);
                 }
             }
         } catch (IOException e) {
@@ -45,12 +38,8 @@ public class GameHandler implements ClientHandler {
 
     @Override
     public void close() {
-        try {
-            if (clientWriter != null) {
-                clientWriter.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (clientWriter != null) {
+            clientWriter.close();
         }
     }
 
@@ -68,7 +57,11 @@ public class GameHandler implements ClientHandler {
         }
     }
 
-    public static CommandFactory getCommandFactory() {
+    public PrintWriter getOut() {
+        return clientWriter;
+    }
+
+    public CommandFactory getCommandFactory() {
         return commandFactory;
     }
 }

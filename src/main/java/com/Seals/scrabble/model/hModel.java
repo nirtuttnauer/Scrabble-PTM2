@@ -20,12 +20,14 @@ public class hModel extends Model {
 
     public hModel(iModel model) {
         super(model);
+        GameHandler gh = new GameHandler();
+
         System.out.println("HostModel constructor called");
 //        Random r = new Random();
 //        int port = 6000 + r.nextInt(1000);
         int port = Settings.getHostServerPort();
-        getGameManager();
-        gameServer = new MyServer(port, new GameHandler());
+        getGameManager().setGameHandler(gh);
+        gameServer = new MyServer(port, gh);
 
     }
 
@@ -33,7 +35,7 @@ public class hModel extends Model {
         gameServer.start();
         System.out.println("Server started on port " + gameServer.getPort());
         connectToHost();
-        sendRequestToHost("NP");
+        sendRequestToHost("NP", null);
     }
 
     public void stopServer() {
@@ -76,10 +78,10 @@ public class hModel extends Model {
         return gameServer;
     }
 
-    public void testDMServerConnection() {
-        System.out.println("Testing DM server connection");
-        sendRequestToServer("q,mobidick," + getNickname());
-    }
+//    public void testDMServerConnection() {
+//        System.out.println("Testing DM server connection");
+//        sendRequestToServer("q,mobidick," + getNickname());
+//    }
 
     public Player getCurrentPlayer() {
         return currentPlayer;
