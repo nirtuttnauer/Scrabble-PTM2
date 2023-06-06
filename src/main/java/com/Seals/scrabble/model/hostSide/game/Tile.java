@@ -1,4 +1,4 @@
-//
+
 package com.Seals.scrabble.model.hostSide.game;
 
 import java.util.Arrays;
