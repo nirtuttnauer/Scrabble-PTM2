@@ -24,7 +24,12 @@
     -fx-text-fill: #cacfd6;
     -fx-border-radius: 50px;
     -fx-background-color: rgba(56, 114, 161, 0.71);
-    -fx-effect: dropshadow(gaussian, rgba(154, 165, 176, 0.6), 20, 0, 2, 2);
+     -fx-effect: dropshadow(gaussian, rgba(154, 165, 176, 0.6), 20, 0, 2, 2);
+    /*-fx-translate-x: -5px;
+    -fx-translate-y: -5px;*/
+    -fx-scale-x: 1.09px;
+    -fx-scale-y: 1.09px;
+    /*-fx-rotate: 10deg;*/
 
 }
 
