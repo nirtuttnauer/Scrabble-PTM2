@@ -25,7 +25,7 @@ import static com.Seals.scrabble.factories.SceneFactory.setScene;
 
 public class GameController implements Observer, iController {
     @FXML
-    private Canvas BoardCanvas;
+    private GridPane boardGrid;
 
     @FXML
     HBox HandHbox;
@@ -54,20 +54,23 @@ public class GameController implements Observer, iController {
 
         this.boardClass = new BoardClass(15, 15);
 
-        draw();
+        this.boardGrid.setGridLinesVisible(true);
+//        draw();
 
         if (hand != null)
             drawHand();
+        boardGrid.setPrefWidth(500.0);
+        boardGrid.setPrefHeight(400.0);
     }
 
     public void stepForward(int x, int y, String letter) {
         this.boardClass.setBoard(x, y, letter);
-        draw();
+//        draw();
     }
 
     public void stepBack(int x, int y) {
         this.boardClass.setBoard(x, y, null);
-        draw();
+//        draw();
     }
 
     public void handleSteps(int x, int y, String letter) {
@@ -99,7 +102,6 @@ public class GameController implements Observer, iController {
 
             letter.setText(hand.tiles[i]);
             score.setText("0");
-
             // Set padding around the labels
             Insets labelPadding = new Insets(47);
 
@@ -115,33 +117,34 @@ public class GameController implements Observer, iController {
 
             HandHbox.getChildren().add(pane);
         }
+//        HandHbox.setMaxSize(890,65);
     }
 
-    public void draw() {
-        GraphicsContext g = this.BoardCanvas.getGraphicsContext2D();
-        g.setTransform(this.affine);
-        g.setFill(Color.LIGHTGRAY);
-        g.fillRect(0, 0, 600, 600);
-        g.setFill(Color.BLACK);
-
-        for (int i = 0; i < this.boardClass.getBoard().length; i++) {
-            for (int j = 0; j < this.boardClass.getBoard()[i].length; j++) {
-                String letter = this.boardClass.getState(i, j);
-                if (letter != null)
-                    g.strokeText(letter, i + 0.5, j + 0.8);
-            }
-        }
-
-        g.setStroke(Color.GREY);
-        g.setLineWidth(0.05);
-        for (int i = 0; i <= this.boardClass.getBoard().length; i++) {
-            g.strokeLine(i, 0, i, 15);
-        }
-
-        for (int j = 0; j <= this.boardClass.getBoard()[0].length; j++) {
-            g.strokeLine(0, j, 15, j);
-        }
-    }
+//    public void draw() {
+//        GraphicsContext g = this.BoardCanvas.getGraphicsContext2D();
+//        g.setTransform(this.affine);
+//        g.setFill(Color.LIGHTGRAY);
+//        g.fillRect(0, 0, 600, 600);
+//        g.setFill(Color.BLACK);
+//
+//        for (int i = 0; i < this.boardClass.getBoard().length; i++) {
+//            for (int j = 0; j < this.boardClass.getBoard()[i].length; j++) {
+//                String letter = this.boardClass.getState(i, j);
+//                if (letter != null)
+//                    g.strokeText(letter, i + 0.5, j + 0.8);
+//            }
+//        }
+//
+//        g.setStroke(Color.GREY);
+//        g.setLineWidth(0.05);
+//        for (int i = 0; i <= this.boardClass.getBoard().length; i++) {
+//            g.strokeLine(i, 0, i, 15);
+//        }
+//
+//        for (int j = 0; j <= this.boardClass.getBoard()[0].length; j++) {
+//            g.strokeLine(0, j, 15, j);
+//        }
+//    }
 
     @FXML
     private void handleDraw(MouseEvent mouseEvent) {
@@ -178,5 +181,9 @@ public class GameController implements Observer, iController {
     @Override
     public void onExitButtonClick() throws IOException {
         Platform.exit();
+    }
+
+    public void handleDraggFromHbox(MouseEvent mouseEvent) {
+
     }
 }
