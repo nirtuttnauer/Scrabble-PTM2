@@ -14,6 +14,7 @@ public class NewPlayerCommand implements ICommand {
     public String execute(String[] args) {
         Player p = getGameManager().addPlayer();
         if (p != null) return String.valueOf(p.getId());
+        else System.out.println("failed to add player");
         return null;
     }
 }

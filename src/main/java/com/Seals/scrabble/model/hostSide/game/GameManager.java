@@ -1,8 +1,9 @@
 package com.Seals.scrabble.model.hostSide.game;
 
+import com.Seals.scrabble.Settings;
 import com.Seals.scrabble.model.hostSide.GameHandler;
+import com.Seals.scrabble.model.socketUtil.MyServer;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,12 +21,20 @@ public class GameManager {
     private boolean isGameInProgress;
     private GameHandler gameHandler;
 
-    public GameManager() {
-        this.gameBoard = Board.getBoard();
-        this.Bag = Tile.Bag.getBag();
-        this.playerManager = new PlayerManager();
-        this.isGameInProgress = false;
-    }
+    //server
+    private MyServer gameServer;
+
+
+ public GameManager() {
+    this.gameBoard = Board.getBoard();
+    this.Bag = Tile.Bag.getBag();
+    this.playerManager = new PlayerManager();
+    this.isGameInProgress = false;
+    this.gameHandler = new GameHandler();
+    int port = Settings.getHostServerPort();
+    gameServer = new MyServer(port, gameHandler);
+}
+
 
     public TurnManager getTurnManager() {
         return turnManager;
@@ -65,9 +74,10 @@ public class GameManager {
     private void processTurn() {
         Player currentPlayer = getCurrentPlayer();
         currentPlayer.printHand();
-        getGameHandler().getCommandFactory().getCommand("TU").execute(null);
+        getGameHandler().getCommandFactory().getCommand("TU").execute(new String[]{String.valueOf(getTurnManager().getCurrentPlayerIndex())});
 //        getGameHandler().getCommandFactory().getCommand(("PL")).execute(new String[]{"H", "7", "8", "HI"});
         // wait for the response command (this will be game-specific, depending on your design)
+        this.gameServer.broadcast("hi");
         delay(5000);
     }
 
@@ -219,7 +229,21 @@ public class GameManager {
         return gameHandler;
     }
 
+    public void startServer() {
+        gameServer.start();
+        System.out.println("Server started on port " + gameServer.getPort());
+    }
+
+    public void stopServer() {
+        gameServer.close();
+        System.out.println("Server closed on port " + gameServer.getPort());
+    }
+
     public void setGameHandler(GameHandler gameHandler) {
         this.gameHandler = gameHandler;
+    }
+
+    public MyServer getGameServer() {
+        return gameServer;
     }
 }

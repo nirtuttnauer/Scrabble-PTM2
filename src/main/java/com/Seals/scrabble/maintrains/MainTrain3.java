@@ -30,7 +30,12 @@ public class MainTrain3 {
 			in.close();
 			out.close();
 		}
-		
+
+		@Override
+		public void sendMessage(String message) {
+
+		}
+
 	}
 	
 	

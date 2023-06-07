@@ -8,7 +8,7 @@ import static com.Seals.scrabble.model.hModel.getGameManager;
 public class TurnUpdateCommand implements ICommand {
     @Override
     public String execute(String[] args) {
-        getGameManager().getGameHandler().getOut().println("TU:" + getGameManager().getTurnManager().getCurrentPlayerIndex());
+        getGameManager().getGameServer().broadcast(args.toString());
         return null;
     }
 }

@@ -68,4 +68,9 @@ public class BookScrabbleHandler implements ClientHandler {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public void sendMessage(String message) {
+
+    }
 }

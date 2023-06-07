@@ -3,45 +3,34 @@ package com.Seals.scrabble.model;
 import com.Seals.scrabble.Settings;
 import com.Seals.scrabble.model.hostSide.GameHandler;
 import com.Seals.scrabble.model.hostSide.game.GameManager;
-import com.Seals.scrabble.model.hostSide.game.Player;
-import com.Seals.scrabble.model.socketUtil.MyServer;
 import com.Seals.scrabble.model.socketUtil.SocketUtil;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Random;
 import java.util.Scanner;
 
 public class hModel extends Model {
-    private MyServer gameServer;
     static private GameManager single_instance_gm = null;
-    private Player currentPlayer;
+    private int currentPlayer;
 
     public hModel(iModel model) {
         super(model);
-        GameHandler gh = new GameHandler();
 
         System.out.println("HostModel constructor called");
 //        Random r = new Random();
 //        int port = 6000 + r.nextInt(1000);
-        int port = Settings.getHostServerPort();
-        getGameManager().setGameHandler(gh);
-        gameServer = new MyServer(port, gh);
+        getGameManager();
 
     }
 
     public void startServer() {
-        gameServer.start();
-        System.out.println("Server started on port " + gameServer.getPort());
+        getGameManager().startServer();
         connectToHost();
         sendRequestToHost("NP", null);
     }
 
-    public void stopServer() {
-        gameServer.close();
-        System.out.println("Server closed on port " + gameServer.getPort());
-    }
+
 
     public String sendRequestToServer(String query) {
         Socket client = null;
@@ -74,20 +63,18 @@ public class hModel extends Model {
         getGameManager().endGame();
         System.out.println("Game ended");
     }
-    public MyServer getGameServer() {
-        return gameServer;
-    }
+
 
 //    public void testDMServerConnection() {
 //        System.out.println("Testing DM server connection");
 //        sendRequestToServer("q,mobidick," + getNickname());
 //    }
 
-    public Player getCurrentPlayer() {
+    public int getCurrentPlayer() {
         return currentPlayer;
     }
 
-    public void setCurrentPlayer(Player currentPlayer) {
+    public void setCurrentPlayer(int currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
 

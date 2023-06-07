@@ -104,8 +104,6 @@ public class Tile {
         }
 
         public Tile getRand() {
-            System.out.println(size());
-            System.out.println(Arrays.toString(getAmounts()));
             if (size() > 0) {
                 Random rn = new Random();
                 int i = abs(rn.nextInt() % 26);
@@ -113,7 +111,6 @@ public class Tile {
                     i++;
                 }
                 char ot = (char) ('A' + (i % 26));
-                System.out.println(ot);
                 return getTile(ot);
             }
             return null;

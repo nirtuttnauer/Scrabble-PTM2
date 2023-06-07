@@ -118,18 +118,22 @@ public class Model extends Observable implements iModel {
             in = new Scanner(guestSocket.getInputStream());
             System.out.println("Just connected to " + guestSocket.getRemoteSocketAddress());
             startListening();
+            sendRequestToHost("NP", new String[]{getNickname()}); // Request for ID of new player
         } catch (IOException e) {
             // Handle any exceptions
             e.printStackTrace();
         }
     }
+
     private void startListening() {
         listening = true;
+        System.out.println("started listing on line 130");
         listenerThread = new Thread(() -> {
             while (listening) {
                 if (in.hasNextLine()) {
                     System.out.println("I heard something...");
                     String response = in.nextLine();
+                    System.out.println(response);
                     processResponse(response);
                 }
             }
@@ -144,7 +148,7 @@ public class Model extends Observable implements iModel {
         }
     }
 
-        private void processResponse(String response) {
+    private void processResponse(String response) {
         String[] parts = response.split(":");
         if (parts[0].equals("TU")) {
             int turnId = Integer.parseInt(parts[1]);
@@ -170,31 +174,29 @@ public class Model extends Observable implements iModel {
     }
 
 
-public void sendRequestToHost(String commandName, String[] args) {
-    try {
-        if (guestSocket.isClosed()) {
-            System.out.println("Socket is closed");
-            guestSocket = new Socket(serverAddress, Settings.getHostServerPort());
-            guestSocket.setSoTimeout(1000); // Set the timeout to 5 seconds (5000 milliseconds)
-            out = new PrintWriter(guestSocket.getOutputStream(), true); // Sending request to server
-            in = new Scanner(guestSocket.getInputStream());
-        }
+    public void sendRequestToHost(String commandName, String[] args) {
+        try {
+            if (guestSocket.isClosed()) {
+                System.out.println("Socket is closed");
+                guestSocket = new Socket(serverAddress, Settings.getHostServerPort());
+                guestSocket.setSoTimeout(1000); // Set the timeout to 5 seconds (5000 milliseconds)
+                out = new PrintWriter(guestSocket.getOutputStream(), true); // Sending request to server
+            }
 
-        // Format the command and arguments into a request string
-        String request = commandName;
-        if (args != null) {
-            request += ":" + String.join(",", args);
-        }
+            // Format the command and arguments into a request string
+            String request = commandName;
+            if (args != null) {
+                request += ":" + String.join(",", args);
+            }
 
-        out.println(request);
-        // Handle response
-        System.out.println();
-        // Don't close socket, scanner, or writer here;
-        // they should be closed when done with all communication
-    } catch (IOException e) {
-        throw new RuntimeException(e);
+            out.println(request);
+            // Handle response
+            // Don't close socket, scanner, or writer here;
+            // they should be closed when done with all communication
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
-}
 
 
 //    private String processResponse(String response) {

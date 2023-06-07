@@ -5,15 +5,13 @@ import com.Seals.scrabble.factories.command.ICommand;
 import com.Seals.scrabble.model.socketUtil.ClientHandler;
 
 import java.io.*;
-import java.net.Socket;
 
-public class GameHandler implements ClientHandler {
+public class PlayerHandler implements ClientHandler {
 
-    private CommandFactory commandFactory;
+    private final CommandFactory commandFactory;
     private PrintWriter clientWriter;
-    private Socket clientSocket;
 
-    public GameHandler() {
+    public PlayerHandler() {
         this.commandFactory = new CommandFactory();
     }
 
@@ -42,10 +40,9 @@ public class GameHandler implements ClientHandler {
         }
     }
 
+    @Override
     public void sendMessage(String message) {
-        if (clientWriter != null) {
-            clientWriter.println(message);
-        }
+
     }
 
     private String processRequest(String request) {
@@ -60,10 +57,6 @@ public class GameHandler implements ClientHandler {
         } else {
             return "Unknown command: " + split[0];
         }
-    }
-
-    public void setClientSocket(Socket clientSocket) {
-        this.clientSocket = clientSocket;
     }
 
     public PrintWriter getOut() {

@@ -5,26 +5,17 @@ import com.Seals.scrabble.model.hModel;
 
 import static com.Seals.scrabble.model.socketUtil.SocketUtil.delay;
 
-public class MainModel {
+public class hMainModel {
 
     public static void main(String[] args) {
-        delay(5000);
-        Model model = createAndConnectGuest();
+        delay(1000);
 
-
-        // Test sending a request from one of the players
-//        if (models.length > 0) {
-//            models[0].sendRequestToHost("PL", new String[]{String.valueOf(models[0].getID()), ",H,7,8,lolz"});
-//        }
-
-//        delay(1000);
-
-//        hostModel.endGame();
-
-        // Disconnect guests
-//        disconnectGuests(models);
-
-//        hostModel.stopServer();
+        // Create and start the host server
+        hModel hostModel = new hModel(new Model());
+        hostModel.startServer();
+        delay(10000);
+        // Create and connect guests
+        hostModel.startGame();
     }
 
     private static Model createAndConnectGuest() {
