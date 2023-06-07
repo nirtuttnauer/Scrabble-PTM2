@@ -6,7 +6,7 @@ import static com.Seals.scrabble.model.hModel.getGameManager;
 
 public class PassCommand implements ICommand {
     @Override
-    public String execute(String[] args) {
+    public String execute(String args) {
         getGameManager().getTurnManager().nextTurn();
         getGameManager().getGameBoard().printBoard();
         return null;

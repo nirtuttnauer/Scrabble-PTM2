@@ -5,6 +5,8 @@ import com.Seals.scrabble.factories.command.ICommand;
 import com.Seals.scrabble.model.socketUtil.ClientHandler;
 
 import java.io.*;
+import java.net.Socket;
+import java.util.Arrays;
 
 public class PlayerHandler implements ClientHandler {
 
@@ -45,6 +47,11 @@ public class PlayerHandler implements ClientHandler {
 
     }
 
+    @Override
+    public void setClientSocket(Socket client) {
+
+    }
+
     private String processRequest(String request) {
         if (request == null || request.isEmpty()) {
             return "Invalid request";
@@ -53,7 +60,7 @@ public class PlayerHandler implements ClientHandler {
         String[] split = request.split(",");
         ICommand command = commandFactory.getCommand(split[0]);
         if (command != null) {
-            return command.execute(split);
+            return command.execute(Arrays.toString(split));
         } else {
             return "Unknown command: " + split[0];
         }

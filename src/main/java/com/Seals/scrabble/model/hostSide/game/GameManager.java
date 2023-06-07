@@ -74,7 +74,7 @@ public class GameManager {
     private void processTurn() {
         Player currentPlayer = getCurrentPlayer();
         currentPlayer.printHand();
-        getGameHandler().getCommandFactory().getCommand("TU").execute(new String[]{String.valueOf(getTurnManager().getCurrentPlayerIndex())});
+        getGameHandler().getCommandFactory().getCommand("TU").execute(String.valueOf(getTurnManager().getCurrentPlayerIndex()));
 //        getGameHandler().getCommandFactory().getCommand(("PL")).execute(new String[]{"H", "7", "8", "HI"});
         // wait for the response command (this will be game-specific, depending on your design)
         this.gameServer.broadcast("hi");

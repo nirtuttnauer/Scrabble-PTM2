@@ -8,9 +8,9 @@ import static com.Seals.scrabble.model.hModel.getGameManager;
 public class PlaceCommand implements ICommand {
 
     @Override
-    public String execute(String[] args) {
+    public String execute(String args) {
         try {
-            boolean success = getGameManager().tryPlaceWordAction(getGameManager().getPlayerManager().getPlayer(getGameManager().getCurrentPlayer().getId()), args);
+            boolean success = getGameManager().tryPlaceWordAction(getGameManager().getPlayerManager().getPlayer(getGameManager().getCurrentPlayer().getId()), new String[]{args});
             return success ? "Word successfully placed!" : "Word placement failed.";
         } catch (IllegalArgumentException e) {
             System.out.println("error");

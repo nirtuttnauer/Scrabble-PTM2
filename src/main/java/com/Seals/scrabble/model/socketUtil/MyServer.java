@@ -102,10 +102,11 @@ public class MyServer {
         return stop.get();
     }
 
-    public void broadcast(String message) {
+    public String broadcast(String message) {
         for (ClientHandler clientHandler : clientHandlers.values()) {
             clientHandler.sendMessage(message);
         }
+        return message;
     }
  public ClientHandler createHandler(ClientHandler handler) {
         if (handler instanceof GameHandler) {
