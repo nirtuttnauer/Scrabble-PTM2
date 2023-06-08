@@ -64,9 +64,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     public void update(Observable o, Object arg) {
 //         if (o == modelFacade) {
 //             nickname.set(model.getNickname());
-//         }
     }
-
     // Additional methods and functionality specific to ViewModel
 
 //     public void startServer() {
@@ -84,4 +82,5 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     public void joinGame() {
         modelFacade.joinGame(Settings.getServerAddress(), Settings.getHostServerPort());
     }
+
 }
