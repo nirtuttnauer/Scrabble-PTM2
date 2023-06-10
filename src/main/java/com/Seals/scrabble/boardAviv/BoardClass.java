@@ -25,15 +25,23 @@ public class BoardClass {
         return this.board[i][j];
     }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
     public void printBoard() {
         System.out.println("---");
         for (int i = 0; i < height; i++) {
             String line = "|";
             for (int j = 0; j < width; j++) {
-                if (this.board[j][i] == null)
+                if (this.board[i][j] == null)
                     line += ".";
                 else
-                    line += this.board[j][i];
+                    line += this.board[i][j];
             }
             line += "|";
             System.out.println(line);

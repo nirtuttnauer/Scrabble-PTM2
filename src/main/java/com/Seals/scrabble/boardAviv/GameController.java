@@ -6,26 +6,30 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 
 import java.io.IOException;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 import static com.Seals.scrabble.factories.SceneFactory.setScene;
 
 public class GameController implements Observer, iController {
+
+
     @FXML
-    private GridPane boardGrid;
+    VBox VboxBoard;
 
     @FXML
     HBox HandHbox;
@@ -36,115 +40,124 @@ public class GameController implements Observer, iController {
 
     private Hand hand;
 
+    private List<Pane> paneList;
+    private String letterFromHand;
+
     @FXML
     public void initialize() {
+        this.paneList= new ArrayList<>();
+        this.letterFromHand = "";
         this.handString = new SimpleStringProperty();
 
         handString.bind(ViewModel.getHand());
-
         if (handString.get() != null) {
             System.out.println(handString.get());
             hand = new Hand(handString.get());
-        } else
+        } else {
             System.out.println("Hand object didn't create, handString is null");
+        }
 
         this.affine = new Affine();
-
-        this.affine.appendScale(600 / 15, 600 / 15);
+        this.affine.appendScale(600.0 / 15, 600.0 / 15);
 
         this.boardClass = new BoardClass(15, 15);
+        draw();
 
-        this.boardGrid.setGridLinesVisible(true);
-//        draw();
 
-        if (hand != null)
+        if (hand != null) {
             drawHand();
-        boardGrid.setPrefWidth(500.0);
-        boardGrid.setPrefHeight(400.0);
+        }
+
     }
 
     public void stepForward(int x, int y, String letter) {
         this.boardClass.setBoard(x, y, letter);
-//        draw();
     }
 
     public void stepBack(int x, int y) {
         this.boardClass.setBoard(x, y, null);
-//        draw();
     }
 
     public void handleSteps(int x, int y, String letter) {
-        if (this.boardClass.getState(x, y) == null)
+        if (this.boardClass.getState(x, y) == null) {
             stepForward(x, y, letter);
-        else
+        } else {
             stepBack(x, y);
+        }
     }
 
-    public void onFinishButtonClick(ActionEvent event) {
-        // Handle finish button click event
-    }
+
 
     public void drawHand() {
-        HandHbox.getChildren().clear(); // Clear existing children
+        HandHbox.getChildren().clear();
 
-        BackgroundFill backgroundFill = new BackgroundFill(Color.GREY, CornerRadii.EMPTY, Insets.EMPTY);
-
-        // Create a new Background with the BackgroundFill
+        BackgroundFill backgroundFill = new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY);
         Background background = new Background(backgroundFill);
 
         for (int i = 0; i < hand.tiles.length; i++) {
-            GridPane pane = new GridPane();
+            Pane handPane = new Pane();
+            handPane.setBackground(background);
             Label score = new Label();
             Label letter = new Label();
 
-            // Setting the grid background
-            pane.setBackground(background);
-
             letter.setText(hand.tiles[i]);
             score.setText("0");
-            // Set padding around the labels
-            Insets labelPadding = new Insets(47);
 
-            score.setPadding(labelPadding);
+            Insets labelsPadding = new Insets(47);
+            score.setPadding(labelsPadding);
             letter.setPadding(new Insets(10));
 
-            // Show the lines inside the grid
-            pane.setGridLinesVisible(true);
 
-            pane.getChildren().addAll(score, letter);
+            handPane.getChildren().addAll(score, letter);
 
-            pane.setPrefSize(HandHbox.getWidth() / hand.tiles.length, Double.MAX_VALUE);
+            HandHbox.getChildren().add(handPane);
 
-            HandHbox.getChildren().add(pane);
+            handPane.setOnMouseClicked(event -> {
+                handPane.setBackground(Background.fill(Color.BLUE));
+                // Handle the click event on the pane
+                System.out.println("Clicked on pane: " + handPane.getId());
+                letterFromHand = letter.getText();
+                System.out.println("The letter from the label: " + letterFromHand);
+                // Perform further actions with the letter
+            });
+
+            handPane.setMinHeight(100.0);
+
         }
-//        HandHbox.setMaxSize(890,65);
     }
 
-//    public void draw() {
-//        GraphicsContext g = this.BoardCanvas.getGraphicsContext2D();
-//        g.setTransform(this.affine);
-//        g.setFill(Color.LIGHTGRAY);
-//        g.fillRect(0, 0, 600, 600);
-//        g.setFill(Color.BLACK);
-//
-//        for (int i = 0; i < this.boardClass.getBoard().length; i++) {
-//            for (int j = 0; j < this.boardClass.getBoard()[i].length; j++) {
-//                String letter = this.boardClass.getState(i, j);
-//                if (letter != null)
-//                    g.strokeText(letter, i + 0.5, j + 0.8);
-//            }
-//        }
-//
-//        g.setStroke(Color.GREY);
-//        g.setLineWidth(0.05);
-//        for (int i = 0; i <= this.boardClass.getBoard().length; i++) {
-//            g.strokeLine(i, 0, i, 15);
-//        }
-//
-//        for (int j = 0; j <= this.boardClass.getBoard()[0].length; j++) {
-//            g.strokeLine(0, j, 15, j);
-//        }
-//    }
+
+
+
+    private void draw() {
+        VboxBoard.getChildren().clear();
+        VboxBoard.setAlignment(Pos.CENTER);
+        for (int i = 0; i < 15; i++) {
+            HBox row = new HBox();
+            for (int j = 0; j < 15; j++) {
+                Pane pane = new Pane();
+                pane.setMinSize(40, 40);
+                pane.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 1px;");// Set the background color of the pane
+
+                pane.setOnMouseClicked(event -> {
+                    if(!letterFromHand.equals("")){
+                        Label letter = new Label();
+                        letter.setText(letterFromHand);
+                        pane.getChildren().add(letter);
+                    }
+                    letterFromHand="";
+                    drawHand();
+                });
+                row.getChildren().add(pane);
+            }
+            VboxBoard.getChildren().add(row);
+        }
+    }
+
+
+
+
+
 
     @FXML
     private void handleDraw(MouseEvent mouseEvent) {
@@ -183,7 +196,5 @@ public class GameController implements Observer, iController {
         Platform.exit();
     }
 
-    public void handleDraggFromHbox(MouseEvent mouseEvent) {
 
-    }
 }
