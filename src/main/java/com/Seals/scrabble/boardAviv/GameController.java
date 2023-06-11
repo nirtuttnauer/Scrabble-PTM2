@@ -13,6 +13,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
@@ -70,21 +71,7 @@ public class GameController implements Observer, iController {
 
     }
 
-    public void stepForward(int x, int y, String letter) {
-        this.boardClass.setBoard(x, y, letter);
-    }
 
-    public void stepBack(int x, int y) {
-        this.boardClass.setBoard(x, y, null);
-    }
-
-    public void handleSteps(int x, int y, String letter) {
-        if (this.boardClass.getState(x, y) == null) {
-            stepForward(x, y, letter);
-        } else {
-            stepBack(x, y);
-        }
-    }
 
 
 
@@ -109,6 +96,9 @@ public class GameController implements Observer, iController {
 
 
             handPane.getChildren().addAll(score, letter);
+
+            // add the Tile to the paneList
+            paneList.add(handPane);
 
             HandHbox.getChildren().add(handPane);
 
@@ -156,29 +146,6 @@ public class GameController implements Observer, iController {
 
 
 
-
-
-
-    @FXML
-    private void handleDraw(MouseEvent mouseEvent) {
-        double mouseX = mouseEvent.getX();
-        double mouseY = mouseEvent.getY();
-
-        try {
-            Affine inverse = this.affine.createInverse();
-            double[] point = new double[]{mouseX, mouseY};
-            inverse.transform2DPoints(point, 0, point, 0, 1);
-            int simX = (int) Math.floor(point[0]);
-            int simY = (int) Math.floor(point[1]);
-
-            System.out.println(simX + "," + simY);
-
-            handleSteps(simX, simY, "A"); // Replace "A" with the desired letter
-        } catch (NonInvertibleTransformException e) {
-            System.out.println("Could not invert transform");
-        }
-    }
-
     @Override
     public void update(Observable o, Object arg) {
         if (o instanceof ViewModel) {
@@ -196,5 +163,33 @@ public class GameController implements Observer, iController {
         Platform.exit();
     }
 
+    public void generateTile(ActionEvent actionEvent) {
+        if(paneList.size()>=7){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Exception!");
+            alert.setHeaderText("Wrong step!");
+            alert.setContentText("you already have 7 tiles");
+
+            // Display the alert dialog
+            alert.showAndWait();
+        }
+        String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        // Create a Random object
+        Random random = new Random();
+
+        // Generate a random index within the range of the letters string length
+        int randomIndex = random.nextInt(letters.length());
+
+        // Get the random letter at the generated index
+        char randomLetter = letters.charAt(randomIndex);
+        Pane p = new Pane();
+        Label letter = new Label();
+        letter.setText(String.valueOf(randomLetter));
+        Label score = new Label();
+        p.getChildren().addAll(score,letter);
+        paneList.add(p);
+        drawHand();
     }
+}
 
