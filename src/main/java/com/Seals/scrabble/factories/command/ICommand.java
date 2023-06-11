@@ -1,5 +1,9 @@
 package com.Seals.scrabble.factories.command;
 
+import java.net.Socket;
+
 public interface ICommand {
-     String execute(String args);
+    String execute(Socket socket, String... args);
+
+
 }

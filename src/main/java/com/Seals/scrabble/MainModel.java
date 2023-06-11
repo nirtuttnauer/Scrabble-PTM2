@@ -30,7 +30,6 @@ public class MainModel {
     private static Model createAndConnectGuest() {
         Model model = new Model();
         model.connectToHost();
-        model.sendRequestToHost("NP", null); // Request for ID of new player
         return model;
     }
 

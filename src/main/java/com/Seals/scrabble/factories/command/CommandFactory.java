@@ -20,9 +20,9 @@ public class CommandFactory {
         commands.put("PL", new PlaceCommand());
         commands.put("PA", new PassCommand());
         commands.put("EX", new ExchangeCommand());
-        commands.put("NP", new NewPlayerCommand());
+        commands.put("new player", new NewPlayerCommand());
         commands.put("QU", new QuitCommand());
-        commands.put("TU", new TurnUpdateCommand());
+        commands.put("update me", new TurnUpdateCommand());
     }
 
     public ICommand getCommand(String commandName) {

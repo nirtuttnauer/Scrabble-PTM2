@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class MyServer {
+public class MyServer implements Runnable{
     private final int port;
     private final Map<String, ClientHandler> clientHandlers;
     private final ClientHandler ch;
@@ -30,32 +30,18 @@ public class MyServer {
 
     public void start() {
         stop.set(false);
-        new Thread(this::startServer).start();
+        new Thread(this).start();
         new Thread(this::processConnections).start();
-    }
-
-    private void startServer() {
-        try (ServerSocket server = new ServerSocket(port)) {
-            server.setSoTimeout(1000);
-            while (!stop.get()) {
-                try {
-                    Socket client = server.accept();
-                    queue.put(client);
-                } catch (SocketTimeoutException | InterruptedException ignored) {
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void processConnections() {
         while (!stop.get() || !queue.isEmpty()) {
             try {
                 Socket client = queue.take();
+                System.out.println(client.getInetAddress().getHostAddress() + ":" + client.getPort());
                 String clientKey = client.getInetAddress().getHostAddress() + ":" + client.getPort();
 
-                clientHandlers.putIfAbsent(clientKey, createHandler(ch));
+                clientHandlers.putIfAbsent(clientKey, createHandler(ch,client));
                 ClientHandler clientHandler = clientHandlers.get(clientKey);
 
                 executorService.execute(() -> {
@@ -63,14 +49,15 @@ public class MyServer {
                         clientHandler.handleClient(client.getInputStream(), client.getOutputStream());
                     } catch (IOException e) {
                         e.printStackTrace();
-                    } finally {
-                        clientHandler.close();
-                        try {
-                            client.close();
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
                     }
+//                    finally {
+////                        clientHandler.close();
+////                        try {
+////                            client.close();
+////                        } catch (IOException e) {
+////                            throw new RuntimeException(e);
+////                        }
+//                    }
                 });
             } catch (InterruptedException ignored) {
             }
@@ -90,7 +77,7 @@ public class MyServer {
         }
 
         for (ClientHandler clientHandler : clientHandlers.values()) {
-            clientHandler.close();
+//            clientHandler.close();
         }
     }
 
@@ -103,14 +90,20 @@ public class MyServer {
     }
 
     public String broadcast(String message) {
+        System.out.println("line 107 " + clientHandlers.values().size());
         for (ClientHandler clientHandler : clientHandlers.values()) {
-            clientHandler.sendMessage(message);
+            try {
+                clientHandler.sendMessage(message);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         return message;
     }
- public ClientHandler createHandler(ClientHandler handler) {
+
+    public ClientHandler createHandler(ClientHandler handler,Socket socket) {
         if (handler instanceof GameHandler) {
-            return new GameHandler();
+            return new GameHandler(socket);
         } else if (handler instanceof BookScrabbleHandler) {
             return new BookScrabbleHandler();
         } else {
@@ -118,4 +111,19 @@ public class MyServer {
         }
     }
 
+    @Override
+    public void run() {
+                try (ServerSocket server = new ServerSocket(port)) {
+            server.setSoTimeout(1000);
+            while (!stop.get()) {
+                try {
+                    Socket client = server.accept();
+                    queue.put(client);
+                } catch (SocketTimeoutException | InterruptedException ignored) {
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -10,7 +10,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Observable;
+import java.util.Random;
 import java.util.Scanner;
+
+import static java.lang.Math.abs;
 
 public class Model extends Observable implements iModel {
     private String serverAddress = "localhost";
@@ -33,6 +36,7 @@ public class Model extends Observable implements iModel {
         this.currentTurn = new SimpleStringProperty();
         hostPort = Settings.getHostServerPort();
         this.listening = false;
+        getRandomName();
     }
 
     public Model(iModel model) {
@@ -113,12 +117,12 @@ public class Model extends Observable implements iModel {
         try {
             System.out.println("Connecting to host on port " + hostPort);
             guestSocket = new Socket(serverAddress, Settings.getHostServerPort());
-            guestSocket.setSoTimeout(1000); // Set the timeout to 5 seconds (5000 milliseconds)
+            guestSocket.setSoTimeout(5000); // Set the timeout to 5 seconds (5000 milliseconds)
             out = new PrintWriter(guestSocket.getOutputStream(), true); // Sending request to server
             in = new Scanner(guestSocket.getInputStream());
             System.out.println("Just connected to " + guestSocket.getRemoteSocketAddress());
             startListening();
-            sendRequestToHost("NP", new String[]{getNickname()}); // Request for ID of new player
+            sendRequestToHost("new player", getNickname()); // Request for ID of new player
         } catch (IOException e) {
             // Handle any exceptions
             e.printStackTrace();
@@ -133,8 +137,9 @@ public class Model extends Observable implements iModel {
                 if (in.hasNextLine()) {
                     System.out.println("I heard something...");
                     String response = in.nextLine();
+//                    System.out.println(in.nextLine());
                     System.out.println(response);
-                    processResponse(response);
+                    sendRequestToHost(processResponse(response));
                 }
             }
         });
@@ -148,14 +153,13 @@ public class Model extends Observable implements iModel {
         }
     }
 
-    private void processResponse(String response) {
+    private String processResponse(String response) {
         String[] parts = response.split(":");
-        if (parts[0].equals("TU")) {
-            int turnId = Integer.parseInt(parts[1]);
-            if (turnId == this.ID) {
-                Platform.runLater(this::onMyTurn);
-            }
+        if (parts[0].equals("ID")) {
+            ID = Integer.parseInt(parts[1]);
         }
+//        System.out.println("update me");
+        return "update me";
     }
 
     private void onMyTurn() {
@@ -163,36 +167,37 @@ public class Model extends Observable implements iModel {
         notifyObservers("MT");
 
         // Send a response to the server when it's this player's turn
-        sendRequestToHost("MTR", null);
+        sendRequestToHost("MTR");
     }
 
     public void disconnectFromHost() {
         stopListening();
-        sendRequestToHost("QU", new String[]{String.valueOf(this.ID)});
+        sendRequestToHost("QU", String.valueOf(this.ID));
         SocketUtil.finallyClose(guestSocket, out, in);
         System.out.println("Disconnected from host");
     }
 
 
-    public void sendRequestToHost(String commandName, String[] args) {
+    public void sendRequestToHost(String commandName, String... args) {
         try {
             if (guestSocket.isClosed()) {
                 System.out.println("Socket is closed");
                 guestSocket = new Socket(serverAddress, Settings.getHostServerPort());
-                guestSocket.setSoTimeout(1000); // Set the timeout to 5 seconds (5000 milliseconds)
+                guestSocket.setSoTimeout(5000); // Set the timeout to 5 seconds (5000 milliseconds)
                 out = new PrintWriter(guestSocket.getOutputStream(), true); // Sending request to server
             }
 
             // Format the command and arguments into a request string
             String request = commandName;
             if (args != null) {
-                request += ":" + String.join(",", args);
+                request += "," + String.join(",", args);
             }
 
             out.println(request);
             // Handle response
             // Don't close socket, scanner, or writer here;
             // they should be closed when done with all communication
+//            out.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -213,5 +218,12 @@ public class Model extends Observable implements iModel {
 //        }
 //    }
 
+    void getRandomName() {
+        Random r = new Random();
+        String names = "yosi,inoy,aviv,omer,nir,hadar,maria,igor,efi,eli";
+        String[] split = names.split(",");
+        int rn = abs(r.nextInt() % split.length);
+        this.nickname.set(split[rn]);
+    }
 
 }

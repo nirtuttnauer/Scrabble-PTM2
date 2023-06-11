@@ -1,10 +1,10 @@
 package com.Seals.scrabble.model.hostSide.game;
 
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import static com.Seals.scrabble.model.hostSide.game.Player.MAX_TILES;
+import static com.Seals.scrabble.model.hostSide.game.Player.MAX_PLAYERS;
 
 public class PlayerManager {
     private List<Player> players;
@@ -17,9 +17,13 @@ public class PlayerManager {
         this.players = new ArrayList<>();
     }
 
-    public void addPlayer(Player player) {
-        players.add(player);
-        System.out.println(this.players);
+    public Boolean addPlayer(Player player) {
+        if (this.getTotalPlayers() <= MAX_PLAYERS) {
+            players.add(player);
+            System.out.println(this.players + "line 24 PM");
+            return true;
+        }
+        return false;
     }
 
     public void removePlayer(Player player) {
@@ -40,8 +44,8 @@ public class PlayerManager {
     }
 
 
-    public Player addPlayer() {
-        Player player = Player.createPlayer();
+    public Player addPlayer(Socket socket, String nickname) {
+        Player player = Player.createPlayer(socket, nickname);
         if (player != null) {
             addPlayer(player);
             System.out.println("Total players: " + getTotalPlayers());
@@ -53,7 +57,7 @@ public class PlayerManager {
 
     public void initializePlayerHands() {
         for (Player player : players) {
-                player.addTile(Tile.Bag.getBag().getRand());
+            player.addTile(Tile.Bag.getBag().getRand());
         }
     }
 

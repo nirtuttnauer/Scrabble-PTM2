@@ -1,9 +1,8 @@
 package com.Seals.scrabble.model.hostSide.game;
 
-import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.Seals.scrabble.model.hModel.getGameManager;
@@ -11,17 +10,22 @@ import static com.Seals.scrabble.model.hModel.getGameManager;
 public class Player {
     public static final int MAX_TILES = 7;
     private static int nextId = 1;
-    private static final int MAX_PLAYERS = 4;
+    public static final int MAX_PLAYERS = 4;
+    public final Socket socket;
+    private final String name;
     private int id;
     private List<Tile> hand;
-    private Player() {
-        this.id = nextId++;
+
+    public Player(Socket socket, String nickname) {
+            this.id = nextId++;
         this.hand = new ArrayList<>();
+        this.socket = socket;
+        this.name = nickname;
     }
 
-    public static Player createPlayer() {
+    public static Player createPlayer(Socket socket, String nickname) {
         if (nextId <= MAX_PLAYERS) {
-            return new Player();
+            return new Player(socket,nickname);
         } else {
             System.out.println("Player limit reached");
             return null;

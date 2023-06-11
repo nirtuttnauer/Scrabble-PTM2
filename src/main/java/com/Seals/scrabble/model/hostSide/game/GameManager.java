@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-import static com.Seals.scrabble.model.hostSide.game.Player.createPlayer;
 import static com.Seals.scrabble.model.socketUtil.SocketUtil.delay;
 
 public class GameManager {
@@ -25,15 +24,14 @@ public class GameManager {
     private MyServer gameServer;
 
 
- public GameManager() {
-    this.gameBoard = Board.getBoard();
-    this.Bag = Tile.Bag.getBag();
-    this.playerManager = new PlayerManager();
-    this.isGameInProgress = false;
-    this.gameHandler = new GameHandler();
-    int port = Settings.getHostServerPort();
-    gameServer = new MyServer(port, gameHandler);
-}
+    public GameManager() {
+        this.gameBoard = Board.getBoard();
+        this.Bag = Tile.Bag.getBag();
+        this.playerManager = new PlayerManager();
+        this.isGameInProgress = false;
+        int port = Settings.getHostServerPort();
+        gameServer = new MyServer(port, new GameHandler(null));
+    }
 
 
     public TurnManager getTurnManager() {
@@ -57,6 +55,7 @@ public class GameManager {
 
         // Game has started
         playerManager.initializePlayerHands();
+
         nextTurn();
         while (isGameInProgress) {
             processTurn();
@@ -72,13 +71,18 @@ public class GameManager {
     }
 
     private void processTurn() {
-        Player currentPlayer = getCurrentPlayer();
-        currentPlayer.printHand();
-        getGameHandler().getCommandFactory().getCommand("TU").execute(String.valueOf(getTurnManager().getCurrentPlayerIndex()));
-//        getGameHandler().getCommandFactory().getCommand(("PL")).execute(new String[]{"H", "7", "8", "HI"});
-        // wait for the response command (this will be game-specific, depending on your design)
-        this.gameServer.broadcast("hi");
-        delay(5000);
+        System.out.println("line 75 " + (getTurnManager().getCurrentPlayerIndex()+1));
+        Player currentPlayer = getPlayerManager().getPlayer(getTurnManager().getCurrentPlayerIndex()+1);
+        if (currentPlayer != null) {
+            currentPlayer.printHand();
+            gameServer.broadcast("lolz");
+
+            // rest of the code
+        } else {
+            // handle the case when the player is not found
+        }
+
+        delay(2000);
     }
 
     private boolean isGameFinished() {
@@ -115,12 +119,11 @@ public class GameManager {
     }
 
 
-    public Player addPlayer() {
-        Player player = createPlayer();
+    public Boolean addPlayer(Player player) {
         if (player != null) {
-            playerManager.addPlayer(player); // Add player to player manager
+            Boolean status = playerManager.addPlayer(player); // Add player to player manager
             System.out.println("Total players: " + getTotalPlayers());
-            return player;
+            return status;
         } else {
             return null;
         }

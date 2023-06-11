@@ -7,11 +7,13 @@ import com.Seals.scrabble.model.socketUtil.ClientHandler;
 import java.io.*;
 import java.net.Socket;
 import java.util.Arrays;
+import java.util.List;
 
 public class PlayerHandler implements ClientHandler {
 
     private final CommandFactory commandFactory;
     private PrintWriter clientWriter;
+    private Socket clientSocket;
 
     public PlayerHandler() {
         this.commandFactory = new CommandFactory();
@@ -52,19 +54,24 @@ public class PlayerHandler implements ClientHandler {
 
     }
 
-    private String processRequest(String request) {
-        if (request == null || request.isEmpty()) {
-            return "Invalid request";
-        }
-
-        String[] split = request.split(",");
-        ICommand command = commandFactory.getCommand(split[0]);
-        if (command != null) {
-            return command.execute(Arrays.toString(split));
-        } else {
-            return "Unknown command: " + split[0];
-        }
+private String processRequest(String request) {
+    if (request == null || request.isEmpty()) {
+        return "Invalid request";
     }
+
+    List<String> split = new java.util.ArrayList<>(List.of(request.split(",")));
+    System.out.println(split);
+    String scmd = split.get(0);
+    ICommand command = commandFactory.getCommand(scmd);
+    split.remove(split.get(0));
+    if (command != null) {
+        String[] args = new String[split.size()];
+        split.toArray(args);
+        return command.execute(this.clientSocket, args);
+    } else {
+        return "Unknown command: " + scmd;
+    }
+}
 
     public PrintWriter getOut() {
         return clientWriter;

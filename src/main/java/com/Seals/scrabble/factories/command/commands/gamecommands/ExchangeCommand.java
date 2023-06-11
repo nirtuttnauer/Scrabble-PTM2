@@ -3,11 +3,13 @@ package com.Seals.scrabble.factories.command.commands.gamecommands;
 import com.Seals.scrabble.factories.command.ICommand;
 import com.Seals.scrabble.model.hostSide.game.GameManager;
 
+import java.net.Socket;
+
 import static com.Seals.scrabble.model.hModel.getGameManager;
 
 public class ExchangeCommand implements ICommand {
     @Override
-    public String execute(String args) {
+    public String execute(Socket socket, String... args) {
         getGameManager().getGameBoard().printBoard();
         return null;
     }
