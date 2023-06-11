@@ -196,5 +196,5 @@ public class GameController implements Observer, iController {
         Platform.exit();
     }
 
+    }
 
-}
