@@ -13,24 +13,28 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     private  ModelFacade modelFacade;
 
 
-    private StringProperty nickname;
-    private StringProperty hand;
 
-    public StringProperty getHand() {
-        return hand;
+    private static StringProperty handToView;
+     private String newHand;
+     private String handFromModel;
+    private final int[] values = {1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 1, 1, 3, 10, 1, 1, 1, 1, 4, 4, 8, 4, 10};
+
+    public static StringProperty getHandToView() {
+        return handToView;
     }
 
     public StringProperty handProperty() {
-        return hand;
+        return handToView;
     }
 
     public ViewModel() {
-        this.hand = new SimpleStringProperty();
+        handFromModel = new String();
+        newHand = new String();
+        handToView = new SimpleStringProperty();
         sharedInstance = this;
         hand.set("ABBBCAS");
         modelFacade = new ModelFacade();
         this.nickname = new SimpleStringProperty();
-
     }
 
     public static iViewModel getSharedInstance() {
@@ -62,9 +66,16 @@ public class ViewModel extends Observable implements Observer, iViewModel {
 
     @Override
     public void update(Observable o, Object arg) {
-        // Handle update logic
+//        if (o instanceof ModelFacade) {
+//            if (arg instanceof String) {
+//                String check = arg.toString();
+//                if(check.charAt(0) == 'U' && check.charAt(1) == 'A' && check.charAt(2) == ',')
+//                    handFromModel = arg.toString();
+//                    setLetterValue(handFromModel);
+//            }
+//         }
+//            nickname.set(model.getNickname());
     }
-
     // Additional methods and functionality specific to ViewModel
 
     public void hostGame() {
@@ -74,5 +85,30 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     public void joinGame() {
         modelFacade.joinGame(Settings.getServerAddress(), Settings.getHostServerPort());
     }
+    public void setLetterValue(String tiles){
+        for (int i = 3; i < handFromModel.length(); i++){
+            int value = values[tiles.charAt(i) - 'A'];
+            newHand += handFromModel.charAt(i) + "," + value +",";
+        }
+        newHand = newHand.substring(0, newHand.length()-1);
+        setHandToView();
+    }
 
+    public void setHandToView(){
+        handToView.set(newHand);
+    }
+
+    public static StringProperty handToViewProperty() {
+        return handToView;
+    }
+
+    public static void setHandToView(String handToView) {
+        ViewModel.handToView.set(handToView);
+    }
+
+//    public void check(){
+//        handFromModel = "UA,AQBRTC";
+//        setLetterValue(handFromModel);
+//        System.out.println(handToView.get());
+//    }
 }
