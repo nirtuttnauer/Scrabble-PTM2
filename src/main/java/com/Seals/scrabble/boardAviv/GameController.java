@@ -38,7 +38,9 @@ import static com.Seals.scrabble.factories.SceneFactory.setScene;
 
 public class GameController implements Observer, iController {
 
-    private static IntegerProperty cordX;
+    private static IntegerProperty cordX =new SimpleIntegerProperty();
+    private static IntegerProperty cordY= new SimpleIntegerProperty();
+
 
     public static int getCordX() {
         return cordX.get();
@@ -55,8 +57,6 @@ public class GameController implements Observer, iController {
     public static IntegerProperty cordYProperty() {
         return cordY;
     }
-
-    private static IntegerProperty cordY;
     @FXML
     Button confirmChangesBTN;
     @FXML
@@ -83,9 +83,6 @@ public class GameController implements Observer, iController {
     @FXML
     public void initialize() {
 
-        //int property
-        cordX= new SimpleIntegerProperty();
-        cordY = new SimpleIntegerProperty();
 
         // set changes button
         this.confirmChangesBTN.setVisible(false);
@@ -114,13 +111,13 @@ public class GameController implements Observer, iController {
         // StringProperty...
         this.letterFromHand = "";
         this.handString = new SimpleStringProperty();
-        handString.bind(ViewModel.getSharedInstance().getHand());
+        handString.bind(ViewModel.getSharedInstance().getHandProperty());
         if (handString.get() != null) {
             drawHand();
         } else {
             System.out.println("Hand object didn't create, handString is null");
         }
-        ViewModel.getSharedInstance().getHand().addListener(new ChangeListener<String>() {
+        ViewModel.getSharedInstance().getHandProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
                 System.out.println("addListener() called , the new value is : "+ newValue);

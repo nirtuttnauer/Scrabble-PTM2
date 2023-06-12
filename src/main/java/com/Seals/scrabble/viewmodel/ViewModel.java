@@ -1,29 +1,33 @@
 package com.Seals.scrabble.viewmodel;
 
 import com.Seals.scrabble.Settings;
+import com.Seals.scrabble.boardAviv.BoardClass;
+import com.Seals.scrabble.boardAviv.GameController;
 import com.Seals.scrabble.facade.ModelFacade;
+import com.Seals.scrabble.model.serverSide.manager.DictionaryManager;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 
 import java.util.Observable;
 import java.util.Observer;
 
 public class ViewModel extends Observable implements Observer, iViewModel {
     private static iViewModel sharedInstance;
-    private  ModelFacade modelFacade;
-
-
-
-    private static StringProperty handToView;
-     private String newHand;
-     private String handFromModel;
+    private ModelFacade modelFacade;
+    private StringProperty nickname;
+    private StringProperty handToView;
+    private String newHand;
+    private String handFromModel;
     private final int[] values = {1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 1, 1, 3, 10, 1, 1, 1, 1, 4, 4, 8, 4, 10};
+    private BoardClass board;
+    private IntegerProperty cordX;
+    private IntegerProperty cordY;
 
-    public static StringProperty getHandToView() {
-        return handToView;
-    }
-
-    public StringProperty handProperty() {
+    @Override
+    public StringProperty getHandProperty() {
         return handToView;
     }
 
@@ -32,9 +36,14 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         newHand = new String();
         handToView = new SimpleStringProperty();
         sharedInstance = this;
-        hand.set("ABBBCAS");
         modelFacade = new ModelFacade();
         this.nickname = new SimpleStringProperty();
+        board = new BoardClass(0, 0); // Create an instance of BoardClass
+        cordX = new SimpleIntegerProperty();
+        cordY = new SimpleIntegerProperty();
+        cordX.bind(GameController.cordXProperty());
+        cordY.bind(GameController.cordYProperty());
+        handToView.set("A,1,B,2,C,3");
     }
 
     public static iViewModel getSharedInstance() {
@@ -60,6 +69,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         return nickname.get();
     }
 
+    @Override
     public StringProperty nicknameProperty() {
         return nickname;
     }
@@ -85,6 +95,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     public void joinGame() {
         modelFacade.joinGame(Settings.getServerAddress(), Settings.getHostServerPort());
     }
+
     public void setLetterValue(String tiles){
         for (int i = 3; i < handFromModel.length(); i++){
             int value = values[tiles.charAt(i) - 'A'];
@@ -96,14 +107,6 @@ public class ViewModel extends Observable implements Observer, iViewModel {
 
     public void setHandToView(){
         handToView.set(newHand);
-    }
-
-    public static StringProperty handToViewProperty() {
-        return handToView;
-    }
-
-    public static void setHandToView(String handToView) {
-        ViewModel.handToView.set(handToView);
     }
 
 //    public void check(){
