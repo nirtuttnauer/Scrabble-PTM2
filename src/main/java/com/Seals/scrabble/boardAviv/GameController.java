@@ -148,12 +148,20 @@ public class GameController implements Observer, iController {
             HandHbox.getChildren().add(handPane);
 
             handPane.setOnMouseClicked(event -> {
-                handPane.setBackground(Background.fill(Color.BLUE));
-                // Handle the click event on the pane
-                System.out.println("Clicked on pane: " + handPane.getId());
-                letterFromHand = letter.getText();
-                System.out.println("The letter from the label: " + letterFromHand);
-                // Perform further actions with the letter
+                if (handPane.getBackground().equals(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)))) {
+                    letterFromHand="";
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Error");
+                    alert.setContentText("You already used this tile!\nTry a different tile.");
+                    alert.showAndWait();
+                } else {
+                    handPane.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+                    // Handle the click event on the pane
+                    System.out.println("Clicked on pane: " + handPane.getId());
+                    letterFromHand = letter.getText();
+                    System.out.println("The letter from the label: " + letterFromHand);
+                    // Perform further actions with the letter
+                }
             });
 
             handPane.setMinHeight(100.0);
