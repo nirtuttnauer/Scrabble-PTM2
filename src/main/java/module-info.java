@@ -12,5 +12,7 @@ module com.example.scrabble {
     exports com.Seals.scrabble.boardAviv;
     opens com.Seals.scrabble.boardAviv to javafx.fxml;
     exports com.Seals.scrabble.factories.command;
-    opens com.Seals.scrabble.factories.command to javafx.fxml;
+    opens com.Seals.scrabble.factories.command.commands.modelcommands to javafx.fxml;
+    exports com.Seals.scrabble.factories.command.commands.hostcommands;
+    opens com.Seals.scrabble.factories.command.commands.hostcommands to javafx.fxml;
 }

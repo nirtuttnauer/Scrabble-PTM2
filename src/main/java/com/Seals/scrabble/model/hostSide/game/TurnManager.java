@@ -38,4 +38,8 @@ public class TurnManager {
             }
         }
     }
+
+    public int getCurrentPlayerIndex() {
+        return currentPlayerIndex;
+    }
 }
