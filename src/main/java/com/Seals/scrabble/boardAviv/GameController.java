@@ -6,6 +6,7 @@ import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -36,8 +37,26 @@ import java.util.*;
 import static com.Seals.scrabble.factories.SceneFactory.setScene;
 
 public class GameController implements Observer, iController {
-    
-    private IntegerProperty[] cordXY;
+
+    private static IntegerProperty cordX;
+
+    public static int getCordX() {
+        return cordX.get();
+    }
+
+    public static IntegerProperty cordXProperty() {
+        return cordX;
+    }
+
+    public static int getCordY() {
+        return cordY.get();
+    }
+
+    public static IntegerProperty cordYProperty() {
+        return cordY;
+    }
+
+    private static IntegerProperty cordY;
     @FXML
     Button confirmChangesBTN;
     @FXML
@@ -63,9 +82,10 @@ public class GameController implements Observer, iController {
 
     @FXML
     public void initialize() {
-        
+
         //int property
-        cordXY= new IntegerProperty[2];
+        cordX= new SimpleIntegerProperty();
+        cordY = new SimpleIntegerProperty();
 
         // set changes button
         this.confirmChangesBTN.setVisible(false);
@@ -126,9 +146,9 @@ public class GameController implements Observer, iController {
 
         BackgroundFill backgroundFill = new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY);
         Background background = new Background(backgroundFill);
-        
+
         String[] splitString = handString.get().split(",");
-        
+
         for (int i = 0; i < splitString.length; i+=2) {
             String letterStr= splitString[i];
             String scoreStr=splitString[i+1];
@@ -165,8 +185,8 @@ public class GameController implements Observer, iController {
                     letterFromHand = letter.getText();
                     System.out.println("The letter from the label: " + letterFromHand);
                     // Perform further actions with the letter
-                        cordXY[0].set((int)event.getX());
-                        cordXY[1].set((int)event.getY());
+                        cordX.set((int)event.getX());
+                        cordY.set((int)event.getY());
                 }
             });
 
