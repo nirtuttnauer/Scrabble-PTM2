@@ -14,4 +14,8 @@ public interface iViewModel extends Observer {
     void addObserver(java.util.Observer observer);
 
     void deleteObserver(java.util.Observer observer);
+
+    ObservableValue<String> getHand();
+
+
 }

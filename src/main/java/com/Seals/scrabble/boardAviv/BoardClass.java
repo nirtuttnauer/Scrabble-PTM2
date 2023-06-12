@@ -3,7 +3,7 @@ package com.Seals.scrabble.boardAviv;
 public class BoardClass {
     private int width;
     private int height;
-    private String[][] board;
+    private static String[][] board;
 
     public BoardClass(int width, int height) {
         this.width = width;
@@ -16,7 +16,7 @@ public class BoardClass {
         this.board[i][j] = val;
     }
 
-    public String[][] getBoard() {
+    public static String[][] getBoard() {
         return board;
     }
 
