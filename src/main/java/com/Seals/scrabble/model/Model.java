@@ -2,13 +2,15 @@ package com.Seals.scrabble.model;
 
 import com.Seals.scrabble.Settings;
 import com.Seals.scrabble.model.socketUtil.SocketUtil;
-import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.Observable;
 import java.util.Random;
 import java.util.Scanner;
@@ -21,7 +23,7 @@ public class Model extends Observable implements iModel {
     private int ID;
     private Socket guestSocket;
     private PrintWriter out = null;
-    private Scanner in = null;
+    private BufferedReader in = null;
 
     //IO listener
     private Thread listenerThread;
@@ -84,11 +86,11 @@ public class Model extends Observable implements iModel {
         this.out = out;
     }
 
-    public Scanner getIn() {
+    public BufferedReader getIn() {
         return in;
     }
 
-    public void setIn(Scanner in) {
+    public void setIn(BufferedReader in) {
         this.in = in;
     }
 
@@ -113,38 +115,45 @@ public class Model extends Observable implements iModel {
         return nickname;
     }
 
-    public void connectToHost() {
-        try {
-            System.out.println("Connecting to host on port " + hostPort);
-            guestSocket = new Socket(serverAddress, Settings.getHostServerPort());
-            guestSocket.setSoTimeout(5000); // Set the timeout to 5 seconds (5000 milliseconds)
-            out = new PrintWriter(guestSocket.getOutputStream(), true); // Sending request to server
-            in = new Scanner(guestSocket.getInputStream());
-            System.out.println("Just connected to " + guestSocket.getRemoteSocketAddress());
-            startListening();
-            sendRequestToHost("new player", getNickname()); // Request for ID of new player
-        } catch (IOException e) {
-            // Handle any exceptions
-            e.printStackTrace();
-        }
+public void connectToHost() {
+    try {
+        System.out.println("Connecting to host on port " + hostPort);
+        guestSocket = new Socket(serverAddress, Settings.getHostServerPort());
+        guestSocket.setSoTimeout(5000); // Set the timeout to 5 seconds (5000 milliseconds)
+        out = new PrintWriter(guestSocket.getOutputStream(), true); // Sending request to server
+        in = new BufferedReader(new InputStreamReader(guestSocket.getInputStream())); // Change this line
+        System.out.println("Just connected to " + guestSocket.getRemoteSocketAddress());
+        startListening();
+        sendRequestToHost("new player", getNickname()); // Request for ID of new player
+    } catch (IOException e) {
+        // Handle any exceptions
+        e.printStackTrace();
     }
+}
 
-    private void startListening() {
-        listening = true;
-        System.out.println("started listing on line 130");
-        listenerThread = new Thread(() -> {
-            while (listening) {
-                if (in.hasNextLine()) {
+
+private void startListening() {
+    listening = true;
+    System.out.println("started listing on line 130");
+    listenerThread = new Thread(() -> {
+        while (listening) {
+            String response = null;
+            try {
+                if ((response = in.readLine()) != null) {
                     System.out.println("I heard something...");
-                    String response = in.nextLine();
-//                    System.out.println(in.nextLine());
                     System.out.println(response);
                     sendRequestToHost(processResponse(response));
                 }
+            } catch (SocketTimeoutException e) {
+                System.out.println("Socket timeout, continuing to listen...");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        });
-        listenerThread.start();
-    }
+        }
+    });
+    listenerThread.start();
+}
+
 
     private void stopListening() {
         listening = false;
@@ -173,7 +182,11 @@ public class Model extends Observable implements iModel {
     public void disconnectFromHost() {
         stopListening();
         sendRequestToHost("QU", String.valueOf(this.ID));
-        SocketUtil.finallyClose(guestSocket, out, in);
+        try {
+            SocketUtil.finallyClose(guestSocket, out, in);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         System.out.println("Disconnected from host");
     }
 
