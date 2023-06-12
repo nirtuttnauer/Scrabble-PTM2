@@ -17,6 +17,7 @@ public interface iViewModel extends Observer {
     void deleteObserver(java.util.Observer observer);
 
    StringProperty getHandProperty();
+  void joinGame();
 
 
 }

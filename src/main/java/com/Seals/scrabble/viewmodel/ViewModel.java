@@ -16,15 +16,13 @@ import java.util.Observer;
 
 public class ViewModel extends Observable implements Observer, iViewModel {
     private static iViewModel sharedInstance;
-    private ModelFacade modelFacade;
+    private  static ModelFacade modelFacade;
     private StringProperty nickname;
     private StringProperty handToView;
     private String newHand;
     private String handFromModel;
     private final int[] values = {1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 1, 1, 3, 10, 1, 1, 1, 1, 4, 4, 8, 4, 10};
-    private BoardClass board;
-    private IntegerProperty cordX;
-    private IntegerProperty cordY;
+
 
     @Override
     public StringProperty getHandProperty() {
@@ -38,12 +36,6 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         sharedInstance = this;
         modelFacade = new ModelFacade();
         this.nickname = new SimpleStringProperty();
-        board = new BoardClass(0, 0); // Create an instance of BoardClass
-        cordX = new SimpleIntegerProperty();
-        cordY = new SimpleIntegerProperty();
-        cordX.bind(GameController.cordXProperty());
-        cordY.bind(GameController.cordYProperty());
-        handToView.set("A,1,B,2,C,3");
     }
 
     public static iViewModel getSharedInstance() {
@@ -91,11 +83,6 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     public void hostGame() {
         modelFacade.hostGame(Settings.getServerAddress(), Settings.getHostServerPort());
     }
-
-    public void joinGame() {
-        modelFacade.joinGame(Settings.getServerAddress(), Settings.getHostServerPort());
-    }
-
     public void setLetterValue(String tiles){
         for (int i = 3; i < handFromModel.length(); i++){
             int value = values[tiles.charAt(i) - 'A'];
@@ -114,4 +101,14 @@ public class ViewModel extends Observable implements Observer, iViewModel {
 //        setLetterValue(handFromModel);
 //        System.out.println(handToView.get());
 //    }
+    public static void startServer(){
+        modelFacade.toggleModels();
+        modelFacade.getHostModel().startServer();
+    }
+
+    @Override
+    public void joinGame(){
+        modelFacade.joinGame("omer", 5);
+    }
+
 }

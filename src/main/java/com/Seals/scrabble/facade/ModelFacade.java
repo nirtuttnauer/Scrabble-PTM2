@@ -9,6 +9,18 @@ import javafx.beans.property.StringProperty;
 import java.util.Observable;
 
 public class ModelFacade implements iModelFacade {
+    public hModel getHostModel() {
+        return hostModel;
+    }
+
+    public Model getModel() {
+        return model;
+    }
+
+    public StringProperty nicknameProperty() {
+        return nickname;
+    }
+
     private hModel hostModel = null;
     private Model model;
     private StringProperty nickname;
@@ -50,12 +62,14 @@ public class ModelFacade implements iModelFacade {
     public void hostGame(String serverAddress, int port) {
         if (hostModel == null)
             toggleModels();
+        hostModel.startServer();
 //         hostModel.connectToServer(serverAddress,port);
     }
 
     public void joinGame(String serverAddress, int serverPort) {
         if (model == null)
             toggleModels();
+        model.connectToHost();
 //         model.joinToServer(serverAddress, serverPort);
         // Perform any additional actions or updates related to joining the server as a guest
     }
