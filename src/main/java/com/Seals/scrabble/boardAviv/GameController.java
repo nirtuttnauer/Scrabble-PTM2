@@ -36,9 +36,8 @@ import java.util.*;
 import static com.Seals.scrabble.factories.SceneFactory.setScene;
 
 public class GameController implements Observer, iController {
-
-    private IntegerProperty cordX;
-    private IntegerProperty cordY;
+    
+    private IntegerProperty[] cordXY;
     @FXML
     Button confirmChangesBTN;
     @FXML
@@ -54,7 +53,7 @@ public class GameController implements Observer, iController {
 
     @FXML
     private HBox HandHbox;
-    private BoardClass boardClass;
+    private static BoardClass boardClass= new BoardClass(15,15);
     private Affine affine;
 
     private StringProperty handString;
@@ -64,6 +63,9 @@ public class GameController implements Observer, iController {
 
     @FXML
     public void initialize() {
+        
+        //int property
+        cordXY= new IntegerProperty[2];
 
         // set changes button
         this.confirmChangesBTN.setVisible(false);
@@ -110,9 +112,6 @@ public class GameController implements Observer, iController {
         this.affine = new Affine();
         this.affine.appendScale(600.0 / 15, 600.0 / 15);
 
-        // boardClass
-        this.boardClass = new BoardClass(15, 15);
-
         //draw the board
         draw();
 
@@ -127,20 +126,25 @@ public class GameController implements Observer, iController {
 
         BackgroundFill backgroundFill = new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY);
         Background background = new Background(backgroundFill);
-
-        for (int i = 0; i < handString.get().length(); i++) {
+        
+        String[] splitString = handString.get().split(",");
+        
+        for (int i = 0; i < splitString.length; i+=2) {
+            String letterStr= splitString[i];
+            String scoreStr=splitString[i+1];
             Pane handPane = new Pane();
             handPane.setBackground(background);
             Label score = new Label();
             Label letter = new Label();
 
-            letter.setText(String.valueOf(handString.get().charAt(i)));
-            score.setText("0");
+            letter.setText(letterStr);
+            score.setText(scoreStr);
 
             Insets labelsPadding = new Insets(47);
             score.setPadding(labelsPadding);
             letter.setPadding(new Insets(10));
 
+            handPane.setStyle("fx-border-color: black; -fx-border-width: 1px;");
 
             handPane.getChildren().addAll(score, letter);
 
@@ -161,6 +165,8 @@ public class GameController implements Observer, iController {
                     letterFromHand = letter.getText();
                     System.out.println("The letter from the label: " + letterFromHand);
                     // Perform further actions with the letter
+                        cordXY[0].set((int)event.getX());
+                        cordXY[1].set((int)event.getY());
                 }
             });
 
@@ -255,6 +261,8 @@ public class GameController implements Observer, iController {
         Platform.exit();
     }
 
-
+    public static BoardClass getBoardClass() {
+        return boardClass;
+    }
 }
 
