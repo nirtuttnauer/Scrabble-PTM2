@@ -5,7 +5,9 @@ import com.Seals.scrabble.model.hostSide.GameHandler;
 import com.Seals.scrabble.model.hostSide.game.GameManager;
 import com.Seals.scrabble.model.socketUtil.SocketUtil;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
@@ -35,21 +37,25 @@ public class hModel extends Model {
     public String sendRequestToServer(String query) {
         Socket client = null;
         PrintWriter out = null;
-        Scanner in = null;
+        BufferedReader in = null;
         String response = "";
 
         try {
             client = new Socket("localhost", Settings.getDMServerPort());
             out = new PrintWriter(client.getOutputStream());
-            in = new Scanner(client.getInputStream());
+            in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
             out.println(query);
             out.flush();
-            if (in.hasNext()) response = in.nextLine();
+            response = in.readLine();
         } catch (IOException e) {
             System.out.println("Your code ran into an IOException: " + e.getMessage());
         } finally {
-            SocketUtil.finallyClose(client, out, in);
+            try {
+                SocketUtil.finallyClose(client, out, in);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         return String.valueOf(response.equals("true"));
     }
