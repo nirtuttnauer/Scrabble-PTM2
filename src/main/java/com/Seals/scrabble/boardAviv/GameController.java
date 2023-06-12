@@ -2,169 +2,267 @@ package com.Seals.scrabble.boardAviv;
 
 import com.Seals.scrabble.controller.iController;
 import com.Seals.scrabble.viewmodel.ViewModel;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
+import javafx.util.Duration;
 
 import java.io.IOException;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 import static com.Seals.scrabble.factories.SceneFactory.setScene;
 
 public class GameController implements Observer, iController {
+
+    private static IntegerProperty cordX;
+
+    public static int getCordX() {
+        return cordX.get();
+    }
+
+    public static IntegerProperty cordXProperty() {
+        return cordX;
+    }
+
+    public static int getCordY() {
+        return cordY.get();
+    }
+
+    public static IntegerProperty cordYProperty() {
+        return cordY;
+    }
+
+    private static IntegerProperty cordY;
     @FXML
-    private GridPane boardGrid;
+    Button confirmChangesBTN;
+    @FXML
+    private Label player4;
+    @FXML
+    private Label player3;
+    @FXML
+    private Label player2;
+    @FXML
+    private Label player1;
+    @FXML
+    private VBox VboxBoard;
 
     @FXML
-    HBox HandHbox;
-    private BoardClass boardClass;
+    private HBox HandHbox;
+    private static BoardClass boardClass= new BoardClass(15,15);
     private Affine affine;
 
     private StringProperty handString;
 
-    private Hand hand;
+
+    private String letterFromHand;
 
     @FXML
     public void initialize() {
+
+        //int property
+        cordX= new SimpleIntegerProperty();
+        cordY = new SimpleIntegerProperty();
+
+        // set changes button
+        this.confirmChangesBTN.setVisible(false);
+        confirmChangesBTN.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setContentText("Are you sure about this changes?");
+                ButtonType yes = new ButtonType("Yes");
+                ButtonType no = new ButtonType("No");
+                alert.getButtonTypes().addAll(yes,no);
+
+                alert.setOnCloseRequest(event->{
+                    ButtonType res = alert.getResult();
+                    if(res == yes){
+                        alert.setContentText("Checking your new data...");
+                    }
+                    else if (res==no){
+                        alert.setContentText("No problem, try again!");
+                    }
+                });
+                alert.showAndWait();
+            }
+        });
+
+        // StringProperty...
+        this.letterFromHand = "";
         this.handString = new SimpleStringProperty();
-
-        handString.bind(ViewModel.getHand());
-
+        handString.bind(ViewModel.getSharedInstance().getHand());
         if (handString.get() != null) {
-            System.out.println(handString.get());
-            hand = new Hand(handString.get());
-        } else
-            System.out.println("Hand object didn't create, handString is null");
-
-        this.affine = new Affine();
-
-        this.affine.appendScale(600 / 15, 600 / 15);
-
-        this.boardClass = new BoardClass(15, 15);
-
-        this.boardGrid.setGridLinesVisible(true);
-//        draw();
-
-        if (hand != null)
             drawHand();
-        boardGrid.setPrefWidth(500.0);
-        boardGrid.setPrefHeight(400.0);
+        } else {
+            System.out.println("Hand object didn't create, handString is null");
+        }
+        ViewModel.getSharedInstance().getHand().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
+                System.out.println("addListener() called , the new value is : "+ newValue);
+                drawHand();
+            }
+        });
+
+        //affine
+        this.affine = new Affine();
+        this.affine.appendScale(600.0 / 15, 600.0 / 15);
+
+        //draw the board
+        draw();
+
     }
 
-    public void stepForward(int x, int y, String letter) {
-        this.boardClass.setBoard(x, y, letter);
-//        draw();
-    }
 
-    public void stepBack(int x, int y) {
-        this.boardClass.setBoard(x, y, null);
-//        draw();
-    }
 
-    public void handleSteps(int x, int y, String letter) {
-        if (this.boardClass.getState(x, y) == null)
-            stepForward(x, y, letter);
-        else
-            stepBack(x, y);
-    }
 
-    public void onFinishButtonClick(ActionEvent event) {
-        // Handle finish button click event
-    }
 
     public void drawHand() {
-        HandHbox.getChildren().clear(); // Clear existing children
+        HandHbox.getChildren().clear();
 
-        BackgroundFill backgroundFill = new BackgroundFill(Color.GREY, CornerRadii.EMPTY, Insets.EMPTY);
-
-        // Create a new Background with the BackgroundFill
+        BackgroundFill backgroundFill = new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY);
         Background background = new Background(backgroundFill);
 
-        for (int i = 0; i < hand.tiles.length; i++) {
-            GridPane pane = new GridPane();
+        String[] splitString = handString.get().split(",");
+
+        for (int i = 0; i < splitString.length; i+=2) {
+            String letterStr= splitString[i];
+            String scoreStr=splitString[i+1];
+            Pane handPane = new Pane();
+            handPane.setBackground(background);
             Label score = new Label();
             Label letter = new Label();
 
-            // Setting the grid background
-            pane.setBackground(background);
+            letter.setText(letterStr);
+            score.setText(scoreStr);
 
-            letter.setText(hand.tiles[i]);
-            score.setText("0");
-            // Set padding around the labels
-            Insets labelPadding = new Insets(47);
-
-            score.setPadding(labelPadding);
+            Insets labelsPadding = new Insets(47);
+            score.setPadding(labelsPadding);
             letter.setPadding(new Insets(10));
 
-            // Show the lines inside the grid
-            pane.setGridLinesVisible(true);
+            handPane.setStyle("fx-border-color: black; -fx-border-width: 1px;");
 
-            pane.getChildren().addAll(score, letter);
+            handPane.getChildren().addAll(score, letter);
 
-            pane.setPrefSize(HandHbox.getWidth() / hand.tiles.length, Double.MAX_VALUE);
 
-            HandHbox.getChildren().add(pane);
-        }
-//        HandHbox.setMaxSize(890,65);
-    }
+            HandHbox.getChildren().add(handPane);
 
-//    public void draw() {
-//        GraphicsContext g = this.BoardCanvas.getGraphicsContext2D();
-//        g.setTransform(this.affine);
-//        g.setFill(Color.LIGHTGRAY);
-//        g.fillRect(0, 0, 600, 600);
-//        g.setFill(Color.BLACK);
-//
-//        for (int i = 0; i < this.boardClass.getBoard().length; i++) {
-//            for (int j = 0; j < this.boardClass.getBoard()[i].length; j++) {
-//                String letter = this.boardClass.getState(i, j);
-//                if (letter != null)
-//                    g.strokeText(letter, i + 0.5, j + 0.8);
-//            }
-//        }
-//
-//        g.setStroke(Color.GREY);
-//        g.setLineWidth(0.05);
-//        for (int i = 0; i <= this.boardClass.getBoard().length; i++) {
-//            g.strokeLine(i, 0, i, 15);
-//        }
-//
-//        for (int j = 0; j <= this.boardClass.getBoard()[0].length; j++) {
-//            g.strokeLine(0, j, 15, j);
-//        }
-//    }
+            handPane.setOnMouseClicked(event -> {
+                if (handPane.getBackground().equals(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)))) {
+                    letterFromHand="";
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Error");
+                    alert.setContentText("You already used this tile!\nTry a different tile.");
+                    alert.showAndWait();
+                } else {
+                    handPane.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+                    // Handle the click event on the pane
+                    System.out.println("Clicked on pane: " + handPane.getId());
+                    letterFromHand = letter.getText();
+                    System.out.println("The letter from the label: " + letterFromHand);
+                    // Perform further actions with the letter
+                        cordX.set((int)event.getX());
+                        cordY.set((int)event.getY());
+                }
+            });
 
-    @FXML
-    private void handleDraw(MouseEvent mouseEvent) {
-        double mouseX = mouseEvent.getX();
-        double mouseY = mouseEvent.getY();
+            handPane.setMinHeight(100.0);
 
-        try {
-            Affine inverse = this.affine.createInverse();
-            double[] point = new double[]{mouseX, mouseY};
-            inverse.transform2DPoints(point, 0, point, 0, 1);
-            int simX = (int) Math.floor(point[0]);
-            int simY = (int) Math.floor(point[1]);
-
-            System.out.println(simX + "," + simY);
-
-            handleSteps(simX, simY, "A"); // Replace "A" with the desired letter
-        } catch (NonInvertibleTransformException e) {
-            System.out.println("Could not invert transform");
         }
     }
+
+
+
+
+    private void draw() {
+        VboxBoard.getChildren().clear();
+        VboxBoard.setAlignment(Pos.CENTER);
+        for (int i = 0; i < 15; i++) {
+            HBox row = new HBox();
+            for (int j = 0; j < 15; j++) {
+                Pane pane = new Pane();
+                pane.setMinSize(40, 40);
+
+                setColor(pane,i,j);
+                int finalI = i;
+                int finalJ = j;
+                pane.setOnMouseClicked(event -> {
+                    int x = finalI;
+                    int y= finalJ;
+                    if(!letterFromHand.equals("")){
+                        Label letter = new Label();
+                        letter.setText(letterFromHand);
+                        boardClass.setBoard(x,y,letterFromHand);
+                        boardClass.printBoard();
+                        pane.getChildren().add(letter);
+                        confirmChangesBTN.setVisible(true);
+                    }
+                    letterFromHand="";
+                });
+                row.getChildren().add(pane);
+            }
+            VboxBoard.getChildren().add(row);
+        }
+    }
+
+    private void setColor(Pane pane, int i, int j) {
+        // red part
+        if((i==0 && j==0) ||(i==0 && j==7) ||(i==0 && j==14) || (i==7 && j==14) ||(i==7 && j==14) || (i==14 && j==14)|| (i==14 && j==7)|| (i==14 && j==0)|| (i==7 && j==0) )
+            pane.setStyle("-fx-background-color: red");
+
+        // light blue part
+      else if((i==0 && j==3) || (i==0 && j==11) || (i==2 && j==6) || (i==2 && j==8) || (i==3 && j==7) || (i==3 && j==0) || (i==3 && j==14) ||
+                (i==6 && j==2) || (i==6 && j==6) || (i==6 && j==8) || (i==7 && j==3) || (i==7 && j==11) || (i==8 && j==2) || (i==8 && j==6)
+                || (i==8 && j==8) || (i==8 && j==12) || (i==11 && j==0) || (i==11 && j==7) || (i==11 && j==14) || (i==12 && j==6) ||
+                (i==12 && j==8) || (i==14 && j==3) ||(i==14 && j==11))
+                        pane.setStyle("-fx-background-color:  #00ffea;-fx-border-color: black; -fx-border-width: 1px;");
+
+        // The blue part
+        else if((i==1 && j==5) || (i==1 && j==9) ||(i==5 && j==1) ||(i==5 && j==5) ||(i==5 && j==9) || (i==5 && j==13) ||
+                (i==9 && j==1) ||(i==9 && j==5) ||(i==9 && j==9) ||(i==9 && j==13) || (i==13 && j==5) || (i==13 && j==9))
+                pane.setStyle("-fx-background-color: blue;-fx-border-color: black; -fx-border-width: 1px;");
+
+        // yellow part
+        else if((i==1 && j==1) ||(i==2 && j==2) ||(i==3 && j==3) || (i==4 && j==4) || (i==1 && j==13) || (i==2 && j==12) ||
+                (i==3 && j==11) || (i==4 && j==10) || (i==10 && j==4) ||(i==11 && j==3) || (i==12 && j==2) ||
+                (i==13 && j==1) || (i==10 && j==10) || (i==11 && j==11) || (i==12 && j==12) ||(i==13 && j==13))
+            pane.setStyle("-fx-background-color: #e3e362;-fx-border-color: black; -fx-border-width: 1px;");
+
+        // middle part
+        else if((i==7 && j==7)) {
+            pane.setStyle("-fx-background-color: #e3e362;-fx-border-color: black; -fx-border-width: 1px;");
+            Label label= new Label();
+            label.setText("Star");
+            pane.getChildren().add(label);
+        }
+        else
+            pane.setStyle("-fx-background-color: grey;-fx-border-color: black; -fx-border-width: 1px;");
+    }
+
 
     @Override
     public void update(Observable o, Object arg) {
@@ -183,7 +281,9 @@ public class GameController implements Observer, iController {
         Platform.exit();
     }
 
-    public void handleDraggFromHbox(MouseEvent mouseEvent) {
-
+    public static BoardClass getBoardClass() {
+        System.out.println("נירוס הקטלני");
+        return boardClass;
     }
 }
+

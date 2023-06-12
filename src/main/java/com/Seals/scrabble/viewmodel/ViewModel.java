@@ -10,9 +10,8 @@ import java.util.Observer;
 
 public class ViewModel extends Observable implements Observer, iViewModel {
     private static iViewModel sharedInstance;
-    private StringProperty nickname;
+    private  ModelFacade modelFacade;
 
-    private final ModelFacade modelFacade;
 
 
     private static StringProperty handToView;
@@ -33,9 +32,9 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         newHand = new String();
         handToView = new SimpleStringProperty();
         sharedInstance = this;
+        hand.set("ABBBCAS");
         modelFacade = new ModelFacade();
         this.nickname = new SimpleStringProperty();
-//        check();
     }
 
     public static iViewModel getSharedInstance() {
@@ -78,14 +77,6 @@ public class ViewModel extends Observable implements Observer, iViewModel {
 //            nickname.set(model.getNickname());
     }
     // Additional methods and functionality specific to ViewModel
-
-//     public void startServer() {
-//         (modelFacade.startServer();
-//     }
-
-//     public void closeServer() {
-//         ((hModel) model).stopServer();
-//     }
 
     public void hostGame() {
         modelFacade.hostGame(Settings.getServerAddress(), Settings.getHostServerPort());

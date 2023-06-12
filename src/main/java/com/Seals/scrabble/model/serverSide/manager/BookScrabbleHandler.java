@@ -6,6 +6,7 @@ import com.Seals.scrabble.model.socketUtil.ClientHandler;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -67,5 +68,15 @@ public class BookScrabbleHandler implements ClientHandler {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void sendMessage(String message) {
+
+    }
+
+    @Override
+    public void setClientSocket(Socket client) {
+
     }
 }

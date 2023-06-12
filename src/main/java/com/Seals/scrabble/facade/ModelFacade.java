@@ -44,9 +44,6 @@ public class ModelFacade implements iModelFacade {
         }
     }
 
-    public void testDMServerConnection() {
-        hostModel.testDMServerConnection();
-    }
 
     // Other methods specific to the HostModel can be added here
 

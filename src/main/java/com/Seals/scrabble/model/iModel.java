@@ -13,7 +13,7 @@ public interface iModel {
 
     StringProperty nicknameProperty();
 
-    String sendRequestToHost(String query);
+    void sendRequestToHost(String Cmd , String[] query);
 
     void disconnectFromHost();
 
