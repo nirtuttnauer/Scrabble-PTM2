@@ -4,20 +4,19 @@ import com.Seals.scrabble.Settings;
 import com.Seals.scrabble.facade.ModelFacade;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ObservableValue;
 
 import java.util.Observable;
 import java.util.Observer;
 
 public class ViewModel extends Observable implements Observer, iViewModel {
     private static iViewModel sharedInstance;
+    private  ModelFacade modelFacade;
+
+
     private StringProperty nickname;
+    private StringProperty hand;
 
-    private final ModelFacade modelFacade;
-
-     private static StringProperty hand;
-
-    public static StringProperty getHand() {
+    public StringProperty getHand() {
         return hand;
     }
 
@@ -26,11 +25,12 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     }
 
     public ViewModel() {
-        this.hand= new SimpleStringProperty();
-        hand.set("ABBBCAS");
+        this.hand = new SimpleStringProperty();
         sharedInstance = this;
+        hand.set("ABBBCAS");
         modelFacade = new ModelFacade();
         this.nickname = new SimpleStringProperty();
+
     }
 
     public static iViewModel getSharedInstance() {
@@ -62,18 +62,10 @@ public class ViewModel extends Observable implements Observer, iViewModel {
 
     @Override
     public void update(Observable o, Object arg) {
-//         if (o == modelFacade) {
-//             nickname.set(model.getNickname());
+        // Handle update logic
     }
+
     // Additional methods and functionality specific to ViewModel
-
-//     public void startServer() {
-//         (modelFacade.startServer();
-//     }
-
-//     public void closeServer() {
-//         ((hModel) model).stopServer();
-//     }
 
     public void hostGame() {
         modelFacade.hostGame(Settings.getServerAddress(), Settings.getHostServerPort());
