@@ -282,6 +282,7 @@ public class GameController implements Observer, iController {
     }
 
     public static BoardClass getBoardClass() {
+        System.out.println("נירוס הקטלני");
         return boardClass;
     }
 }
