@@ -1,6 +1,7 @@
 package com.Seals.scrabble.controller;
 
 import com.Seals.scrabble.factories.SceneFactory;
+import com.Seals.scrabble.viewmodel.ViewModel;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -23,6 +24,7 @@ public class HostController implements Initializable, Observer, iController{
 
 
     public void onLobbyButtonClick(ActionEvent event) {
+        ViewModel.startServer();
         setScene("LobbyView");
     }
 
