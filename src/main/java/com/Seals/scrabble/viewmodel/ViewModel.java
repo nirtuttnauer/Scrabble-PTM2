@@ -5,6 +5,8 @@ import com.Seals.scrabble.boardAviv.GameController;
 import com.Seals.scrabble.facade.ModelFacade;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -35,6 +37,15 @@ public class ViewModel extends Observable implements Observer, iViewModel {
 
     public ViewModel() {
         this.tryPlaceWord= new SimpleStringProperty();
+        if(bindForTryPlaceWord()) {
+            GameController.getTryPlaceWord().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                    // send data for the modelFacade
+
+                }
+            });
+        }
         this.hand = new SimpleStringProperty();
         sharedInstance = this;
         hand.set("ABBBCAS");
@@ -42,8 +53,14 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         this.nickname = new SimpleStringProperty();
 
     }
-    public void bindForTryPlaceWord(){
-        this.tryPlaceWord.bind(GameController.getTryPlaceWord());
+    public boolean bindForTryPlaceWord(){
+        try {
+            this.tryPlaceWord.bind(GameController.getTryPlaceWord());
+        }catch (Exception e){
+            System.out.println("Catch from bindForTryPlaceWord int viewmodel");
+            return false;
+        }
+        return true;
     }
     public static iViewModel getSharedInstance() {
         return sharedInstance;

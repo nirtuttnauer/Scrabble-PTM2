@@ -124,6 +124,20 @@ public class GameController implements Observer, iController {
         atiles.forEach(atiles1 -> {
             tmp.append(atiles1.toString());
         });
+        int Xfirst = (int) atiles.get(0).coordinate.getX();
+        int Yfirst = (int) atiles.get(0).coordinate.getY();
+
+        int Xlast = (int) atiles.get(atiles.size()).coordinate.getX();
+        int Ylast = (int) atiles.get(atiles.size()).coordinate.getY();
+
+        if(Xfirst== Xlast && Yfirst!=Ylast){
+            tmp.append("H");
+        }
+        else{
+            tmp.append("V");
+        }
+        //A,1.1,2.1 B,1.0,3.0 ...  H\V
+        tryPlaceWord.set(tmp.toString());
 
     }
 
@@ -290,7 +304,7 @@ public class GameController implements Observer, iController {
         @Override
         public String toString() {
             //split by " " in view model
-            return letter+"."+"(" + coordinate.getX() +"," + coordinate.getY()+" ";
+            return letter+","+ coordinate.getX() +"," + coordinate.getY()+" ";
         }
     }
 }
