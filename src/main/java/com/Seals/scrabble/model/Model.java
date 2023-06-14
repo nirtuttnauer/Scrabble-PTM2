@@ -140,7 +140,7 @@ private void startListening() {
             String response = null;
             try {
                 if ((response = in.readLine()) != null) {
-                    System.out.println("I heard something...");
+//                    System.out.println("I heard something...");
                     System.out.println(response);
                     sendRequestToHost(processResponse(response));
                 }

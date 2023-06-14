@@ -90,7 +90,7 @@ public class MyServer implements Runnable{
     }
 
     public String broadcast(String message) {
-        System.out.println("line 107 " + clientHandlers.values().size());
+//        System.out.println("line 107 " + clientHandlers.values().size());
         for (ClientHandler clientHandler : clientHandlers.values()) {
             try {
                 clientHandler.sendMessage(message);

@@ -306,17 +306,19 @@ public class Board {
         System.out.println("-----------------------------------");
     }
 
-    public void printBoardLetters() {
+    public String printBoardLetters() {
+        StringBuilder s = new StringBuilder();
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
                 if (SingleBoard.Places[i][j].tile != null) {
-                    System.out.print(SingleBoard.Places[i][j].tile.letter + " ");
+                    s.append(SingleBoard.Places[i][j].tile.letter).append(" ");
                 } else
-                    System.out.print("  ");
+                    s.append(" 0 ");
 
             }
-            System.out.println();
+            if (i<14) s.append(" : ");
         }
+            return s.toString();
 
     }
 

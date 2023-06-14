@@ -39,7 +39,7 @@ public class GameManager {
     }
 
     public void startGame() {
-        System.out.println("Scrabble game started");
+        System.out.println("----Scrabble game started----");
         this.turnManager = new TurnManager(playerManager.getPlayers());
         this.scoreBoard = new ScoreBoard();
         gameBoard.printBoard();
@@ -59,7 +59,7 @@ public class GameManager {
         nextTurn();
         while (isGameInProgress) {
             processTurn();
-            gameBoard.printBoard();
+//            gameBoard.printBoard();
             displayScoreboard();
 
             if (isGameFinished()) {
@@ -71,11 +71,14 @@ public class GameManager {
     }
 
     private void processTurn() {
-        System.out.println("line 75 " + (getTurnManager().getCurrentPlayerIndex()+1));
-        Player currentPlayer = getPlayerManager().getPlayer(getTurnManager().getCurrentPlayerIndex()+1);
+//        System.out.println(+ (getTurnManager().getCurrentPlayerIndex() + 1));
+        Player currentPlayer = getPlayerManager().getPlayer(getTurnManager().getCurrentPlayerIndex() + 1);
         if (currentPlayer != null) {
-            currentPlayer.printHand();
-            gameServer.broadcast("lolz");
+
+            gameServer.broadcast(currentPlayer.printHand());
+            gameServer.broadcast(getGameBoard().printBoardLetters());
+            gameServer.broadcast("Current turn is:" + (getTurnManager().getCurrentPlayerIndex() + 1));
+//            gameServer.broadcast(() => {);
 
             // rest of the code
         } else {
@@ -131,7 +134,7 @@ public class GameManager {
 
 
     public void endGame() {
-        System.out.println("Scrabble game ended");
+        System.out.println("----Scrabble game ended----");
     }
 
     public boolean tryPlaceWordAction(Player player, String[] words) {

@@ -9,7 +9,7 @@ import static com.Seals.scrabble.model.hModel.getGameManager;
 public class PassCommand implements ICommand {
 
     @Override
-    public String execute(Socket socket, String... args) {
+    public String execute(String... args) {
         return "pass";
     }
 }
