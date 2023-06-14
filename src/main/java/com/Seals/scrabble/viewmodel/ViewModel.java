@@ -111,4 +111,9 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         modelFacade.joinGame("omer", 5);
     }
 
+    @Override
+    public void startGame() {
+        modelFacade.startGame();
+    }
+
 }

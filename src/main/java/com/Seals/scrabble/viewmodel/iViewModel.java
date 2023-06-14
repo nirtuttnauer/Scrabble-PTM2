@@ -20,4 +20,5 @@ public interface iViewModel extends Observer {
   void joinGame();
 
 
+    void startGame();
 }
