@@ -11,7 +11,8 @@ public class TurnUpdateCommand implements ICommand {
 
     @Override
     public String execute(Socket socket, String... args) {
-        System.out.println("hellppp");
+//        System.out.println("hellppp");
+        getGameManager().getGameServer().broadcast("TU from command");
                return getGameManager().getGameServer().broadcast(String.valueOf(getGameManager().getTurnManager().getCurrentPlayerIndex() + 1));
 
     }

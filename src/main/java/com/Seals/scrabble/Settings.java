@@ -2,8 +2,8 @@ package com.Seals.scrabble;
 
 public class Settings {
     //resulution settings:
-    private static int WIDTH = 720;
-    private static int HEIGHT = 720;
+    private static int WIDTH = 820;
+    private static int HEIGHT = 820;
     //server settings:
     private static int DMServerPort = 5555;
 
