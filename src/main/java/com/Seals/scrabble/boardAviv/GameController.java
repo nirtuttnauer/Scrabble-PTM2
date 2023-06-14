@@ -2,34 +2,24 @@ package com.Seals.scrabble.boardAviv;
 
 import com.Seals.scrabble.controller.iController;
 import com.Seals.scrabble.viewmodel.ViewModel;
-import javafx.animation.PauseTransition;
 import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
-import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
-import javafx.scene.transform.NonInvertibleTransformException;
-import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.*;
@@ -38,25 +28,6 @@ import static com.Seals.scrabble.factories.SceneFactory.setScene;
 
 public class GameController implements Observer, iController {
 
-    private static IntegerProperty cordX;
-
-    public static int getCordX() {
-        return cordX.get();
-    }
-
-    public static IntegerProperty cordXProperty() {
-        return cordX;
-    }
-
-    public static int getCordY() {
-        return cordY.get();
-    }
-
-    public static IntegerProperty cordYProperty() {
-        return cordY;
-    }
-
-    private static IntegerProperty cordY;
     @FXML
     Button confirmChangesBTN;
     @FXML
@@ -75,17 +46,26 @@ public class GameController implements Observer, iController {
     private static BoardClass boardClass= new BoardClass(15,15);
     private Affine affine;
 
+    String letterSaver;
     private StringProperty handString;
 
+    public static StringProperty getTryPlaceWord() {
+        return tryPlaceWord;
+    }
+
+
+    private static StringProperty tryPlaceWord;
 
     private String letterFromHand;
 
+    private ArrayList<Atiles> atiles;
+
     @FXML
     public void initialize() {
+        // Tiles list + pane
+        atiles= new ArrayList<>();
+        letterSaver="";
 
-        //int property
-        cordX= new SimpleIntegerProperty();
-        cordY = new SimpleIntegerProperty();
 
         // set changes button
         this.confirmChangesBTN.setVisible(false);
@@ -102,6 +82,7 @@ public class GameController implements Observer, iController {
                     ButtonType res = alert.getResult();
                     if(res == yes){
                         alert.setContentText("Checking your new data...");
+                        handleGetTpw();
                     }
                     else if (res==no){
                         alert.setContentText("No problem, try again!");
@@ -112,6 +93,7 @@ public class GameController implements Observer, iController {
         });
 
         // StringProperty...
+        this.tryPlaceWord= new SimpleStringProperty();
         this.letterFromHand = "";
         this.handString = new SimpleStringProperty();
         handString.bind(ViewModel.getSharedInstance().getHand());
@@ -137,8 +119,13 @@ public class GameController implements Observer, iController {
 
     }
 
+    private void handleGetTpw() {
+        StringBuilder tmp= new StringBuilder();
+        atiles.forEach(atiles1 -> {
+            tmp.append(atiles1.toString());
+        });
 
-
+    }
 
 
     public void drawHand() {
@@ -179,14 +166,14 @@ public class GameController implements Observer, iController {
                     alert.setContentText("You already used this tile!\nTry a different tile.");
                     alert.showAndWait();
                 } else {
+                    letterSaver= letter.getText();
                     handPane.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
                     // Handle the click event on the pane
                     System.out.println("Clicked on pane: " + handPane.getId());
                     letterFromHand = letter.getText();
                     System.out.println("The letter from the label: " + letterFromHand);
                     // Perform further actions with the letter
-                        cordX.set((int)event.getX());
-                        cordY.set((int)event.getY());
+
                 }
             });
 
@@ -220,6 +207,12 @@ public class GameController implements Observer, iController {
                         boardClass.printBoard();
                         pane.getChildren().add(letter);
                         confirmChangesBTN.setVisible(true);
+                        // save the coordinates
+                        if(!letterSaver.equals("")) {
+                            Point2D point2D = new Point2D(event.getX(), event.getY());
+                            atiles.add(new Atiles(letterSaver,point2D));
+                        }
+
                     }
                     letterFromHand="";
                 });
@@ -282,8 +275,23 @@ public class GameController implements Observer, iController {
     }
 
     public static BoardClass getBoardClass() {
-        System.out.println("נירוס הקטלני");
         return boardClass;
+    }
+
+    private class Atiles {
+        String letter;
+        Point2D coordinate;
+
+        public Atiles(String letter, Point2D coordinate) {
+            this.letter = letter;
+            this.coordinate = coordinate;
+        }
+
+        @Override
+        public String toString() {
+            //split by " " in view model
+            return letter+"."+"(" + coordinate.getX() +"," + coordinate.getY()+" ";
+        }
     }
 }
 

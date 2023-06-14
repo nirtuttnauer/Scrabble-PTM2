@@ -1,6 +1,7 @@
 package com.Seals.scrabble.viewmodel;
 
 import com.Seals.scrabble.Settings;
+import com.Seals.scrabble.boardAviv.GameController;
 import com.Seals.scrabble.facade.ModelFacade;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -12,7 +13,15 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     private static iViewModel sharedInstance;
     private  ModelFacade modelFacade;
 
+    public StringProperty getTryPlaceWord() {
+        return tryPlaceWord;
+    }
 
+    public StringProperty tryPlaceWordProperty() {
+        return tryPlaceWord;
+    }
+
+    private StringProperty tryPlaceWord;
     private StringProperty nickname;
     private StringProperty hand;
 
@@ -25,6 +34,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     }
 
     public ViewModel() {
+        this.tryPlaceWord= new SimpleStringProperty();
         this.hand = new SimpleStringProperty();
         sharedInstance = this;
         hand.set("ABBBCAS");
@@ -32,7 +42,9 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         this.nickname = new SimpleStringProperty();
 
     }
-
+    public void bindForTryPlaceWord(){
+        this.tryPlaceWord.bind(GameController.getTryPlaceWord());
+    }
     public static iViewModel getSharedInstance() {
         return sharedInstance;
     }
