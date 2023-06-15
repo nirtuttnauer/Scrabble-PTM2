@@ -36,6 +36,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         sharedInstance = this;
         modelFacade = new ModelFacade();
         this.nickname = new SimpleStringProperty();
+        check();
     }
 
     public static iViewModel getSharedInstance() {
@@ -96,11 +97,11 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         handToView.set(newHand);
     }
 
-//    public void check(){
-//        handFromModel = "UA,AQBRTC";
-//        setLetterValue(handFromModel);
-//        System.out.println(handToView.get());
-//    }
+    public void check(){
+        handFromModel = "UA,AQBRTC";
+        setLetterValue(handFromModel);
+        System.out.println(handToView.get());
+    }
     public static void startServer(){
         modelFacade.toggleModels();
         modelFacade.getHostModel().startServer();
