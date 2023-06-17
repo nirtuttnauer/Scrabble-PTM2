@@ -22,6 +22,7 @@ import javafx.scene.transform.Affine;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.Seals.scrabble.factories.SceneFactory.setScene;
 
@@ -43,7 +44,6 @@ public class GameController implements Observer, iController {
     @FXML
     private HBox HandHbox;
     private List<ConfrimTiles> tiles;
-    private Pane paneClicked;
 
     private volatile boolean isFirstPlay = true;
     private static BoardClass boardClass= new BoardClass(15,15);
@@ -51,14 +51,15 @@ public class GameController implements Observer, iController {
 
     private StringProperty handString;
 
-
     private String letterFromHand;
     private Pane starPane;
+    private List<Pane> paneList;
 
     @FXML
     public void initialize() {
         //list of tiles that will transform to the vm
         tiles= new ArrayList<>();
+        paneList= new ArrayList<>();
         // set changes button
         this.confirmChangesBTN.setVisible(false);
         confirmChangesBTN.setOnAction(new EventHandler<ActionEvent>() {
@@ -73,11 +74,12 @@ public class GameController implements Observer, iController {
                 alert.setOnCloseRequest(event->{
                     ButtonType res = alert.getResult();
                     if(res == yes){
-                        alert.setContentText("Checking your new data...");
+                        if(isFirstPlay)
+                            checkStar();
                         handleTryPlaceWord();
                     }
                     else if (res==no){
-                        alert.setContentText("No problem, try again!");
+                        coloriseHandToGray();
                     }
                 });
                 alert.showAndWait();
@@ -109,6 +111,32 @@ public class GameController implements Observer, iController {
         //draw the board
         draw();
 
+    }
+
+    private void coloriseHandToGray() {
+        paneList.forEach(pane -> {
+            pane.setBackground(new Background(new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+        });
+        paneList.clear();
+    }
+
+    private void checkStar() {
+        AtomicBoolean flag= new AtomicBoolean(false);
+      tiles.forEach(confrimTiles -> {
+          int x = confrimTiles.cordX;
+          int y = confrimTiles.cordY;
+
+          if(x==7 && y==7)
+              flag.set(true);
+      });
+      if(flag.get()==false){
+          Alert alert = new Alert(Alert.AlertType.INFORMATION);
+          alert.setContentText("Can not put the first tile in a different place!\n try again.");
+          alert.showAndWait();
+          coloriseHandToGray();
+      }
+      else
+          isFirstPlay=false;
     }
 
     private void handleTryPlaceWord() {
@@ -187,7 +215,7 @@ public class GameController implements Observer, iController {
                     alert.setContentText("You already used this tile!\nTry a different tile.");
                     alert.showAndWait();
                 } else {
-                    paneClicked= handPane;
+                    paneList.add(handPane);
                     handPane.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
                     // Handle the click event on the pane
                     System.out.println("Clicked on pane: " + handPane.getId());
@@ -219,15 +247,7 @@ public class GameController implements Observer, iController {
                 pane.setOnMouseClicked(event -> {
                     int x = finalI;
                     int y= finalJ;
-                    if(isFirstPlay && (x!=7 || y!=7)){
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setContentText("Can not put the first tile in a different place!\n try again.");
-                        alert.showAndWait();
-                        paneClicked.setBackground(new Background(new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY)));
-                        //"nulling" paneClicked after using him
-                        paneClicked=null;
-                    }
-                   else if(!letterFromHand.equals("")){
+                    if(!letterFromHand.equals("")){
                         Label letter = new Label();
                         letter.setText(letterFromHand);
                         boardClass.setBoard(x,y,letterFromHand);
@@ -238,8 +258,6 @@ public class GameController implements Observer, iController {
                         confirmChangesBTN.setVisible(true);
                         //adding the new tile to the list
                         tiles.add(new ConfrimTiles(x,y,letterFromHand));
-                        if(isFirstPlay)
-                            isFirstPlay=false;
                     }
                     letterFromHand="";
                 });
@@ -303,10 +321,10 @@ public class GameController implements Observer, iController {
     }
 
     public static BoardClass getBoardClass() {
-        System.out.println("נירוס הקטלני");
         return boardClass;
     }
 
+    // inner class that will be used after placing all the words on the board
     public class ConfrimTiles{
         private int cordX;
         private int cordY;
