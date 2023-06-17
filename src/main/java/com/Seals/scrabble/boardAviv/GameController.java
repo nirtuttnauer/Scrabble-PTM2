@@ -2,34 +2,23 @@ package com.Seals.scrabble.boardAviv;
 
 import com.Seals.scrabble.controller.iController;
 import com.Seals.scrabble.viewmodel.ViewModel;
-import javafx.animation.PauseTransition;
 import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
-import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
-import javafx.scene.transform.NonInvertibleTransformException;
-import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.*;
@@ -38,25 +27,6 @@ import static com.Seals.scrabble.factories.SceneFactory.setScene;
 
 public class GameController implements Observer, iController {
 
-    private static IntegerProperty cordX =new SimpleIntegerProperty();
-    private static IntegerProperty cordY= new SimpleIntegerProperty();
-
-
-    public static int getCordX() {
-        return cordX.get();
-    }
-
-    public static IntegerProperty cordXProperty() {
-        return cordX;
-    }
-
-    public static int getCordY() {
-        return cordY.get();
-    }
-
-    public static IntegerProperty cordYProperty() {
-        return cordY;
-    }
     @FXML
     Button confirmChangesBTN;
     @FXML
@@ -72,6 +42,10 @@ public class GameController implements Observer, iController {
 
     @FXML
     private HBox HandHbox;
+    private List<ConfrimTiles> tiles;
+    private Pane paneClicked;
+
+    private volatile boolean isFirstPlay = true;
     private static BoardClass boardClass= new BoardClass(15,15);
     private Affine affine;
 
@@ -79,11 +53,12 @@ public class GameController implements Observer, iController {
 
 
     private String letterFromHand;
+    private Pane starPane;
 
     @FXML
     public void initialize() {
-
-
+        //list of tiles that will transform to the vm
+        tiles= new ArrayList<>();
         // set changes button
         this.confirmChangesBTN.setVisible(false);
         confirmChangesBTN.setOnAction(new EventHandler<ActionEvent>() {
@@ -99,12 +74,14 @@ public class GameController implements Observer, iController {
                     ButtonType res = alert.getResult();
                     if(res == yes){
                         alert.setContentText("Checking your new data...");
+                        handleTryPlaceWord();
                     }
                     else if (res==no){
                         alert.setContentText("No problem, try again!");
                     }
                 });
                 alert.showAndWait();
+                confirmChangesBTN.setVisible(false);
             }
         });
 
@@ -134,8 +111,42 @@ public class GameController implements Observer, iController {
 
     }
 
+    private void handleTryPlaceWord() {
+        StringBuilder sb = new StringBuilder();
+        tiles.forEach(t->{
+            sb.append(t.letter).append(",").append(t.cordX).append(",").append(t.cordY).append("\n"); // split by "\n"
+        });
 
+        // checking if horizontal to vertical
+        sb.append(checkDirection());
+        //building our string
+       String val = sb.toString();
+        System.out.println("sb.toString() = " + val);
+       sendValueToVM(val);
+       //clearing the list after sending the changes to the vm
+       tiles.clear();
+    }
 
+    private String checkDirection() {
+        //first tile indexes
+        int firstX = tiles.get(0).cordX;
+        int firstY = tiles.get(0).cordY;
+
+        //second tile indexes
+        int seccondX = tiles.get(1).cordX;
+        int seccondY = tiles.get(1).cordY;
+
+        if(firstX==seccondY && seccondY!=seccondX)
+            return "H";
+        else if(firstY==seccondY && seccondX!=seccondY)
+            return "V";
+        else
+            return "cannot find if the word is vertical or horizontal";
+    }
+
+    private void sendValueToVM(String val) {
+        ViewModel.getSharedInstance().updateTryPlaceWordInViewModel(val);
+    }
 
 
     public void drawHand() {
@@ -176,14 +187,12 @@ public class GameController implements Observer, iController {
                     alert.setContentText("You already used this tile!\nTry a different tile.");
                     alert.showAndWait();
                 } else {
+                    paneClicked= handPane;
                     handPane.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
                     // Handle the click event on the pane
                     System.out.println("Clicked on pane: " + handPane.getId());
                     letterFromHand = letter.getText();
                     System.out.println("The letter from the label: " + letterFromHand);
-                    // Perform further actions with the letter
-                        cordX.set((int)event.getX());
-                        cordY.set((int)event.getY());
                 }
             });
 
@@ -210,13 +219,27 @@ public class GameController implements Observer, iController {
                 pane.setOnMouseClicked(event -> {
                     int x = finalI;
                     int y= finalJ;
-                    if(!letterFromHand.equals("")){
+                    if(isFirstPlay && (x!=7 || y!=7)){
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setContentText("Can not put the first tile in a different place!\n try again.");
+                        alert.showAndWait();
+                        paneClicked.setBackground(new Background(new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+                        //"nulling" paneClicked after using him
+                        paneClicked=null;
+                    }
+                   else if(!letterFromHand.equals("")){
                         Label letter = new Label();
                         letter.setText(letterFromHand);
                         boardClass.setBoard(x,y,letterFromHand);
-                        boardClass.printBoard();
+                        if(pane==starPane){
+                            pane.getChildren().clear();
+                        }
                         pane.getChildren().add(letter);
                         confirmChangesBTN.setVisible(true);
+                        //adding the new tile to the list
+                        tiles.add(new ConfrimTiles(x,y,letterFromHand));
+                        if(isFirstPlay)
+                            isFirstPlay=false;
                     }
                     letterFromHand="";
                 });
@@ -249,12 +272,13 @@ public class GameController implements Observer, iController {
                 (i==13 && j==1) || (i==10 && j==10) || (i==11 && j==11) || (i==12 && j==12) ||(i==13 && j==13))
             pane.setStyle("-fx-background-color: #e3e362;-fx-border-color: black; -fx-border-width: 1px;");
 
-        // middle part
+        // star part
         else if((i==7 && j==7)) {
             pane.setStyle("-fx-background-color: #e3e362;-fx-border-color: black; -fx-border-width: 1px;");
             Label label= new Label();
             label.setText("Star");
             pane.getChildren().add(label);
+            starPane=pane;
         }
         else
             pane.setStyle("-fx-background-color: grey;-fx-border-color: black; -fx-border-width: 1px;");
@@ -281,6 +305,19 @@ public class GameController implements Observer, iController {
     public static BoardClass getBoardClass() {
         System.out.println("נירוס הקטלני");
         return boardClass;
+    }
+
+    public class ConfrimTiles{
+        private int cordX;
+        private int cordY;
+        private String letter;
+
+        public ConfrimTiles(int cordX, int cordY, String letter) {
+            this.cordX = cordX;
+            this.cordY = cordY;
+            this.letter = letter;
+        }
+
     }
 }
 
