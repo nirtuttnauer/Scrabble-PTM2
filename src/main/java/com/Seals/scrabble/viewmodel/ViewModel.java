@@ -21,6 +21,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     private StringProperty handToView;
     private String newHand;
     private String handFromModel;
+    private StringProperty tryPlaceWord;
     private final int[] values = {1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 1, 1, 3, 10, 1, 1, 1, 1, 4, 4, 8, 4, 10};
 
 
@@ -30,6 +31,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     }
 
     public ViewModel() {
+        tryPlaceWord= new SimpleStringProperty();
         handFromModel = new String();
         newHand = new String();
         handToView = new SimpleStringProperty();
@@ -110,6 +112,13 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     @Override
     public void joinGame(){
         modelFacade.joinGame("omer", 5);
+    }
+
+
+    @Override
+    public void updateTryPlaceWordInViewModel(String val){
+        System.out.println("updateTryPlaceWordInViewModel was call form viewModel");
+        tryPlaceWord.set(val);
     }
 
 }

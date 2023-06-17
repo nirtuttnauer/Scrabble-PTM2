@@ -18,6 +18,7 @@ public interface iViewModel extends Observer {
 
    StringProperty getHandProperty();
   void joinGame();
+  void updateTryPlaceWordInViewModel(String val);
 
 
 }
