@@ -38,25 +38,8 @@ import static com.Seals.scrabble.factories.SceneFactory.setScene;
 
 public class GameController implements Observer, iController {
 
-    private static IntegerProperty cordX =new SimpleIntegerProperty();
-    private static IntegerProperty cordY= new SimpleIntegerProperty();
 
 
-    public static int getCordX() {
-        return cordX.get();
-    }
-
-    public static IntegerProperty cordXProperty() {
-        return cordX;
-    }
-
-    public static int getCordY() {
-        return cordY.get();
-    }
-
-    public static IntegerProperty cordYProperty() {
-        return cordY;
-    }
     @FXML
     Button confirmChangesBTN;
     @FXML
@@ -182,8 +165,6 @@ public class GameController implements Observer, iController {
                     letterFromHand = letter.getText();
                     System.out.println("The letter from the label: " + letterFromHand);
                     // Perform further actions with the letter
-                        cordX.set((int)event.getX());
-                        cordY.set((int)event.getY());
                 }
             });
 
