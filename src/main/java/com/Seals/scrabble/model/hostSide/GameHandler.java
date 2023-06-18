@@ -1,75 +1,95 @@
 package com.Seals.scrabble.model.hostSide;
 
-import com.Seals.scrabble.model.hModel;
-import com.Seals.scrabble.model.hostSide.game.GameManager;
-import com.Seals.scrabble.model.hostSide.game.Player;
+import com.Seals.scrabble.factories.command.CommandFactory;
+import com.Seals.scrabble.factories.command.ICommand;
 import com.Seals.scrabble.model.socketUtil.ClientHandler;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.util.Scanner;
+import java.io.*;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
+import java.nio.charset.StandardCharsets;
 
 public class GameHandler implements ClientHandler {
 
-    private GameManager gm;
-    private Scanner scanner;
-    private PrintWriter writer;
+    private CommandFactory commandFactory;
+    BufferedReader in;
+    PrintWriter out;
+    private Socket clientSocket;
 
-
-    public GameHandler(hModel hostModel) {
-        gm = hModel.getGameManager();
+    public GameHandler(Socket socket) {
+        this.commandFactory = new CommandFactory();
+        this.clientSocket = socket;
     }
 
-    @Override
-    public void handleClient(InputStream inFromClient, OutputStream outToClient) {
-        Scanner scanner = new Scanner(inFromClient);
-        PrintWriter writer = new PrintWriter(outToClient, true); // Auto-flush enabled
-
-//        while (scanner.hasNextLine())
-        String request = scanner.nextLine();
-
-        // Process the request and generate a response
-        String response = processRequest(request);
-
-        // Send the response back to the client
-        writer.println(response != null ? response : "Request received");
+    public CommandFactory getCommandFactory() {
+        return commandFactory;
     }
 
+    public void handleClient(InputStream inFromClient, OutputStream outToClient) throws IOException {
+        if (in == null) in = new BufferedReader(new InputStreamReader(inFromClient, StandardCharsets.UTF_8));
+        if (out == null) this.out = new PrintWriter(new OutputStreamWriter(outToClient, StandardCharsets.UTF_8), true);
+
+        String request;
+        while ((request = in.readLine()) != null) {
+            System.out.println("Received request: " + request);
+            String response = processRequest(request);
+            try {
+                sendMessage(response);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     @Override
     public void close() {
-        // Cleanup or additional operations when the handler is closed
+        try {
+            if (out != null) {
+                out.flush();
+            }
+            if (in != null) {
+                in.close();
+            }
+            if (out != null) {
+                out.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void setClientSocket(Socket clientSocket) {
+        this.clientSocket = clientSocket;
+    }
+
+    @Override
+    public void sendMessage(String message) throws IOException {
+        if (out != null) {
+            out.println(message);
+            out.flush();
+        } else {
+            System.out.println("out is null : line 69 : gameHandler");
+        }
     }
 
     private String processRequest(String request) {
-        String[] split = request.split(",");
-        System.out.println(request);
-        // Create a new player for this connection
-        if (split[0].equals("PL")) {
-            gm.performAction("PL", Integer.parseInt(split[1]), split[2]);
-            gm.getGameBoard().printBoard();
+        System.out.println("processRequerst::GameHandler " + request + " on line 82");
+        if (request == null || request.isEmpty()) {
+            return "Invalid request";
         }
-        if (split[0].equals("PA")) {
-            gm.performAction("PA", Integer.parseInt(split[1]), null);
-            gm.getGameBoard().printBoard();
-        }
-        if (split[0].equals("EX")) {
-            gm.performAction("EX", Integer.parseInt(split[1]), null);
-            gm.getGameBoard().printBoard();
-        }
-        if (split[0].equals("N")) {
-            if (gm.getTotalPlayers() < 4) {
-                request = String.valueOf(gm.addPlayer());
 
-            } else {
-                System.out.println("Player limit reached");
-                request = "0";
-            }
+        List<String> split = new ArrayList<>(List.of(request.split(",")));
+        String scmd = split.get(0);
+        ICommand command = commandFactory.getCommand(scmd);
+        split.remove(split.get(0));
+        if (command != null) {
+            String[] args = new String[split.size()];
+            split.toArray(args);
+            return command.execute(this.clientSocket, args);
+        } else {
+            return "Unknown command: " + scmd;
         }
-        // Implement your logic to process the request and generate a response
-        // Example: Echo the request as the response
-        return request;
     }
 }
-

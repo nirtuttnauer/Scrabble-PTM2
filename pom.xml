@@ -34,8 +34,6 @@
             <scope>test</scope>
         </dependency>
 
-
-
         <!-- JUnit Jupiter for unit testing -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -52,19 +50,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.13.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>7.7.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>7.7.1</version>
+            <version>RELEASE</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

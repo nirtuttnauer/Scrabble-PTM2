@@ -2,6 +2,7 @@ package com.Seals.scrabble.model;
 
 import javafx.beans.property.StringProperty;
 
+import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
@@ -13,7 +14,7 @@ public interface iModel {
 
     StringProperty nicknameProperty();
 
-    String sendRequestToHost(String query);
+    void sendRequestToHost(String Cmd , String[] query);
 
     void disconnectFromHost();
 
@@ -35,9 +36,9 @@ public interface iModel {
 
     void setOut(PrintWriter out);
 
-    Scanner getIn();
+    BufferedReader getIn();
 
-    void setIn(Scanner in);
+    void setIn(BufferedReader in);
 
     int getID();
 }

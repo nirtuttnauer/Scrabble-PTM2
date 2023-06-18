@@ -1,24 +1,42 @@
 package com.Seals.scrabble.viewmodel;
 
 import com.Seals.scrabble.Settings;
-import com.Seals.scrabble.model.Model;
-import com.Seals.scrabble.model.hModel;
-import com.Seals.scrabble.model.iModel;
+import com.Seals.scrabble.boardAviv.BoardClass;
+import com.Seals.scrabble.boardAviv.GameController;
+import com.Seals.scrabble.facade.ModelFacade;
+import com.Seals.scrabble.model.serverSide.manager.DictionaryManager;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 
 import java.util.Observable;
 import java.util.Observer;
 
 public class ViewModel extends Observable implements Observer, iViewModel {
     private static iViewModel sharedInstance;
-    protected iModel model;
-    StringProperty vm_nickname;
+    private  static ModelFacade modelFacade;
+    private StringProperty nickname;
+    private StringProperty handToView;
+    private String newHand;
+    private String handFromModel;
+    private final int[] values = {1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 1, 1, 3, 10, 1, 1, 1, 1, 4, 4, 8, 4, 10};
+
+
+    @Override
+    public StringProperty getHandProperty() {
+        return handToView;
+    }
 
     public ViewModel() {
+        handFromModel = new String();
+        newHand = new String();
+        handToView = new SimpleStringProperty();
         sharedInstance = this;
-        this.model = new Model();
-        vm_nickname = new SimpleStringProperty();
+        modelFacade = new ModelFacade();
+        this.nickname = new SimpleStringProperty();
+        check();
     }
 
     public static iViewModel getSharedInstance() {
@@ -31,59 +49,67 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         sharedInstance = instance;
     }
 
-    public ViewModel(hViewModel hostVM) {
-        sharedInstance = this;
-        toggleModel();
-        this.setNickname(hostVM.getNickname());
-    }
-
-    public void toggleModel() {
-        if (!(model instanceof hModel)) {
-            this.model = new hModel((Model) model);
-        } else {
-            this.model = new Model((hModel) model);
-        }
-    }
-
+    @Override
     public void setNickname(String nickname) {
-        this.vm_nickname.set(nickname);
-        model.setNickname(nickname);
+        this.nickname.set(nickname);
+        modelFacade.setNickname(nickname);
         setChanged();
         notifyObservers();
     }
 
+    @Override
     public String getNickname() {
-        return model.getNickname();
+        return nickname.get();
     }
 
+    @Override
     public StringProperty nicknameProperty() {
-        return vm_nickname;
+        return nickname;
     }
 
     @Override
     public void update(Observable o, Object arg) {
-        if (o == model) {
-            vm_nickname.set(model.getNickname());
+//        if (o instanceof ModelFacade) {
+//            if (arg instanceof String) {
+//                String check = arg.toString();
+//                if(check.charAt(0) == 'U' && check.charAt(1) == 'A' && check.charAt(2) == ',')
+//                    handFromModel = arg.toString();
+//                    setLetterValue(handFromModel);
+//            }
+//         }
+//            nickname.set(model.getNickname());
+    }
+    // Additional methods and functionality specific to ViewModel
+
+    public void hostGame() {
+        modelFacade.hostGame(Settings.getServerAddress(), Settings.getHostServerPort());
+    }
+    public void setLetterValue(String tiles){
+        for (int i = 3; i < handFromModel.length(); i++){
+            int value = values[tiles.charAt(i) - 'A'];
+            newHand += handFromModel.charAt(i) + "," + value +",";
         }
+        newHand = newHand.substring(0, newHand.length()-1);
+        setHandToView();
     }
 
-    // Additional methods and functionality specific to VM
+    public void setHandToView(){
+        handToView.set(newHand);
+    }
 
-//    public void testDMServerConnection() {
-//        System.out.println("Testing DM server connection");
-//
-//        // Ensure the appropriate casting is performed
-//        if (model instanceof hModel) {
-//            hModel hModel = (hModel) model;
-//            String response = hModel.sendRequestToServer(this.getNickname());
-//            System.out.println("Received response: " + response);
-//        } else {
-//            System.out.println("The model is not an instance of hModel");
-//        }
-//    }
+    public void check(){
+        handFromModel = "UA,AQBRTC";
+        setLetterValue(handFromModel);
+        System.out.println(handToView.get());
+    }
+    public static void startServer(){
+        modelFacade.toggleModels();
+        modelFacade.getHostModel().startServer();
+    }
 
-    public StringProperty getVm_nickname() {
-        return vm_nickname;
+    @Override
+    public void joinGame(){
+        modelFacade.joinGame("omer", 5);
     }
 
 }
