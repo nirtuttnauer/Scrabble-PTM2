@@ -22,6 +22,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     private String newHand;
     private String handFromModel;
     private final int[] values = {1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 1, 1, 3, 10, 1, 1, 1, 1, 4, 4, 8, 4, 10};
+    private IntegerProperty id;
 
 
     @Override
@@ -36,6 +37,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         sharedInstance = this;
         modelFacade = new ModelFacade();
         this.nickname = new SimpleStringProperty();
+        this.id = new SimpleIntegerProperty();
         check();
     }
 
@@ -76,6 +78,9 @@ public class ViewModel extends Observable implements Observer, iViewModel {
 //                    handFromModel = arg.toString();
 //                    setLetterValue(handFromModel);
 //            }
+//            if(arg instanceof Integer) {
+//                    this.id.set((Integer) arg);
+//            }
 //         }
 //            nickname.set(model.getNickname());
     }
@@ -111,5 +116,10 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     public void joinGame(){
         modelFacade.joinGame("omer", 5);
     }
+
+    public IntegerProperty getIdProperty(){
+        return this.id;
+    }
+
 
 }
