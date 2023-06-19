@@ -1,15 +1,12 @@
 package com.Seals.scrabble.viewmodel;
 
 import com.Seals.scrabble.Settings;
-import com.Seals.scrabble.boardAviv.BoardClass;
-import com.Seals.scrabble.boardAviv.GameController;
 import com.Seals.scrabble.facade.ModelFacade;
 import com.Seals.scrabble.model.serverSide.manager.DictionaryManager;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ObservableValue;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -74,22 +71,31 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         return nickname;
     }
 
+
+    @Override
+    public StringProperty bagAmountProperty() {
+        return bagAmount;
+    }
+
     @Override
     public void update(Observable o, Object arg) {
-//        if (o instanceof ModelFacade) {
-//            if (arg instanceof String) {
-//                String check = arg.toString();
-//                if(check.charAt(0) == 'U' && check.charAt(1) == 'A' && check.charAt(2) == ','){
-//                    handFromModel = arg.toString();
-//                    setLetterValue(handFromModel);
-//                } else if (check.charAt(0) == 'B' && check.charAt(1) == 'A' && check.charAt(2) == ',') {
-//                    bagFromModel = arg.toString();
-//                    bagAmount.set(bagFromModel.substring(3));
-//                }
-//            }
-//
-//         }
-//            nickname.set(model.getNickname());
+        if (o instanceof Model) {
+            if (arg instanceof String) {
+                String check = arg.toString();
+                if(check.charAt(0) == 'U' && check.charAt(1) == 'A' && check.charAt(2) == ','){
+                    handFromModel = arg.toString();
+                    setLetterValue(handFromModel);
+                } else if (check.charAt(0) == 'B' && check.charAt(1) == 'A' && check.charAt(2) == ',') {
+                    bagFromModel = arg.toString();
+                    bagAmount.set(bagFromModel.substring(3));
+                }
+            }
+            else if (arg instanceof Integer){
+                id.set((Integer) arg);
+            }
+
+         }
+            nickname.set(modelFacade.getNickname());
     }
 
     // Additional methods and functionality specific to ViewModel
@@ -116,7 +122,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         bagAmount.set(bagFromModel.substring(3));
         setLetterValue(handFromModel);
         System.out.println(handToView.get());
-        System.out.println(bagAmount.get());
+        System.out.println(bagAmountProperty().get());
     }
     public static void startServer(){
         modelFacade.toggleModels();
@@ -128,9 +134,16 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         modelFacade.joinGame("omer", 5);
     }
 
-    public IntegerProperty getIdProperty(){
-        return this.id;
+    @Override
+    public void setNewHand(String string){
+        String newHandView = new String(string);
+        setChanged();
+        notifyObservers();
     }
 
+    @Override
+    public IntegerProperty getIdProperty() {
+        return id;
+    }
 
 }

@@ -117,8 +117,47 @@ public class GameController implements Observer, iController {
 
     }
 
+    private void handleId() {
+        int id = this.id.get();
+        switch (id){
+            case 1:
+                player1.setText(MenuController.getNickName().get());
+                player2.setVisible(false);
+                player3.setVisible(false);
+                player4.setVisible(false);
+                break;
+            case 2:
+                player2.setText(MenuController.getNickName().get());
+                player1.setVisible(false);
+                player3.setVisible(false);
+                player4.setVisible(false);
+                break;
+            case 3:
+                player3.setText(MenuController.getNickName().get());
+                player2.setVisible(false);
+                player1.setVisible(false);
+                player4.setVisible(false);
+                break;
+            case 4:
+                player4.setText(MenuController.getNickName().get());
+                player2.setVisible(false);
+                player3.setVisible(false);
+                player1.setVisible(false);
+                break;
+        }
+    }
 
-
+    private void removeFromHand() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i <handString.get().length() ; i++) {
+            if (!paneList.contains(handString.get().charAt(i))) {
+                sb.append(handString.get().charAt(i));
+            }
+        }
+        handChanges=sb.toString();
+        ViewModel.getSharedInstance().setNewHand(sb.toString());
+        paneList.clear();
+    }
 
 
     public void drawHand() {
