@@ -23,6 +23,9 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     private String handFromModel;
     private final int[] values = {1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 1, 1, 3, 10, 1, 1, 1, 1, 4, 4, 8, 4, 10};
     private IntegerProperty id;
+    private StringProperty bagAmount;
+    private String bagFromModel;
+
 
 
     @Override
@@ -34,10 +37,12 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         handFromModel = new String();
         newHand = new String();
         handToView = new SimpleStringProperty();
+        bagFromModel = new String();
         sharedInstance = this;
         modelFacade = new ModelFacade();
         this.nickname = new SimpleStringProperty();
         this.id = new SimpleIntegerProperty();
+        this.bagAmount = new SimpleStringProperty();
         check();
     }
 
@@ -74,16 +79,19 @@ public class ViewModel extends Observable implements Observer, iViewModel {
 //        if (o instanceof ModelFacade) {
 //            if (arg instanceof String) {
 //                String check = arg.toString();
-//                if(check.charAt(0) == 'U' && check.charAt(1) == 'A' && check.charAt(2) == ',')
+//                if(check.charAt(0) == 'U' && check.charAt(1) == 'A' && check.charAt(2) == ','){
 //                    handFromModel = arg.toString();
 //                    setLetterValue(handFromModel);
+//                } else if (check.charAt(0) == 'B' && check.charAt(1) == 'A' && check.charAt(2) == ',') {
+//                    bagFromModel = arg.toString();
+//                    bagAmount.set(bagFromModel.substring(3));
+//                }
 //            }
-//            if(arg instanceof Integer) {
-//                    this.id.set((Integer) arg);
-//            }
+//
 //         }
 //            nickname.set(model.getNickname());
     }
+
     // Additional methods and functionality specific to ViewModel
 
     public void hostGame() {
@@ -104,8 +112,11 @@ public class ViewModel extends Observable implements Observer, iViewModel {
 
     public void check(){
         handFromModel = "UA,AQBRTC";
+        bagFromModel = "BA,30";
+        bagAmount.set(bagFromModel.substring(3));
         setLetterValue(handFromModel);
         System.out.println(handToView.get());
+        System.out.println(bagAmount.get());
     }
     public static void startServer(){
         modelFacade.toggleModels();
