@@ -211,6 +211,7 @@ public class GameController implements Observer, iController {
             String letterStr= splitString[i];
             String scoreStr=splitString[i+1];
             Pane handPane = new Pane();
+            handPane.setId("handPane");
             handPane.setBackground(background);
             Label score = new Label();
             Label letter = new Label();
@@ -289,27 +290,45 @@ public class GameController implements Observer, iController {
     }
 
     private void setColor(Pane pane, int i, int j) {
+        pane.setId("score");
         // red part
-        if((i==0 && j==0) ||(i==0 && j==7) ||(i==0 && j==14) || (i==7 && j==14) ||(i==7 && j==14) || (i==14 && j==14)|| (i==14 && j==7)|| (i==14 && j==0)|| (i==7 && j==0) )
+        if((i==0 && j==0) ||(i==0 && j==7) ||(i==0 && j==14) || (i==7 && j==14) ||(i==7 && j==14) || (i==14 && j==14)|| (i==14 && j==7)|| (i==14 && j==0)|| (i==7 && j==0) ) {
             pane.setStyle("-fx-background-color: red");
+            Label label= new Label();
+            label.setText("3W");
+            pane.getChildren().add(label);
+        }
 
         // light blue part
       else if((i==0 && j==3) || (i==0 && j==11) || (i==2 && j==6) || (i==2 && j==8) || (i==3 && j==7) || (i==3 && j==0) || (i==3 && j==14) ||
                 (i==6 && j==2) || (i==6 && j==6) || (i==6 && j==8) || (i==7 && j==3) || (i==7 && j==11) || (i==8 && j==2) || (i==8 && j==6)
                 || (i==8 && j==8) || (i==8 && j==12) || (i==11 && j==0) || (i==11 && j==7) || (i==11 && j==14) || (i==12 && j==6) ||
-                (i==12 && j==8) || (i==14 && j==3) ||(i==14 && j==11))
-                        pane.setStyle("-fx-background-color:  #00ffea;-fx-border-color: black; -fx-border-width: 1px;");
+                (i==12 && j==8) || (i==14 && j==3) ||(i==14 && j==11)) {
+            pane.setStyle("-fx-background-color:  #00ffea;-fx-border-color: black; -fx-border-width: 1px;");
+            Label label= new Label();
+            label.setText("2L");
+            pane.getChildren().add(label);
+        }
 
         // The blue part
         else if((i==1 && j==5) || (i==1 && j==9) ||(i==5 && j==1) ||(i==5 && j==5) ||(i==5 && j==9) || (i==5 && j==13) ||
-                (i==9 && j==1) ||(i==9 && j==5) ||(i==9 && j==9) ||(i==9 && j==13) || (i==13 && j==5) || (i==13 && j==9))
-                pane.setStyle("-fx-background-color: blue;-fx-border-color: black; -fx-border-width: 1px;");
+                (i==9 && j==1) ||(i==9 && j==5) ||(i==9 && j==9) ||(i==9 && j==13) || (i==13 && j==5) || (i==13 && j==9)) {
+            pane.setStyle("-fx-background-color: blue;-fx-border-color: black; -fx-border-width: 1px;");
+            Label label= new Label();
+            label.setText("3L");
+            pane.getChildren().add(label);
+        }
 
         // yellow part
         else if((i==1 && j==1) ||(i==2 && j==2) ||(i==3 && j==3) || (i==4 && j==4) || (i==1 && j==13) || (i==2 && j==12) ||
                 (i==3 && j==11) || (i==4 && j==10) || (i==10 && j==4) ||(i==11 && j==3) || (i==12 && j==2) ||
-                (i==13 && j==1) || (i==10 && j==10) || (i==11 && j==11) || (i==12 && j==12) ||(i==13 && j==13))
+                (i==13 && j==1) || (i==10 && j==10) || (i==11 && j==11) || (i==12 && j==12) ||(i==13 && j==13)) {
             pane.setStyle("-fx-background-color: #e3e362;-fx-border-color: black; -fx-border-width: 1px;");
+            Label label= new Label();
+            label.setText("2W");
+            pane.getChildren().add(label);
+
+        }
 
         // middle part
         else if((i==7 && j==7)) {
@@ -319,8 +338,9 @@ public class GameController implements Observer, iController {
             pane.getChildren().add(label);
 
         }
-        else
+        else {
             pane.setStyle("-fx-background-color: grey;-fx-border-color: black; -fx-border-width: 1px;");
+        }
     }
 
 
