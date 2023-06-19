@@ -26,4 +26,6 @@ public interface iViewModel extends Observer {
     void setNewHand(String string);
 
     IntegerProperty getIdProperty();
+
+    void updateTryPlaceWordInViewModel(String val);
 }

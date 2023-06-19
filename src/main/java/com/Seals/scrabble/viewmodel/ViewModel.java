@@ -22,6 +22,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     private IntegerProperty id;
     private StringProperty bagAmount;
     private String bagFromModel;
+    private StringProperty tryPlaceWord;
 
 
 
@@ -31,6 +32,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     }
 
     public ViewModel() {
+        tryPlaceWord= new SimpleStringProperty();
         handFromModel = new String();
         newHand = new String();
         handToView = new SimpleStringProperty();
@@ -40,6 +42,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         this.nickname = new SimpleStringProperty();
         this.id = new SimpleIntegerProperty();
         this.bagAmount = new SimpleStringProperty();
+        id.set(1);
         check();
     }
 
@@ -144,6 +147,12 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     @Override
     public IntegerProperty getIdProperty() {
         return id;
+    }
+
+    @Override
+    public void updateTryPlaceWordInViewModel(String val){
+        System.out.println("updateTryPlaceWordInViewModel was call form viewModel");
+        tryPlaceWord.set(val);
     }
 
 }

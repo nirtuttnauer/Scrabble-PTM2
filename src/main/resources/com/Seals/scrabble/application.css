@@ -2,11 +2,18 @@
     -fx-background-color: #1d2b36;
 }
 
+/*.label {*/
+/*    -fx-font-size: 16px;*/
+/*    -fx-font-weight: bold;*/
+/*    -fx-text-fill: #cacfd6;*/
+/*    -fx-padding: 10px; !* You can adjust the value as per your needs *!*/
+/*}*/
+
 .label {
-    -fx-font-size: 16px;
-    -fx-font-weight: bold;
     -fx-text-fill: #cacfd6;
-    -fx-padding: 10px; /* You can adjust the value as per your needs */
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
 }
 .button {
     -fx-font-size: 14px;
@@ -25,4 +32,24 @@
     -fx-border-radius: 5px;
     -fx-effect: dropshadow(gaussian, rgba(48, 97, 137, 0.6), 20, 0, 2, 2);
     -fx-margin: 10px; /* This line adds margins around the input field */
+}
+/*Pane {*/
+/*    -fx-fill: green;*/
+/*    -fx-border-radius: 15px;*/
+/*    -fx-background-radius: 15px;*/
+/*    -fx-stroke: #000000;*/
+/*    -fx-stroke-width: 1;*/
+/*    -fx-arc-width: 5;*/
+/*    -fx-arc-height: 5;*/
+/*    -fx-alignment: center;*/
+/*}*/
+Pane{
+    -fx-fill: #434343;
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+    -fx-stroke: #000000;
+    -fx-stroke-width: 1;
+    -fx-arc-width: 5;
+    -fx-arc-height: 5;
+    -fx-alignment: center;
 }
