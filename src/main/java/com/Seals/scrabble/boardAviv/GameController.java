@@ -1,5 +1,6 @@
 package com.Seals.scrabble.boardAviv;
 
+import com.Seals.scrabble.controller.MenuController;
 import com.Seals.scrabble.controller.iController;
 import com.Seals.scrabble.viewmodel.ViewModel;
 import javafx.application.Platform;
@@ -27,10 +28,12 @@ import java.util.*;
 
 import static com.Seals.scrabble.factories.SceneFactory.setScene;
 
-public class GameController implements Observer, iController {
-
-
-
+public class GameController extends StackPane implements Observer, iController {
+    
+    @FXML
+    VBox rightVBox;
+    @FXML
+    Button bagBTN;
     @FXML
     Button confirmChangesBTN;
     @FXML
@@ -43,7 +46,8 @@ public class GameController implements Observer, iController {
     private Label player1;
     @FXML
     private VBox VboxBoard;
-
+    @FXML
+    private Label bagLbl;
     @FXML
     private HBox HandHbox;
     private List<ConfrimTiles> tiles;
@@ -51,16 +55,25 @@ public class GameController implements Observer, iController {
     private volatile boolean isFirstPlay = true;
     private static BoardClass boardClass= new BoardClass(15,15);
     private Affine affine;
-
+    private  StringProperty bag;
     private StringProperty handString;
-
-
     private String letterFromHand;
+    private List<Pane> paneList;
+    private String handChanges;
+    private  StringProperty id;
 
     @FXML
     public void initialize() {
+        //list of tiles that will transform to the vm
+        tiles= new ArrayList<>();
+        paneList = new ArrayList<>();
 
-
+        // players label
+        id= new SimpleStringProperty();
+        id.bind(ViewModel.getSharedInstance().getIdProperty());
+        handleId();
+        // pane list
+        paneHandList = new ArrayList<>();
         // set changes button
         this.confirmChangesBTN.setVisible(false);
         confirmChangesBTN.setOnAction(new EventHandler<ActionEvent>() {
@@ -76,6 +89,9 @@ public class GameController implements Observer, iController {
                     ButtonType res = alert.getResult();
                     if(res == yes){
                         alert.setContentText("Checking your new data...");
+                        handleTryPlaceWord();
+                        //function()
+                        removeFromHand();
                     }
                     else if (res==no){
                         alert.setContentText("No problem, try again!");
@@ -88,6 +104,8 @@ public class GameController implements Observer, iController {
         });
 
         // StringProperty...
+        this.bag = new SimpleStringProperty();
+        this.bag.bind(ViewModel.getSharedInstance().bagAmountProperty());
         this.letterFromHand = "";
         this.handString = new SimpleStringProperty();
         handString.bind(ViewModel.getSharedInstance().getHandProperty());
@@ -96,11 +114,34 @@ public class GameController implements Observer, iController {
         } else {
             System.out.println("Hand object didn't create, handString is null");
         }
+
+        //add listeners
+       ViewModel.getSharedInstance().bagAmountProperty().addListener(new ChangeListener<String>() {
+           @Override
+           public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+               bagLbl.setText(bag.get());
+           }
+       });
+
         ViewModel.getSharedInstance().getHandProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
                 System.out.println("addListener() called , the new value is : "+ newValue);
                 drawHand();
+            }
+        });
+
+        bagBTN.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+              if(handChanges.length()>=7){
+                  // alert....
+                  Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                  alert.setContentText("You already got 7 tiles...");
+              }
+              else {
+                  ViewModel.getSharedInstance().setNewHand(handChanges);
+              }
             }
         });
 
@@ -116,6 +157,7 @@ public class GameController implements Observer, iController {
     private void coloriseHandToBasicColor() {
         paneList.forEach(pane -> {
             pane.setBackground(new Background(new BackgroundFill(Color.rgb(227,200,141), CornerRadii.EMPTY, Insets.EMPTY)));
+            pane.setStyle("-fx-background-radius: 15px");
         });
         paneList.clear();
         draw();
@@ -158,27 +200,27 @@ public class GameController implements Observer, iController {
     }
 
     private void handleId() {
-        int id = this.id.get();
+        String id = this.id.get();
         switch (id){
-            case 1:
+            case "1":
                 player1.setText(MenuController.getNickName().get());
                 player2.setVisible(false);
                 player3.setVisible(false);
                 player4.setVisible(false);
                 break;
-            case 2:
+            case "2":
                 player2.setText(MenuController.getNickName().get());
                 player1.setVisible(false);
                 player3.setVisible(false);
                 player4.setVisible(false);
                 break;
-            case 3:
+            case "3":
                 player3.setText(MenuController.getNickName().get());
                 player2.setVisible(false);
                 player1.setVisible(false);
                 player4.setVisible(false);
                 break;
-            case 4:
+            case "4":
                 player4.setText(MenuController.getNickName().get());
                 player2.setVisible(false);
                 player3.setVisible(false);
@@ -240,6 +282,8 @@ public class GameController implements Observer, iController {
                 } else {
                     paneList.add(handPane);
                     handPane.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+                    handPane.setStyle("-fx-background-radius: 15px; -fx-background-color: blue; -fx-effect: dropshadow(gaussian, #0a45ea, 20, 0, 2, 2);");
+                    paneHandList.add(letterStr);
                     // Handle the click event on the pane
                     System.out.println("Clicked on pane: " + handPane.getId());
                     letterFromHand = letter.getText();
@@ -263,7 +307,7 @@ public class GameController implements Observer, iController {
         for (int i = 0; i < 15; i++) {
             HBox row = new HBox();
             for (int j = 0; j < 15; j++) {
-                Pane pane = new Pane();
+                StackPane pane = new StackPane();
                 pane.setMinSize(40, 40);
 
                 setColor(pane,i,j);
@@ -294,11 +338,12 @@ public class GameController implements Observer, iController {
         }
     }
 
-    private void setColor(Pane pane, int i, int j) {
+    private void setColor(StackPane pane, int i, int j) {
         pane.setId("score");
         // red part
         if((i==0 && j==0) ||(i==0 && j==7) ||(i==0 && j==14) || (i==7 && j==14) ||(i==7 && j==14) || (i==14 && j==14)|| (i==14 && j==7)|| (i==14 && j==0)|| (i==7 && j==0) ) {
             pane.setStyle("-fx-background-color: red");
+            pane.setAlignment(Pos.CENTER);
             Label label= new Label();
             label.setText("3W");
             pane.getChildren().add(label);
@@ -310,6 +355,7 @@ public class GameController implements Observer, iController {
                 || (i==8 && j==8) || (i==8 && j==12) || (i==11 && j==0) || (i==11 && j==7) || (i==11 && j==14) || (i==12 && j==6) ||
                 (i==12 && j==8) || (i==14 && j==3) ||(i==14 && j==11)) {
             pane.setStyle("-fx-background-color:  #00ffea;-fx-border-color: black; -fx-border-width: 1px;");
+            pane.setAlignment(Pos.CENTER);
             Label label= new Label();
             label.setText("2L");
             pane.getChildren().add(label);
@@ -319,6 +365,7 @@ public class GameController implements Observer, iController {
         else if((i==1 && j==5) || (i==1 && j==9) ||(i==5 && j==1) ||(i==5 && j==5) ||(i==5 && j==9) || (i==5 && j==13) ||
                 (i==9 && j==1) ||(i==9 && j==5) ||(i==9 && j==9) ||(i==9 && j==13) || (i==13 && j==5) || (i==13 && j==9)) {
             pane.setStyle("-fx-background-color: blue;-fx-border-color: black; -fx-border-width: 1px;");
+            pane.setAlignment(Pos.CENTER);
             Label label= new Label();
             label.setText("3L");
             pane.getChildren().add(label);
@@ -329,6 +376,7 @@ public class GameController implements Observer, iController {
                 (i==3 && j==11) || (i==4 && j==10) || (i==10 && j==4) ||(i==11 && j==3) || (i==12 && j==2) ||
                 (i==13 && j==1) || (i==10 && j==10) || (i==11 && j==11) || (i==12 && j==12) ||(i==13 && j==13)) {
             pane.setStyle("-fx-background-color: #e3e362;-fx-border-color: black; -fx-border-width: 1px;");
+            pane.setAlignment(Pos.CENTER);
             Label label= new Label();
             label.setText("2W");
             pane.getChildren().add(label);
@@ -338,6 +386,7 @@ public class GameController implements Observer, iController {
         // middle part
         else if((i==7 && j==7)) {
             pane.setStyle("-fx-background-color: #e3e362;-fx-border-color: black; -fx-border-width: 1px;");
+            pane.setAlignment(Pos.CENTER);
             Label label= new Label();
             label.setText("Star");
             pane.getChildren().add(label);
@@ -345,6 +394,7 @@ public class GameController implements Observer, iController {
         }
         else {
             pane.setStyle("-fx-background-color: grey;-fx-border-color: black; -fx-border-width: 1px;");
+            pane.setAlignment(Pos.CENTER);
         }
     }
 

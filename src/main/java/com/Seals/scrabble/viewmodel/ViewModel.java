@@ -19,7 +19,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     private String newHand;
     private String handFromModel;
     private final int[] values = {1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 1, 1, 3, 10, 1, 1, 1, 1, 4, 4, 8, 4, 10};
-    private IntegerProperty id;
+    private StringProperty id;
     private StringProperty bagAmount;
     private String bagFromModel;
     private StringProperty tryPlaceWord;
@@ -40,9 +40,9 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         sharedInstance = this;
         modelFacade = new ModelFacade();
         this.nickname = new SimpleStringProperty();
-        this.id = new SimpleIntegerProperty();
+        this.id = new SimpleStringProperty();
         this.bagAmount = new SimpleStringProperty();
-        id.set(1);
+        id.set("1");
         check();
     }
 
@@ -88,16 +88,13 @@ public class ViewModel extends Observable implements Observer, iViewModel {
                 // build the string like this --> UA, 7tiles, id, bag amount
                 if(check.charAt(0) == 'U' && check.charAt(1) == 'A' && check.charAt(2) == ','){
                     handFromModel = arg.toString();
+                    handFromModel = handFromModel.substring(3,9);
                     setLetterValue(handFromModel);
-                } else if (check.charAt(0) == 'B' && check.charAt(1) == 'A' && check.charAt(2) == ',') {
+                    id.set(arg.toString().substring(11,11));
                     bagFromModel = arg.toString();
-                    bagAmount.set(bagFromModel.substring(3));
+                    bagAmount.set(bagFromModel.substring(13));
                 }
             }
-            else if (arg instanceof Integer){
-                id.set((Integer) arg);
-            }
-
          }
             nickname.set(modelFacade.getNickname());
     }
@@ -146,7 +143,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     }
 
     @Override
-    public IntegerProperty getIdProperty() {
+    public StringProperty getIdProperty() {
         return id;
     }
 
