@@ -26,8 +26,7 @@ public class LobbyController  implements Initializable, Observer,iController {
         setScene("GameView");
     }
 
-    public void onMenuButtonClick(ActionEvent event) {
-    }
+
 
     @Override
     public void update(Observable o, Object arg) {
@@ -38,11 +37,11 @@ public class LobbyController  implements Initializable, Observer,iController {
 
     @Override
     public void onMenuButtonClick() throws IOException {
-
+        setScene("MenuView");
     }
 
     @Override
     public void onExitButtonClick() throws IOException {
-
+    
     }
 }

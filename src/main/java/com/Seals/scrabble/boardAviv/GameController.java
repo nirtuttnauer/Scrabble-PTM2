@@ -64,6 +64,8 @@ public class GameController extends StackPane implements Observer, iController {
 
     @FXML
     public void initialize() {
+        //example
+        //boardClass.setBoard(0,0,"A");
         //list of tiles that will transform to the vm
         tiles= new ArrayList<>();
         paneList = new ArrayList<>();
@@ -96,6 +98,7 @@ public class GameController extends StackPane implements Observer, iController {
                     else if (res==no){
                         alert.setContentText("No problem, try again!");
                         coloriseHandToBasicColor();
+                        removeFromBoard();
                     }
                 });
                 alert.showAndWait();
@@ -134,10 +137,11 @@ public class GameController extends StackPane implements Observer, iController {
         bagBTN.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-              if(handChanges.length()>=7){
+              if(paneHandList.size()==0){
                   // alert....
                   Alert alert = new Alert(Alert.AlertType.INFORMATION);
                   alert.setContentText("You already got 7 tiles...");
+                  alert.showAndWait();
               }
               else {
                   ViewModel.getSharedInstance().setNewHand(handChanges);
@@ -152,6 +156,14 @@ public class GameController extends StackPane implements Observer, iController {
         //draw the board
         draw();
 
+    }
+
+    public void removeFromBoard() {
+        tiles.forEach(tile->{
+            boardClass.claerByIndex(tile.cordX, tile.cordY);
+        });
+        tiles.clear();
+        draw();
     }
 
     private void coloriseHandToBasicColor() {
@@ -309,7 +321,11 @@ public class GameController extends StackPane implements Observer, iController {
             for (int j = 0; j < 15; j++) {
                 StackPane pane = new StackPane();
                 pane.setMinSize(40, 40);
-
+                if(boardClass.getBoard()[i][j] != null) {
+                    Label l = new Label();
+                    l.setText(boardClass.getBoard()[i][j]);
+                    pane.getChildren().add(l);
+                }
                 setColor(pane,i,j);
                 int finalI = i;
                 int finalJ = j;
@@ -417,7 +433,6 @@ public class GameController extends StackPane implements Observer, iController {
     }
 
     public static BoardClass getBoardClass() {
-        System.out.println("נירוס הקטלני");
         return boardClass;
     }
     // inner class that will be used after placing all the words on the board

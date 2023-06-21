@@ -85,14 +85,14 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         if (o instanceof Model) {
             if (arg instanceof String) {
                 String check = arg.toString();
-                // build the string like this --> UA, 7tiles, id, bag amount
+                // build the string like this --> UA, 7tiles, id, bag amount, board[][]
                 if(check.charAt(0) == 'U' && check.charAt(1) == 'A' && check.charAt(2) == ','){
                     handFromModel = arg.toString();
                     handFromModel = handFromModel.substring(3,9);
-                    setLetterValue(handFromModel);
                     id.set(arg.toString().substring(11,11));
+                    setLetterValue(handFromModel);
                     bagFromModel = arg.toString();
-                    bagAmount.set(bagFromModel.substring(13));
+                    bagAmount.set(bagFromModel.substring(13,14));
                 }
             }
          }
@@ -149,8 +149,10 @@ public class ViewModel extends Observable implements Observer, iViewModel {
 
     @Override
     public void updateTryPlaceWordInViewModel(String val){
+        StringBuilder sb = new StringBuilder("TP-");
         System.out.println("updateTryPlaceWordInViewModel was call form viewModel");
-        tryPlaceWord.set(val);
+        sb.append(val);
+        // nir need to get the boardClass instance , and update all the threads for the changes
     }
 
 }
