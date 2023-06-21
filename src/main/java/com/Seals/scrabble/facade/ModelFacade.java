@@ -26,6 +26,7 @@ public class ModelFacade implements iModelFacade {
     private StringProperty nickname;
 
 
+
     public ModelFacade() {
         this.model = new Model();
         this.nickname = new SimpleStringProperty();
@@ -84,4 +85,10 @@ public class ModelFacade implements iModelFacade {
             model = null;
         }
     }
+
+    public void TPRequestFromVM(String req){
+        String[] cmd = req.split("-");
+//        hModel.getGameManager().tryPlaceWordAction();
+    }
+
 }
