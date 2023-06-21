@@ -3,8 +3,6 @@ package com.Seals.scrabble.viewmodel;
 import com.Seals.scrabble.Settings;
 import com.Seals.scrabble.facade.ModelFacade;
 import com.Seals.scrabble.model.Model;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -22,7 +20,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     private StringProperty id;
     private StringProperty bagAmount;
     private String bagFromModel;
-    private StringProperty tryPlaceWord;
+    //private StringProperty tryPlaceWord;
 
 
 
@@ -32,7 +30,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     }
 
     public ViewModel() {
-        tryPlaceWord= new SimpleStringProperty();
+ //       tryPlaceWord= new SimpleStringProperty();
         handFromModel = new String();
         newHand = new String();
         handToView = new SimpleStringProperty();
@@ -152,6 +150,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         StringBuilder sb = new StringBuilder("TP-");
         System.out.println("updateTryPlaceWordInViewModel was call form viewModel");
         sb.append(val);
+        modelFacade.TPRequestFromVM(sb.toString());
         // nir need to get the boardClass instance , and update all the threads for the changes
     }
 
