@@ -79,7 +79,7 @@ public class GameController implements Observer, iController {
                     }
                     else if (res==no){
                         alert.setContentText("No problem, try again!");
-                        coloriseHandToGray();
+                        coloriseHandToBasicColor();
                     }
                 });
                 alert.showAndWait();
@@ -113,11 +113,12 @@ public class GameController implements Observer, iController {
 
     }
 
-    private void coloriseHandToGray() {
+    private void coloriseHandToBasicColor() {
         paneList.forEach(pane -> {
-            pane.setBackground(new Background(new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+            pane.setBackground(new Background(new BackgroundFill(Color.rgb(227,200,141), CornerRadii.EMPTY, Insets.EMPTY)));
         });
         paneList.clear();
+        draw();
     }
     private void handleTryPlaceWord() {
         StringBuilder sb = new StringBuilder();
@@ -227,7 +228,6 @@ public class GameController implements Observer, iController {
 
             handPane.getChildren().addAll(score, letter);
 
-
             HandHbox.getChildren().add(handPane);
 
             handPane.setOnMouseClicked(event -> {
@@ -246,6 +246,7 @@ public class GameController implements Observer, iController {
                     System.out.println("The letter from the label: " + letterFromHand);
                     // Perform further actions with the letter
                 }
+
             });
 
             handPane.setMinHeight(100.0);
@@ -276,7 +277,11 @@ public class GameController implements Observer, iController {
                         letter.setText(letterFromHand);
                         boardClass.setBoard(x,y,letterFromHand);
                         boardClass.printBoard();
-                        pane.getChildren().add(letter);
+                        if(pane.getChildren().equals("3W") || pane.getChildren().equals("2W") || pane.getChildren().equals("2L") ||
+                                pane.getChildren().equals("3L") || pane.getChildren().equals("Start") );{
+                            pane.getChildren().clear();}
+                        if(pane.getChildren().isEmpty())
+                            pane.getChildren().add(letter);
                         confirmChangesBTN.setVisible(true);
                         //adding the new tile to the list
                         tiles.add(new ConfrimTiles(x,y,letterFromHand));

@@ -2,7 +2,7 @@ package com.Seals.scrabble.viewmodel;
 
 import com.Seals.scrabble.Settings;
 import com.Seals.scrabble.facade.ModelFacade;
-import com.Seals.scrabble.model.serverSide.manager.DictionaryManager;
+import com.Seals.scrabble.model.Model;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -85,6 +85,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         if (o instanceof Model) {
             if (arg instanceof String) {
                 String check = arg.toString();
+                // build the string like this --> UA, 7tiles, id, bag amount
                 if(check.charAt(0) == 'U' && check.charAt(1) == 'A' && check.charAt(2) == ','){
                     handFromModel = arg.toString();
                     setLetterValue(handFromModel);
