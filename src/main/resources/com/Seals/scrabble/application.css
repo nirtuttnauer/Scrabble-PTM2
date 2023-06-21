@@ -29,6 +29,7 @@
 }
 
 Pane {
+    -fx-fill: #434343;
     -fx-border-radius: 15px;
     -fx-background-radius: 15px;
     -fx-stroke: #000000;
@@ -39,6 +40,9 @@ Pane {
 
 #score Label{
     -fx-text-fill: black;
+    -fx-font-size: 13px;
+    -fx-alignment: center;
+
 }
 
 #handPane{
