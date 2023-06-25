@@ -77,7 +77,8 @@ public class GameManager {
 
 //            gameServer.broadcast(currentPlayer.printHand());
 //            gameServer.broadcast(currentPlayer.)
-            gameServer.broadcast(getGameBoard().printBoardLetters());
+            gameServer.broadcast("UA," + currentPlayer.printHand() + "," + currentPlayer.getId() + "," + this.Bag.getQuantitiesString());
+            gameServer.broadcast("board:" + getGameBoard().printBoardLetters());
             gameServer.broadcast("Current turn is:" + (getTurnManager().getCurrentPlayerIndex() + 1));
 //            gameServer.broadcast(() => {);
 
