@@ -4,6 +4,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.Seals.scrabble.model.hModel.getGameManager;
 import static com.Seals.scrabble.model.hostSide.game.Player.MAX_PLAYERS;
 
 public class PlayerManager {
@@ -18,7 +19,7 @@ public class PlayerManager {
     }
 
     public Boolean addPlayer(Player player) {
-        if (this.getTotalPlayers() <= MAX_PLAYERS) {
+        if (this.getTotalPlayers() < MAX_PLAYERS) {
             players.add(player);
             System.out.println(this.players + "line 24 PM");
             return true;
@@ -63,7 +64,7 @@ public class PlayerManager {
 
 
     public void notifyCurrentPlayerTurn() {
-        System.out.println("TU");
+        getGameManager().getGameServer().broadcast("new update");
     }
 
     public void removePlayerById(int playerId) {

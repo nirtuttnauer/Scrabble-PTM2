@@ -21,6 +21,9 @@ public interface iViewModel extends Observer {
 
     StringProperty bagAmountProperty();
 
+
+    void startGame();
+
     void joinGame();
 
     void setNewHand(String string);

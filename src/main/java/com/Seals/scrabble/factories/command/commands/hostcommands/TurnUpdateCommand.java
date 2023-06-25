@@ -10,7 +10,7 @@ import static com.Seals.scrabble.model.hModel.getGameManager;
 public class TurnUpdateCommand implements ICommand {
 
     @Override
-    public String execute(Socket socket, String... args) {
+    public String execute(String...s) {
 //        System.out.println("hellppp");
         getGameManager().getGameServer().broadcast("TU from command");
                return getGameManager().getGameServer().broadcast(String.valueOf(getGameManager().getTurnManager().getCurrentPlayerIndex() + 1));

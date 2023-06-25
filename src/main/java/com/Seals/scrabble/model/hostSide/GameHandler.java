@@ -75,7 +75,7 @@ public class GameHandler implements ClientHandler {
     }
 
     private String processRequest(String request) {
-        System.out.println("processRequerst::GameHandler " + request + " on line 82");
+//        System.out.println("processRequerst::GameHandler " + request + " on line 82");
         if (request == null || request.isEmpty()) {
             return "Invalid request";
         }
@@ -87,7 +87,7 @@ public class GameHandler implements ClientHandler {
         if (command != null) {
             String[] args = new String[split.size()];
             split.toArray(args);
-            return command.execute(this.clientSocket, args);
+            return command.execute(args);
         } else {
             return "Unknown command: " + scmd;
         }
