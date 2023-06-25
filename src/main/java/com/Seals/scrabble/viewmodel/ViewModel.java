@@ -136,7 +136,8 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     @Override
     public void startGame() {
         modelFacade.startGame();
-  
+    }
+
     public void setNewHand(String string){
         String newHandView = new String(string);
         setChanged();
