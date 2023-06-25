@@ -25,6 +25,9 @@ public class BoardClass {
         return this.board[i][j];
     }
 
+    public void claerByIndex(int i , int j){
+        board[i][j] = null;
+    }
     public int getWidth() {
         return width;
     }
