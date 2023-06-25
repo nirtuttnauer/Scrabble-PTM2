@@ -82,7 +82,7 @@ public class Player {
 
     public String printHand() {
         List<Tile> tiles = this.getHand();
-        String hand = tiles.stream().map(tile -> String.valueOf(tile.getLetter())).collect(Collectors.joining(", "));
+        String hand = tiles.stream().map(tile -> String.valueOf(tile.getLetter())).collect(Collectors.joining(""));
         return hand;
     }
 
