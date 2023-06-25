@@ -9,7 +9,10 @@ import javafx.beans.property.StringProperty;
 import java.util.Observable;
 import java.util.Observer;
 
+import static com.Seals.scrabble.factories.SceneFactory.setScene;
+
 public class ViewModel extends Observable implements Observer, iViewModel {
+    Thread tread;
     private static iViewModel sharedInstance;
     private  static ModelFacade modelFacade;
     private StringProperty nickname;
@@ -31,6 +34,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
 
     public ViewModel() {
  //       tryPlaceWord= new SimpleStringProperty();
+        tread = new Thread(this::startGame);
         handFromModel = new String();
         newHand = new String();
         handToView = new SimpleStringProperty();
@@ -156,6 +160,12 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         sb.append(val);
         modelFacade.TPRequestFromVM(sb.toString());
         // nir need to get the boardClass instance , and update all the threads for the changes
+    }
+
+    @Override
+    public void changeScheneToGame() {
+        setScene("GameView");
+        tread.start();
     }
 
 }
