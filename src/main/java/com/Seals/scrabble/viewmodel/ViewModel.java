@@ -44,8 +44,8 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         this.nickname = new SimpleStringProperty();
         this.id = new SimpleStringProperty();
         this.bagAmount = new SimpleStringProperty();
-        id.set("1");
-        check();
+        id.set(""+modelFacade.getModel().getID());
+        //check();
     }
 
     public static iViewModel getSharedInstance() {

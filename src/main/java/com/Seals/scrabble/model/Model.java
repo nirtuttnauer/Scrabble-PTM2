@@ -163,9 +163,13 @@ private void startListening() {
     }
 
     private String processResponse(String response) {
-        String[] parts = response.split(":");
+        String[] parts = response.split(",");
         if (parts[0].equals("ID")) {
             ID = Integer.parseInt(parts[1]);
+        }
+        if (parts[0].equals("UA")){
+            setChanged();
+            notifyObservers(response);
         }
 //        System.out.println("update me");
         return "update me";
