@@ -1,5 +1,6 @@
 package com.Seals.scrabble.viewmodel;
 
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 
@@ -17,8 +18,17 @@ public interface iViewModel extends Observer {
     void deleteObserver(java.util.Observer observer);
 
    StringProperty getHandProperty();
-  void joinGame();
+
+    StringProperty bagAmountProperty();
 
 
     void startGame();
+
+    void joinGame();
+
+    void setNewHand(String string);
+
+    StringProperty getIdProperty();
+
+    void updateTryPlaceWordInViewModel(String val);
 }
