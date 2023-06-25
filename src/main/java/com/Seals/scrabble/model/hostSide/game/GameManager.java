@@ -75,7 +75,8 @@ public class GameManager {
         Player currentPlayer = getPlayerManager().getPlayer(getTurnManager().getCurrentPlayerIndex() + 1);
         if (currentPlayer != null) {
 
-            gameServer.broadcast(currentPlayer.printHand());
+//            gameServer.broadcast(currentPlayer.printHand());
+//            gameServer.broadcast(currentPlayer.)
             gameServer.broadcast(getGameBoard().printBoardLetters());
             gameServer.broadcast("Current turn is:" + (getTurnManager().getCurrentPlayerIndex() + 1));
 //            gameServer.broadcast(() => {);

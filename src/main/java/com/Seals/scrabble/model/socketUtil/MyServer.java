@@ -77,7 +77,7 @@ public class MyServer implements Runnable{
         }
 
         for (ClientHandler clientHandler : clientHandlers.values()) {
-//            clientHandler.close();
+            clientHandler.close();
         }
     }
 

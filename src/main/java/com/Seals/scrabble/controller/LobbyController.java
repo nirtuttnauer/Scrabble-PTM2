@@ -25,8 +25,9 @@ public class LobbyController  implements Observer,iController {
 
     public void onGameButtonClick(ActionEvent event) {
 
-        ViewModel.getSharedInstance().startGame();
         setScene("GameView");
+        ViewModel.getSharedInstance().startGame();
+
     }
 
     public void onMenuButtonClick(ActionEvent event) {
