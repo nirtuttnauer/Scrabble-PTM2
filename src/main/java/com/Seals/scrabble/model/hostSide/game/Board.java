@@ -313,10 +313,10 @@ public class Board {
                 if (SingleBoard.Places[i][j].tile != null) {
                     s.append(SingleBoard.Places[i][j].tile.letter).append(" ");
                 } else
-                    s.append(" 0 ");
+                    s.append("0");
 
             }
-            if (i<14) s.append(" : ");
+            if (i<14) s.append(" ");
         }
             return s.toString();
 
