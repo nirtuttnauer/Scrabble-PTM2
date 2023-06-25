@@ -6,6 +6,7 @@ import com.Seals.scrabble.model.Model;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -23,6 +24,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     private StringProperty id;
     private StringProperty bagAmount;
     private String bagFromModel;
+    public StringProperty board;
     //private StringProperty tryPlaceWord;
 
 
@@ -35,6 +37,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     public ViewModel() {
  //       tryPlaceWord= new SimpleStringProperty();
         tread = new Thread(this::startGame);
+        board = new SimpleStringProperty();
         handFromModel = new String();
         newHand = new String();
         handToView = new SimpleStringProperty();
@@ -45,7 +48,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         this.id = new SimpleStringProperty();
         this.bagAmount = new SimpleStringProperty();
         id.set(""+modelFacade.getModel().getID());
-        //check();
+        check();
     }
 
     public static iViewModel getSharedInstance() {
@@ -87,17 +90,25 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         if (o instanceof Model) {
             if (arg instanceof String) {
                 String check = arg.toString();
+                String boardFromModel = (arg.toString());
+                String[] stringArr  = boardFromModel.split(",");
                 // build the string like this --> UA, 7tiles, id, bag amount, board[][]
                 if(check.charAt(0) == 'U' && check.charAt(1) == 'A' && check.charAt(2) == ','){
-                    handFromModel = arg.toString();
-                    handFromModel = handFromModel.substring(3,9);
+                    handFromModel = "";
+                    handFromModel = ((String) arg).substring(3,10);
                     id.set(arg.toString().substring(11,11));
-                    setLetterValue(handFromModel);
+                    setLetterValue();
                     bagFromModel = arg.toString();
                     bagAmount.set(bagFromModel.substring(13,14));
                 }
+                else if(stringArr[0].equals("board"))  {
+                    //board.set(stringArr[1]);
+                }
+                board.set("000000000000000 000000000000000 000000000000000 000000000000000 000000000000000 000000000000000 000000000000000 000000000000000 000000000000000 000000000000000 000000000000000 000000000000000 000000000000000 000000000000000 000000000000000");
+                System.out.println("line 106: " + handToView);
+                System.out.println("line 107: "+ board);
             }
-         }
+        }
             nickname.set(modelFacade.getNickname());
     }
 
@@ -106,9 +117,11 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     public void hostGame() {
         modelFacade.hostGame(Settings.getServerAddress(), Settings.getHostServerPort());
     }
-    public void setLetterValue(String tiles){
-        for (int i = 3; i < handFromModel.length(); i++){
-            int value = values[tiles.charAt(i) - 'A'];
+    public void setLetterValue(){
+            newHand = "";
+        for (int i = 0; i < handFromModel.length(); i++){
+            System.out.println("line 120: "+handFromModel);
+            int value = values[(int)(handFromModel.charAt(i) - 'A')];
             newHand += handFromModel.charAt(i) + "," + value +",";
         }
         newHand = newHand.substring(0, newHand.length()-1);
@@ -120,10 +133,10 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     }
 
     public void check(){
-        handFromModel = "UA,AQBRTC";
+        handFromModel = "AAAAAAA";
         bagFromModel = "BA,30";
         bagAmount.set(bagFromModel.substring(3));
-        setLetterValue(handFromModel);
+        setLetterValue();
         System.out.println(handToView.get());
         System.out.println(bagAmountProperty().get());
     }
@@ -166,6 +179,11 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     public void changeScheneToGame() {
         setScene("GameView");
         tread.start();
+    }
+
+    @Override
+    public StringProperty getBoardProperty() {
+        return board;
     }
 
 }
