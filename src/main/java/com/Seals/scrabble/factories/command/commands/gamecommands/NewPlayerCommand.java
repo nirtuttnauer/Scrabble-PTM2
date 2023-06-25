@@ -14,9 +14,9 @@ public class NewPlayerCommand implements ICommand {
 
 
 @Override
-public String execute(Socket socket, String... args) {
+public String execute(String... args) {
     if (args.length > 0) {
-        Player p = new Player(socket, args[0]);
+        Player p = new Player(args[0]);
         boolean added = getGameManager().addPlayer(p);
         if (added) {
             return "ID:"+p.getId();

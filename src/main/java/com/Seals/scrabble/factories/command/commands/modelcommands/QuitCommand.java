@@ -9,7 +9,7 @@ import static com.Seals.scrabble.model.hModel.getGameManager;
 public class QuitCommand implements ICommand {
 
     @Override
-    public String execute(Socket socket, String... args) {
+    public String execute(String... args) {
         if (args.length > 0) {
             int playerId = Integer.parseInt(args[0]); // assuming first argument is the player's ID
             getGameManager().getPlayerManager().removePlayerById(playerId);

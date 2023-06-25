@@ -134,18 +134,18 @@ public void connectToHost() {
 
 private void startListening() {
     listening = true;
-    System.out.println("started listing on line 130");
+//    System.out.println("started listing on line 130");
     listenerThread = new Thread(() -> {
         while (listening) {
             String response = null;
             try {
                 if ((response = in.readLine()) != null) {
-                    System.out.println("I heard something...");
+//                    System.out.println("I heard something...");
                     System.out.println(response);
                     sendRequestToHost(processResponse(response));
                 }
             } catch (SocketTimeoutException e) {
-                System.out.println("Socket timeout, continuing to listen...");
+//                System.out.println("Socket timeout, continuing to listen...");
             } catch (IOException e) {
                 e.printStackTrace();
             }
