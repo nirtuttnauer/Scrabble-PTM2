@@ -2,6 +2,7 @@ package com.Seals.scrabble.model;
 
 import com.Seals.scrabble.Settings;
 import com.Seals.scrabble.model.socketUtil.SocketUtil;
+import com.Seals.scrabble.viewmodel.ViewModel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -39,6 +40,7 @@ public class Model extends Observable implements iModel {
         hostPort = Settings.getHostServerPort();
         this.listening = false;
         getRandomName();
+        addObserver(ViewModel.getSharedInstance());
     }
 
     public Model(iModel model) {
@@ -52,6 +54,7 @@ public class Model extends Observable implements iModel {
         this.listening = false;
         this.out = model.getOut();
         this.in = model.getIn();
+        addObserver(ViewModel.getSharedInstance());
     }
 
     public String getServerAddress() {
