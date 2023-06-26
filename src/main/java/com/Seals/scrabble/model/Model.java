@@ -47,6 +47,7 @@ public class Model extends Observable implements iModel {
         if (model == null) {
             throw new IllegalArgumentException("model cannot be null");
         }
+        addObserver(ViewModel.getSharedInstance());
         this.nickname = model.nicknameProperty();
         this.serverAddress = model.getServerAddress();
         this.hostPort = model.getHostPort();

@@ -29,7 +29,7 @@ import java.util.*;
 import static com.Seals.scrabble.factories.SceneFactory.setScene;
 
 public class GameController extends StackPane implements Observer, iController {
-    
+
     @FXML
     VBox rightVBox;
     @FXML
@@ -53,25 +53,25 @@ public class GameController extends StackPane implements Observer, iController {
     private List<ConfrimTiles> tiles;
     private List<String> paneHandList;
     private volatile boolean isFirstPlay = true;
-    private static BoardClass boardClass= new BoardClass(15,15);
+    private static BoardClass boardClass = new BoardClass(15, 15);
     private Affine affine;
-    private  StringProperty bag;
+    private StringProperty bag;
     private StringProperty handString;
     private String letterFromHand;
     private List<Pane> paneList;
     private String handChanges;
-    private  StringProperty id;
+    private StringProperty id;
 
     @FXML
     public void initialize() {
         //example
         //boardClass.setBoard(0,0,"A");
         //list of tiles that will transform to the vm
-        tiles= new ArrayList<>();
+        tiles = new ArrayList<>();
         paneList = new ArrayList<>();
 
         // players label
-        id= new SimpleStringProperty();
+        id = new SimpleStringProperty();
         id.bind(ViewModel.getSharedInstance().getIdProperty());
         handleId();
         // pane list
@@ -85,17 +85,16 @@ public class GameController extends StackPane implements Observer, iController {
                 alert.setContentText("Are you sure about this changes?");
                 ButtonType yes = new ButtonType("Yes");
                 ButtonType no = new ButtonType("No");
-                alert.getButtonTypes().addAll(yes,no);
+                alert.getButtonTypes().addAll(yes, no);
 
-                alert.setOnCloseRequest(event->{
+                alert.setOnCloseRequest(event -> {
                     ButtonType res = alert.getResult();
-                    if(res == yes){
+                    if (res == yes) {
                         alert.setContentText("Checking your new data...");
                         handleTryPlaceWord();
                         //function()
                         removeFromHand();
-                    }
-                    else if (res==no){
+                    } else if (res == no) {
                         alert.setContentText("No problem, try again!");
                         coloriseHandToBasicColor();
                         removeFromBoard();
@@ -107,6 +106,7 @@ public class GameController extends StackPane implements Observer, iController {
         });
 
         // StringProperty...
+
         this.bag = new SimpleStringProperty();
         this.bag.bind(ViewModel.getSharedInstance().bagAmountProperty());
         this.letterFromHand = "";
@@ -119,33 +119,37 @@ public class GameController extends StackPane implements Observer, iController {
         }
 
         //add listeners
-       ViewModel.getSharedInstance().bagAmountProperty().addListener(new ChangeListener<String>() {
-           @Override
-           public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-               bagLbl.setText(bag.get());
-           }
-       });
+        ViewModel.getSharedInstance().bagAmountProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                Platform.runLater(()->{
+
+                bagLbl.setText("Tiles in the bag: " +bag.get());
+                });
+            }
+        });
 
         ViewModel.getSharedInstance().getHandProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-                System.out.println("addListener() called , the new value is : "+ newValue);
+                System.out.println("addListener() called , the new value is : " + newValue);
+                handleId();
                 drawHand();
+                System.out.println("line 133: " + id.get());
             }
         });
 
         bagBTN.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-              if(paneHandList.size()==0){
-                  // alert....
-                  Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                  alert.setContentText("You already got 7 tiles...");
-                  alert.showAndWait();
-              }
-              else {
-                  ViewModel.getSharedInstance().setNewHand(handChanges);
-              }
+                if (paneHandList.size() == 0) {
+                    // alert....
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setContentText("You already got 7 tiles...");
+                    alert.showAndWait();
+                } else {
+                    ViewModel.getSharedInstance().setNewHand(handChanges);
+                }
             }
         });
 
@@ -159,7 +163,7 @@ public class GameController extends StackPane implements Observer, iController {
     }
 
     public void removeFromBoard() {
-        tiles.forEach(tile->{
+        tiles.forEach(tile -> {
             boardClass.claerByIndex(tile.cordX, tile.cordY);
         });
         tiles.clear();
@@ -168,15 +172,16 @@ public class GameController extends StackPane implements Observer, iController {
 
     private void coloriseHandToBasicColor() {
         paneList.forEach(pane -> {
-            pane.setBackground(new Background(new BackgroundFill(Color.rgb(227,200,141), CornerRadii.EMPTY, Insets.EMPTY)));
+            pane.setBackground(new Background(new BackgroundFill(Color.rgb(227, 200, 141), CornerRadii.EMPTY, Insets.EMPTY)));
             pane.setStyle("-fx-background-radius: 15px");
         });
         paneList.clear();
         draw();
     }
+
     private void handleTryPlaceWord() {
         StringBuilder sb = new StringBuilder();
-        tiles.forEach(t->{
+        tiles.forEach(t -> {
             sb.append(t.letter).append(",").append(t.cordX).append(",").append(t.cordY).append("\n"); // split by "\n"
         });
 
@@ -199,9 +204,9 @@ public class GameController extends StackPane implements Observer, iController {
         int seccondX = tiles.get(1).cordX;
         int seccondY = tiles.get(1).cordY;
 
-        if(firstX==seccondY && seccondY!=seccondX)
+        if (firstX == seccondY && seccondY != seccondX)
             return "H";
-        else if(firstY==seccondY && seccondX!=seccondY)
+        else if (firstY == seccondY && seccondX != seccondY)
             return "V";
         else
             return "cannot find if the word is vertical or horizontal";
@@ -213,7 +218,7 @@ public class GameController extends StackPane implements Observer, iController {
 
     private void handleId() {
         String id = this.id.get();
-        switch (id){
+        switch (id) {
             case "1":
                 player1.setText(MenuController.getNickName().get());
                 player2.setVisible(false);
@@ -243,74 +248,76 @@ public class GameController extends StackPane implements Observer, iController {
 
     private void removeFromHand() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i <handString.get().length() ; i++) {
+        for (int i = 0; i < handString.get().length(); i++) {
             if (!paneHandList.contains(handString.get().charAt(i))) {
                 sb.append(handString.get().charAt(i));
             }
         }
-        handChanges=sb.toString();
+        handChanges = sb.toString();
         ViewModel.getSharedInstance().setNewHand(sb.toString());
         paneHandList.clear();
     }
 
 
     public void drawHand() {
-        HandHbox.getChildren().clear();
+        Platform.runLater(() -> {
+            HandHbox.getChildren().clear();
 
-        BackgroundFill backgroundFill = new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY);
-        Background background = new Background(backgroundFill);
+            BackgroundFill backgroundFill = new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY);
+            Background background = new Background(backgroundFill);
 
-        String[] splitString = handString.get().split(",");
+            String[] splitString = handString.get().split(",");
 
-        for (int i = 0; i < splitString.length; i+=2) {
-            String letterStr= splitString[i];
-            String scoreStr=splitString[i+1];
-            Pane handPane = new Pane();
-            handPane.setId("handPane");
-            handPane.setBackground(background);
-            Label score = new Label();
-            Label letter = new Label();
+            for (int i = 0; i < splitString.length; i += 2) {
+                String letterStr = splitString[i];
+                String scoreStr = splitString[i + 1];
+                Pane handPane = new Pane();
+                handPane.setId("handPane");
+                handPane.setBackground(background);
+                Label score = new Label();
+                Label letter = new Label();
 
-            letter.setText(letterStr);
-            score.setText(scoreStr);
+                letter.setText(letterStr);
+                score.setText(scoreStr);
 
-            Insets labelsPadding = new Insets(47);
-            score.setPadding(labelsPadding);
-            letter.setPadding(new Insets(10));
+                Insets labelsPadding = new Insets(47);
+                score.setPadding(labelsPadding);
+                letter.setPadding(new Insets(10));
 
-            handPane.setStyle("fx-border-color: black; -fx-border-width: 1px;");
+                handPane.setStyle("fx-border-color: black; -fx-border-width: 1px;");
 
-            handPane.getChildren().addAll(score, letter);
+                handPane.getChildren().addAll(score, letter);
+                System.out.println("287: " + handPane.getChildren());
+                HandHbox.getChildren().add(handPane);
 
-            HandHbox.getChildren().add(handPane);
+                handPane.setOnMouseClicked(event -> {
+                    if (handPane.getBackground() != null && handPane.getBackground().equals(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)))) {
+                        letterFromHand = "";
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Error");
+                        alert.setContentText("You already used this tile!\nTry a different tile.");
+                        alert.showAndWait();
+                    } else {
+                        paneList.add(handPane);
+                        handPane.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+                        handPane.setStyle("-fx-background-radius: 15px; -fx-background-color: blue; -fx-effect: dropshadow(gaussian, #0a45ea, 20, 0, 2, 2);");
+                        paneHandList.add(letterStr);
+                        // Handle the click event on the pane
+                        System.out.println("Clicked on pane: " + handPane.getId());
+                        letterFromHand = letter.getText();
+                        System.out.println("The letter from the label: " + letterFromHand);
+                        // Perform further actions with the letter
+                    }
 
-            handPane.setOnMouseClicked(event -> {
-                if (handPane.getBackground()!=null && handPane.getBackground().equals(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)))) {
-                    letterFromHand="";
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Error");
-                    alert.setContentText("You already used this tile!\nTry a different tile.");
-                    alert.showAndWait();
-                } else {
-                    paneList.add(handPane);
-                    handPane.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
-                    handPane.setStyle("-fx-background-radius: 15px; -fx-background-color: blue; -fx-effect: dropshadow(gaussian, #0a45ea, 20, 0, 2, 2);");
-                    paneHandList.add(letterStr);
-                    // Handle the click event on the pane
-                    System.out.println("Clicked on pane: " + handPane.getId());
-                    letterFromHand = letter.getText();
-                    System.out.println("The letter from the label: " + letterFromHand);
-                    // Perform further actions with the letter
-                }
+                });
 
-            });
+                handPane.setMinHeight(100.0);
 
-            handPane.setMinHeight(100.0);
+            }
+        });
 
-        }
+
     }
-
-
 
 
     private void draw() {
@@ -321,32 +328,34 @@ public class GameController extends StackPane implements Observer, iController {
             for (int j = 0; j < 15; j++) {
                 StackPane pane = new StackPane();
                 pane.setMinSize(40, 40);
-                if(boardClass.getBoard()[i][j] != null) {
+                if (boardClass.getBoard()[i][j] != null) {
                     Label l = new Label();
                     l.setText(boardClass.getBoard()[i][j]);
                     pane.getChildren().add(l);
                 }
-                setColor(pane,i,j);
+                setColor(pane, i, j);
                 int finalI = i;
                 int finalJ = j;
                 pane.setOnMouseClicked(event -> {
                     int x = finalI;
-                    int y= finalJ;
-                    if(!letterFromHand.equals("")){
+                    int y = finalJ;
+                    if (!letterFromHand.equals("")) {
                         Label letter = new Label();
                         letter.setText(letterFromHand);
-                        boardClass.setBoard(x,y,letterFromHand);
+                        boardClass.setBoard(x, y, letterFromHand);
                         boardClass.printBoard();
-                        if(pane.getChildren().equals("3W") || pane.getChildren().equals("2W") || pane.getChildren().equals("2L") ||
-                                pane.getChildren().equals("3L") || pane.getChildren().equals("Start") );{
-                            pane.getChildren().clear();}
-                        if(pane.getChildren().isEmpty())
+                        if (pane.getChildren().equals("3W") || pane.getChildren().equals("2W") || pane.getChildren().equals("2L") ||
+                                pane.getChildren().equals("3L") || pane.getChildren().equals("Start")) ;
+                        {
+                            pane.getChildren().clear();
+                        }
+                        if (pane.getChildren().isEmpty())
                             pane.getChildren().add(letter);
                         confirmChangesBTN.setVisible(true);
                         //adding the new tile to the list
-                        tiles.add(new ConfrimTiles(x,y,letterFromHand));
+                        tiles.add(new ConfrimTiles(x, y, letterFromHand));
                     }
-                    letterFromHand="";
+                    letterFromHand = "";
                 });
                 row.getChildren().add(pane);
             }
@@ -357,58 +366,57 @@ public class GameController extends StackPane implements Observer, iController {
     private void setColor(StackPane pane, int i, int j) {
         pane.setId("score");
         // red part
-        if((i==0 && j==0) ||(i==0 && j==7) ||(i==0 && j==14) || (i==7 && j==14) ||(i==7 && j==14) || (i==14 && j==14)|| (i==14 && j==7)|| (i==14 && j==0)|| (i==7 && j==0) ) {
+        if ((i == 0 && j == 0) || (i == 0 && j == 7) || (i == 0 && j == 14) || (i == 7 && j == 14) || (i == 7 && j == 14) || (i == 14 && j == 14) || (i == 14 && j == 7) || (i == 14 && j == 0) || (i == 7 && j == 0)) {
             pane.setStyle("-fx-background-color: red");
             pane.setAlignment(Pos.CENTER);
-            Label label= new Label();
+            Label label = new Label();
             label.setText("3W");
             pane.getChildren().add(label);
         }
 
         // light blue part
-      else if((i==0 && j==3) || (i==0 && j==11) || (i==2 && j==6) || (i==2 && j==8) || (i==3 && j==7) || (i==3 && j==0) || (i==3 && j==14) ||
-                (i==6 && j==2) || (i==6 && j==6) || (i==6 && j==8) || (i==7 && j==3) || (i==7 && j==11) || (i==8 && j==2) || (i==8 && j==6)
-                || (i==8 && j==8) || (i==8 && j==12) || (i==11 && j==0) || (i==11 && j==7) || (i==11 && j==14) || (i==12 && j==6) ||
-                (i==12 && j==8) || (i==14 && j==3) ||(i==14 && j==11)) {
+        else if ((i == 0 && j == 3) || (i == 0 && j == 11) || (i == 2 && j == 6) || (i == 2 && j == 8) || (i == 3 && j == 7) || (i == 3 && j == 0) || (i == 3 && j == 14) ||
+                (i == 6 && j == 2) || (i == 6 && j == 6) || (i == 6 && j == 8) || (i == 7 && j == 3) || (i == 7 && j == 11) || (i == 8 && j == 2) || (i == 8 && j == 6)
+                || (i == 8 && j == 8) || (i == 8 && j == 12) || (i == 11 && j == 0) || (i == 11 && j == 7) || (i == 11 && j == 14) || (i == 12 && j == 6) ||
+                (i == 12 && j == 8) || (i == 14 && j == 3) || (i == 14 && j == 11)) {
             pane.setStyle("-fx-background-color:  #00ffea;-fx-border-color: black; -fx-border-width: 1px;");
             pane.setAlignment(Pos.CENTER);
-            Label label= new Label();
+            Label label = new Label();
             label.setText("2L");
             pane.getChildren().add(label);
         }
 
         // The blue part
-        else if((i==1 && j==5) || (i==1 && j==9) ||(i==5 && j==1) ||(i==5 && j==5) ||(i==5 && j==9) || (i==5 && j==13) ||
-                (i==9 && j==1) ||(i==9 && j==5) ||(i==9 && j==9) ||(i==9 && j==13) || (i==13 && j==5) || (i==13 && j==9)) {
+        else if ((i == 1 && j == 5) || (i == 1 && j == 9) || (i == 5 && j == 1) || (i == 5 && j == 5) || (i == 5 && j == 9) || (i == 5 && j == 13) ||
+                (i == 9 && j == 1) || (i == 9 && j == 5) || (i == 9 && j == 9) || (i == 9 && j == 13) || (i == 13 && j == 5) || (i == 13 && j == 9)) {
             pane.setStyle("-fx-background-color: blue;-fx-border-color: black; -fx-border-width: 1px;");
             pane.setAlignment(Pos.CENTER);
-            Label label= new Label();
+            Label label = new Label();
             label.setText("3L");
             pane.getChildren().add(label);
         }
 
         // yellow part
-        else if((i==1 && j==1) ||(i==2 && j==2) ||(i==3 && j==3) || (i==4 && j==4) || (i==1 && j==13) || (i==2 && j==12) ||
-                (i==3 && j==11) || (i==4 && j==10) || (i==10 && j==4) ||(i==11 && j==3) || (i==12 && j==2) ||
-                (i==13 && j==1) || (i==10 && j==10) || (i==11 && j==11) || (i==12 && j==12) ||(i==13 && j==13)) {
+        else if ((i == 1 && j == 1) || (i == 2 && j == 2) || (i == 3 && j == 3) || (i == 4 && j == 4) || (i == 1 && j == 13) || (i == 2 && j == 12) ||
+                (i == 3 && j == 11) || (i == 4 && j == 10) || (i == 10 && j == 4) || (i == 11 && j == 3) || (i == 12 && j == 2) ||
+                (i == 13 && j == 1) || (i == 10 && j == 10) || (i == 11 && j == 11) || (i == 12 && j == 12) || (i == 13 && j == 13)) {
             pane.setStyle("-fx-background-color: #e3e362;-fx-border-color: black; -fx-border-width: 1px;");
             pane.setAlignment(Pos.CENTER);
-            Label label= new Label();
+            Label label = new Label();
             label.setText("2W");
             pane.getChildren().add(label);
 
         }
 
         // middle part
-        else if((i==7 && j==7)) {
+        else if ((i == 7 && j == 7)) {
             pane.setStyle("-fx-background-color: #e3e362;-fx-border-color: black; -fx-border-width: 1px;");
             pane.setAlignment(Pos.CENTER);
-            Label label= new Label();
+            Label label = new Label();
             label.setText("Star");
             pane.getChildren().add(label);
 
-        }
-        else {
+        } else {
             pane.setStyle("-fx-background-color: grey;-fx-border-color: black; -fx-border-width: 1px;");
             pane.setAlignment(Pos.CENTER);
         }
@@ -435,8 +443,9 @@ public class GameController extends StackPane implements Observer, iController {
     public static BoardClass getBoardClass() {
         return boardClass;
     }
+
     // inner class that will be used after placing all the words on the board
-    public class ConfrimTiles{
+    public class ConfrimTiles {
         private int cordX;
         private int cordY;
         private String letter;
