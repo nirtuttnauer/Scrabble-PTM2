@@ -3,6 +3,7 @@ package com.Seals.scrabble.facade;
 import com.Seals.scrabble.model.Model;
 import com.Seals.scrabble.model.hModel;
 import com.Seals.scrabble.viewmodel.ViewModel;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
