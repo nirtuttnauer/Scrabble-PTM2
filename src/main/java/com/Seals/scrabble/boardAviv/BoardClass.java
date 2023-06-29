@@ -58,4 +58,21 @@ public class BoardClass {
         if (j < 0 || j >= height)
             throw new IllegalArgumentException("Index j is out of bounds!");
     }
+
+    public void setAll(String newValue) {
+        String[] lines = newValue.split(" ");
+        String[][] newBoard = new String[width][height];
+        for (int i = 0; i < width; i++) {
+            String[] thisLine= lines[i].split("");
+            for (int j = 0; j < thisLine.length; j++) {
+                if(thisLine[i].equals("0")){
+                    newBoard[i][j]="";
+                }
+                else{
+                    newBoard[i][j]=thisLine[j];
+                }
+            }
+        }
+        board=newBoard;
+    }
 }

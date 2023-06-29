@@ -4,8 +4,6 @@ import com.Seals.scrabble.controller.MenuController;
 import com.Seals.scrabble.controller.iController;
 import com.Seals.scrabble.viewmodel.ViewModel;
 import javafx.application.Platform;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -56,6 +54,7 @@ public class GameController extends StackPane implements Observer, iController {
     private static BoardClass boardClass = new BoardClass(15, 15);
     private Affine affine;
     private StringProperty bag;
+    private StringProperty boardFromOmer;
     private StringProperty handString;
     private String letterFromHand;
     private List<Pane> paneList;
@@ -106,7 +105,8 @@ public class GameController extends StackPane implements Observer, iController {
         });
 
         // StringProperty...
-
+        this.boardFromOmer= new SimpleStringProperty();
+        this.boardFromOmer.bind(ViewModel.getSharedInstance().getBagFromModel());
         this.bag = new SimpleStringProperty();
         this.bag.bind(ViewModel.getSharedInstance().bagAmountProperty());
         this.letterFromHand = "";
@@ -119,6 +119,15 @@ public class GameController extends StackPane implements Observer, iController {
         }
 
         //add listeners
+        ViewModel.getSharedInstance().getBagFromModel().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
+               //setting the new board at the boardClass
+                boardClass.setAll(newValue);
+                // and then draw the board again...
+                draw();
+            }
+        });
         ViewModel.getSharedInstance().bagAmountProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
@@ -328,7 +337,7 @@ public class GameController extends StackPane implements Observer, iController {
             for (int j = 0; j < 15; j++) {
                 StackPane pane = new StackPane();
                 pane.setMinSize(40, 40);
-                if (boardClass.getBoard()[i][j] != null) {
+                if (!boardClass.getBoard()[i][j].equals("")) {
                     Label l = new Label();
                     l.setText(boardClass.getBoard()[i][j]);
                     pane.getChildren().add(l);
@@ -354,6 +363,11 @@ public class GameController extends StackPane implements Observer, iController {
                         confirmChangesBTN.setVisible(true);
                         //adding the new tile to the list
                         tiles.add(new ConfrimTiles(x, y, letterFromHand));
+                        //drawing the pane in the same color like in the hand
+                        pane.setStyle(" -fx-background-color: #e3c88d;\n" +
+                                "    -fx-border-style: solid;\n" +
+                                "    -fx-border-color: black;\n" +
+                                "    -fx-effect: dropshadow(gaussian, #e3b348, 20, 0, 2, 2);");
                     }
                     letterFromHand = "";
                 });
