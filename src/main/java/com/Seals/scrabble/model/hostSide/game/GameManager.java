@@ -55,6 +55,7 @@ public class GameManager {
 //        }
 
         // Game has started
+        delay(2000);
         isGameInProgress = true;
         delay(1000);
         playerManager.initializePlayerHands();

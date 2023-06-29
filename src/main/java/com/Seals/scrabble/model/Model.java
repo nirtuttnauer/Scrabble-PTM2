@@ -171,11 +171,7 @@ private void startListening() {
 
     private String processResponse(String response) {
         String[] parts = response.split(",");
-        if (parts[0].equals("ID")) {
-            setChanged();
-            notifyObservers(response);
-        }
-        if (parts[0].equals("UA")){
+        if (parts[0].equals("ID") || parts[0].equals("UA")) {
             setChanged();
             notifyObservers(response);
         }
