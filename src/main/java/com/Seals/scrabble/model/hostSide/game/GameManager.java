@@ -30,6 +30,7 @@ public class GameManager {
         this.playerManager = new PlayerManager();
         this.isGameInProgress = false;
         int port = Settings.getHostServerPort();
+        this.turnManager = new TurnManager(playerManager.getPlayers());
         gameServer = new MyServer(port, new GameHandler(null));
     }
 
@@ -54,9 +55,9 @@ public class GameManager {
 //        }
 
         // Game has started
-        playerManager.initializePlayerHands();
         isGameInProgress = true;
         delay(1000);
+        playerManager.initializePlayerHands();
 
 
         nextTurn();
@@ -90,7 +91,7 @@ public class GameManager {
             // handle the case when the player is not found
         }
 
-        delay(2000);
+        delay(9000);
     }
 
     private boolean isGameFinished() {

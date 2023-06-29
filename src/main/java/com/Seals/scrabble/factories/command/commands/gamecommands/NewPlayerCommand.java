@@ -19,7 +19,7 @@ public String execute(String... args) {
         Player p = new Player(args[0]);
         boolean added = getGameManager().addPlayer(p);
         if (added) {
-            return "ID:"+p.getId();
+            return "ID,"+p.getId();
         } else {
             System.out.println("Failed to add player");
             return "0";

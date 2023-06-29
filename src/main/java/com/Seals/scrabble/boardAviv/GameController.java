@@ -259,65 +259,75 @@ public class GameController extends StackPane implements Observer, iController {
     }
 
 
-    public void drawHand() {
-        Platform.runLater(() -> {
-            HandHbox.getChildren().clear();
+   public void drawHand() {
+    Platform.runLater(() -> {
+        HandHbox.getChildren().clear();
 
-            BackgroundFill backgroundFill = new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY);
-            Background background = new Background(backgroundFill);
+        BackgroundFill backgroundFill = new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY);
+        Background background = new Background(backgroundFill);
 
-            String[] splitString = handString.get().split(",");
+        if (handString.get() == null || handString.get().isEmpty()) {
+            // Log an error or perform some default action
+            System.err.println("Warning: handString is null or empty!");
+            return; // Early return
+        }
 
-            for (int i = 0; i < splitString.length; i += 2) {
-                String letterStr = splitString[i];
-                String scoreStr = splitString[i + 1];
-                Pane handPane = new Pane();
-                handPane.setId("handPane");
-                handPane.setBackground(background);
-                Label score = new Label();
-                Label letter = new Label();
+        String[] splitString = handString.get().split(",");
 
-                letter.setText(letterStr);
-                score.setText(scoreStr);
+        // Ensure we have an even number of elements in splitString
+        if(splitString.length % 2 != 0){
+            System.err.println("Warning: handString has an odd number of elements!");
+            return; // Early return
+        }
 
-                Insets labelsPadding = new Insets(47);
-                score.setPadding(labelsPadding);
-                letter.setPadding(new Insets(10));
+        for (int i = 0; i < splitString.length; i += 2) {
+            String letterStr = splitString[i];
+            String scoreStr = splitString[i + 1];
 
-                handPane.setStyle("fx-border-color: black; -fx-border-width: 1px;");
+            Pane handPane = new Pane();
+            handPane.setId("handPane");
+            handPane.setBackground(background);
+            Label score = new Label();
+            Label letter = new Label();
 
-                handPane.getChildren().addAll(score, letter);
-                System.out.println("287: " + handPane.getChildren());
-                HandHbox.getChildren().add(handPane);
+            letter.setText(letterStr);
+            score.setText(scoreStr);
 
-                handPane.setOnMouseClicked(event -> {
-                    if (handPane.getBackground() != null && handPane.getBackground().equals(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)))) {
-                        letterFromHand = "";
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Error");
-                        alert.setContentText("You already used this tile!\nTry a different tile.");
-                        alert.showAndWait();
-                    } else {
-                        paneList.add(handPane);
-                        handPane.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
-                        handPane.setStyle("-fx-background-radius: 15px; -fx-background-color: blue; -fx-effect: dropshadow(gaussian, #0a45ea, 20, 0, 2, 2);");
-                        paneHandList.add(letterStr);
-                        // Handle the click event on the pane
-                        System.out.println("Clicked on pane: " + handPane.getId());
-                        letterFromHand = letter.getText();
-                        System.out.println("The letter from the label: " + letterFromHand);
-                        // Perform further actions with the letter
-                    }
+            Insets labelsPadding = new Insets(47);
+            score.setPadding(labelsPadding);
+            letter.setPadding(new Insets(10));
 
-                });
+            handPane.setStyle("fx-border-color: black; -fx-border-width: 1px;");
 
-                handPane.setMinHeight(100.0);
+            handPane.getChildren().addAll(score, letter);
+            System.out.println("287: " + handPane.getChildren());
+            HandHbox.getChildren().add(handPane);
 
-            }
-        });
+            handPane.setOnMouseClicked(event -> {
+                if (handPane.getBackground() != null && handPane.getBackground().equals(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)))) {
+                    letterFromHand = "";
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Error");
+                    alert.setContentText("You already used this tile!\nTry a different tile.");
+                    alert.showAndWait();
+                } else {
+                    paneList.add(handPane);
+                    handPane.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+                    handPane.setStyle("-fx-background-radius: 15px; -fx-background-color: blue; -fx-effect: dropshadow(gaussian, #0a45ea, 20, 0, 2, 2);");
+                    paneHandList.add(letterStr);
+                    // Handle the click event on the pane
+                    System.out.println("Clicked on pane: " + handPane.getId());
+                    letterFromHand = letter.getText();
+                    System.out.println("The letter from the label: " + letterFromHand);
+                    // Perform further actions with the letter
+                }
 
+            });
 
-    }
+            handPane.setMinHeight(100.0);
+        }
+    });
+}
 
 
     private void draw() {

@@ -102,6 +102,10 @@ public class MyServer implements Runnable{
         }
         return message;
     }
+    public String message(String message){
+
+        return message;
+    }
 
     public ClientHandler createHandler(ClientHandler handler,Socket socket) {
         if (handler instanceof GameHandler) {
