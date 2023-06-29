@@ -25,16 +25,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     private final int[] values = {1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 1, 1, 3, 10, 1, 1, 1, 1, 4, 4, 8, 4, 10};
     private StringProperty id;
     private StringProperty bagAmount;
-
-    public StringProperty getBagFromModel() {
-        return bagFromModel;
-    }
-
-    public StringProperty bagFromModelProperty() {
-        return bagFromModel;
-    }
-
-    private StringProperty bagFromModel;
+    private String bagFromModel;
     public StringProperty board;
     //private StringProperty tryPlaceWord;
 
@@ -51,7 +42,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         handFromModel = new String();
         newHand = new String();
         handToView = new SimpleStringProperty();
-        bagFromModel = new SimpleStringProperty();
+        bagFromModel = new String();
         sharedInstance = this;
         modelFacade = new ModelFacade();
         this.nickname = new SimpleStringProperty();
@@ -94,6 +85,8 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         return nickname;
     }
 
+
+    @Override
     public StringProperty bagAmountProperty() {
         return bagAmount;
     }
@@ -110,7 +103,6 @@ public class ViewModel extends Observable implements Observer, iViewModel {
                 String[] stringArr = boardFromModel.split(",");
 
                 // build the string like this --> UA, 7tiles, id, bag amount,
-
                 if (stringArr[0].equals("UA")) {
                     System.err.println(Integer.getInteger(this.id.get()) == Integer.getInteger(stringArr[2].toString()));
                  if (this.id.get().equals(stringArr[2])){
@@ -182,9 +174,8 @@ public class ViewModel extends Observable implements Observer, iViewModel {
 
     public void check() {
         handFromModel = "AAAAAAA";
-        bagFromModel.set( "BA,30");
-        String bag = bagFromModel.get();
-        bagAmount.set(bag.substring(3));
+        bagFromModel = "BA,30";
+        bagAmount.set(bagFromModel.substring(3));
         setLetterValue();
         System.out.println(handToView.get());
         System.out.println(bagAmountProperty().get());
@@ -231,7 +222,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         tread.start();
     }
 
-
+    @Override
     public StringProperty getBoardProperty() {
         return board;
     }

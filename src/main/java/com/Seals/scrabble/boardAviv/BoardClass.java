@@ -1,7 +1,5 @@
 package com.Seals.scrabble.boardAviv;
 
-import java.util.Arrays;
-
 public class BoardClass {
     private int width;
     private int height;
@@ -27,8 +25,8 @@ public class BoardClass {
         return this.board[i][j];
     }
 
-    public void clearByIndex(int i , int j){
-        board[i][j] = "";
+    public void claerByIndex(int i , int j){
+        board[i][j] = null;
     }
     public int getWidth() {
         return width;
@@ -59,29 +57,5 @@ public class BoardClass {
             throw new IllegalArgumentException("Index i is out of bounds!");
         if (j < 0 || j >= height)
             throw new IllegalArgumentException("Index j is out of bounds!");
-    }
-
-    public void setAll(String newValue) {
-        String[] lines = newValue.split(" ");
-        String[][] newBoard = new String[width][height];
-        for (int i = 0; i < width; i++) {
-            String[] thisLine= lines[i].split("");
-            for (int j = 0; j < thisLine.length; j++) {
-                if(thisLine[i].equals("0")){
-                    newBoard[i][j]="";
-                }
-                else{
-                    newBoard[i][j]=thisLine[j];
-                }
-            }
-        }
-        System.out.println(" the new board is : " + Arrays.deepToString(newBoard));
-        board=newBoard;
-    }
-
-    public boolean thereIsLetter(int i, int j) {
-        if((i<width || i>width) || (j>height || j<height))
-            return false;
-        return board[i][j].equals("");
     }
 }
