@@ -308,8 +308,8 @@ public class GameController extends StackPane implements Observer, iController {
             score.setText(scoreStr);
 
             Insets labelsPadding = new Insets(47);
-            score.setPadding(labelsPadding);
-            letter.setPadding(new Insets(10));
+            letter.setPadding(labelsPadding);
+            score.setPadding(new Insets(10));
 
             handPane.setStyle("fx-border-color: black; -fx-border-width: 1px;");
 
