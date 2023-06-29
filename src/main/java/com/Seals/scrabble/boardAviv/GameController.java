@@ -29,7 +29,7 @@ import java.util.*;
 import static com.Seals.scrabble.factories.SceneFactory.setScene;
 
 public class GameController extends StackPane implements Observer, iController {
-    
+
     @FXML
     VBox rightVBox;
     @FXML
@@ -61,6 +61,7 @@ public class GameController extends StackPane implements Observer, iController {
     private List<Pane> paneList;
     private String handChanges;
     private  StringProperty id;
+    public StringProperty boardFromOmer;
 
     @FXML
     public void initialize() {
@@ -82,31 +83,29 @@ public class GameController extends StackPane implements Observer, iController {
             @Override
             public void handle(ActionEvent actionEvent) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setContentText("Are you sure about this changes?");
+                alert.setContentText("Are you sure about these changes?");
                 ButtonType yes = new ButtonType("Yes");
                 ButtonType no = new ButtonType("No");
-                alert.getButtonTypes().addAll(yes,no);
+                alert.getButtonTypes().addAll(yes, no);
 
-                alert.setOnCloseRequest(event->{
-                    ButtonType res = alert.getResult();
-                    if(res == yes){
-                        alert.setContentText("Checking your new data...");
-                        handleTryPlaceWord();
-                        //function()
-                        removeFromHand();
-                    }
-                    else if (res==no){
-                        alert.setContentText("No problem, try again!");
-                        coloriseHandToBasicColor();
-                        removeFromBoard();
-                    }
-                });
-                alert.showAndWait();
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == yes) {
+                    alert.setContentText("Checking your new data...");
+                    handleTryPlaceWord();
+                    removeFromHand();
+                } else {
+                    alert.setContentText("No problem, try again!");
+                    coloriseHandToBasicColor();
+                    removeFromBoard();
+                }
                 confirmChangesBTN.setVisible(false);
             }
         });
 
+
         // StringProperty...
+        this.boardFromOmer= new SimpleStringProperty();
+        this.boardFromOmer.bind(ViewModel.getSharedInstance().bagFromModelProperty());
         this.bag = new SimpleStringProperty();
         this.bag.bind(ViewModel.getSharedInstance().bagAmountProperty());
         this.letterFromHand = "";
@@ -119,6 +118,14 @@ public class GameController extends StackPane implements Observer, iController {
         }
 
         //add listeners
+        ViewModel.getSharedInstance().bagFromModelProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                boardClass.setAll(boardFromOmer.get());
+                System.out.println("Changes from omer coming on...");
+                draw();
+            }
+        });
        ViewModel.getSharedInstance().bagAmountProperty().addListener(new ChangeListener<String>() {
            @Override
            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
@@ -137,6 +144,14 @@ public class GameController extends StackPane implements Observer, iController {
         bagBTN.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+
+                // practice!
+                boardClass.setBoard(0,0,"A");
+                boardClass.setBoard(1,1,"V");
+                boardClass.setBoard(2,2,"i");
+                boardClass.setBoard(3,3,"v");
+
+                ViewModel.getSharedInstance().bagFromModelProperty().set(builtBoard());
               if(paneHandList.size()==0){
                   // alert....
                   Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -156,6 +171,20 @@ public class GameController extends StackPane implements Observer, iController {
         //draw the board
         draw();
 
+    }
+
+    private String builtBoard() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                if(j<14)
+                sb.append(boardClass.getBoard()[i][j]).append(",");
+                else sb.append(boardClass.getBoard()[i][j]);
+            }
+            if(i<14)
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 
     public void removeFromBoard() {

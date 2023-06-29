@@ -22,7 +22,16 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     private final int[] values = {1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 1, 1, 3, 10, 1, 1, 1, 1, 4, 4, 8, 4, 10};
     private StringProperty id;
     private StringProperty bagAmount;
-    private String bagFromModel;
+
+    public String getBagFromModel() {
+        return bagFromModel.get();
+    }
+
+    public StringProperty bagFromModelProperty() {
+        return bagFromModel;
+    }
+
+    private StringProperty bagFromModel;
     //private StringProperty tryPlaceWord;
 
 
@@ -38,7 +47,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         handFromModel = new String();
         newHand = new String();
         handToView = new SimpleStringProperty();
-        bagFromModel = new String();
+        bagFromModel = new SimpleStringProperty();
         sharedInstance = this;
         modelFacade = new ModelFacade();
         this.nickname = new SimpleStringProperty();
@@ -93,8 +102,9 @@ public class ViewModel extends Observable implements Observer, iViewModel {
                     handFromModel = handFromModel.substring(3,9);
                     id.set(arg.toString().substring(11,11));
                     setLetterValue(handFromModel);
-                    bagFromModel = arg.toString();
-                    bagAmount.set(bagFromModel.substring(13,14));
+                    bagFromModel.set(arg.toString());
+                    String bag= bagFromModel.get();
+                    bagAmount.set(bag.substring(13,14));
                 }
             }
          }
@@ -121,8 +131,9 @@ public class ViewModel extends Observable implements Observer, iViewModel {
 
     public void check(){
         handFromModel = "UA,AQBRTC";
-        bagFromModel = "BA,30";
-        bagAmount.set(bagFromModel.substring(3));
+        bagFromModel .set( "BA,30");
+        String bag= bagFromModel.get();
+        bagAmount.set(bag.substring(3));
         setLetterValue(handFromModel);
         System.out.println(handToView.get());
         System.out.println(bagAmountProperty().get());
