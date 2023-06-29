@@ -51,6 +51,7 @@ public class GameController extends StackPane implements Observer, iController {
     private List<ConfrimTiles> tiles;
     private List<String> paneHandList;
     private volatile boolean isFirstPlay = true;
+    private boolean pressed;
     private static BoardClass boardClass = new BoardClass(15, 15);
     private Affine affine;
     private StringProperty bag;
@@ -74,6 +75,8 @@ public class GameController extends StackPane implements Observer, iController {
         id = new SimpleStringProperty();
         id.bind(ViewModel.getSharedInstance().getIdProperty());
         handleId();
+        //pressed boolean
+        pressed=false;
         // pane list
         paneHandList = new ArrayList<>();
         // set changes button
@@ -101,6 +104,7 @@ public class GameController extends StackPane implements Observer, iController {
         });
 
 
+
         // StringProperty...
         this.boardFromOmer = new SimpleStringProperty();
         this.boardFromOmer.bind(ViewModel.getSharedInstance().bagFromModelProperty());
@@ -115,6 +119,8 @@ public class GameController extends StackPane implements Observer, iController {
             System.out.println("Hand object didn't create, handString is null");
         }
 
+        if(boardFromOmer.get()!=null)
+            draw();
         //add listeners
         ViewModel.getSharedInstance().bagFromModelProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -138,7 +144,6 @@ public class GameController extends StackPane implements Observer, iController {
                 drawHand();
             }
         });
-        draw();
     }
 
 
@@ -257,8 +262,8 @@ public class GameController extends StackPane implements Observer, iController {
             score.setText(scoreStr);
 
             Insets labelsPadding = new Insets(47);
-            score.setPadding(labelsPadding);
-            letter.setPadding(new Insets(10));
+            letter.setPadding(labelsPadding);
+            score.setPadding(new Insets(10));
 
             handPane.setStyle("fx-border-color: black; -fx-border-width: 1px;");
 
