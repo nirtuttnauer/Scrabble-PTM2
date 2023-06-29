@@ -4,6 +4,12 @@ import com.Seals.scrabble.Settings;
 import com.Seals.scrabble.model.hostSide.GameHandler;
 import com.Seals.scrabble.model.socketUtil.MyServer;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,6 +19,11 @@ import static com.Seals.scrabble.model.socketUtil.SocketUtil.delay;
 
 public class GameManager {
     private Board gameBoard;
+
+    public Tile.Bag getBag() {
+        return Bag;
+    }
+
     private Tile.Bag Bag;
     private PlayerManager playerManager;
     private TurnManager turnManager;
@@ -23,6 +34,10 @@ public class GameManager {
     //server
     private MyServer gameServer;
 
+    private Socket DMSocket;
+    private PrintWriter out;
+    private BufferedReader in;
+
 
     public GameManager() {
         this.gameBoard = Board.getBoard();
@@ -32,6 +47,11 @@ public class GameManager {
         int port = Settings.getHostServerPort();
         this.turnManager = new TurnManager(playerManager.getPlayers());
         gameServer = new MyServer(port, new GameHandler(null));
+        try {
+            DMSocket = new Socket(Settings.getServerAddress(), Settings.getDMServerPort());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -139,34 +159,47 @@ public class GameManager {
         }
     }
 
-
     public void endGame() {
         System.out.println("----Scrabble game ended----");
     }
 
-    public boolean tryPlaceWordAction(Player player, String[] words) {
-        if (words.length < 4) {
+    public boolean tryPlaceWordAction(int id, String[] words) {
+        if (words.length < 5) {
             throw new IllegalArgumentException("Insufficient arguments for placing a word");
         }
-        boolean isVertical = !"H".equalsIgnoreCase(words[0]);
+
+        int playerId = 0;
+        try {
+            playerId = Integer.parseInt(words[0]);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Error parsing player ID: " + e.getMessage());
+        }
+
+        if (playerId != id) {
+            throw new IllegalArgumentException("Player ID doesn't match the current player's ID");
+        }
+
+        String wordString = words[1];
+
         int x = 0, y = 0;
         try {
-            x = Integer.parseInt(words[1]);
-            y = Integer.parseInt(words[2]);
+            x = Integer.parseInt(words[2]);
+            y = Integer.parseInt(words[3]);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Error parsing word placement coordinates: " + e.getMessage());
         }
-        String wordString = words[3];
 
-        // create tiles from the wordString and get from player's hand
+        boolean isVertical = "V".equalsIgnoreCase(words[4]);
+
+        // Create tiles from the wordString and get from player's hand
         List<Tile> tiles = new ArrayList<>();
         try {
-            tiles = player.addTilesFromString(wordString);
+            tiles = getPlayer(id).addTilesFromString(wordString);
         } catch (Exception e) {
             System.out.println("hey");
             System.out.println(tiles.isEmpty());
         }
-        if (tiles.isEmpty() || tiles == null) {
+        if (tiles.isEmpty()) {
             throw new IllegalArgumentException("Player doesn't have the necessary tiles to form this word.");
         }
         Word wordToPlace = new Word(tiles.toArray(new Tile[0]), x, y, isVertical);
@@ -174,8 +207,8 @@ public class GameManager {
         // Place the word on the board
         int score = gameBoard.tryPlaceWord(wordToPlace);
         if (score == 0) return false;
-        player.removeTilesFromHand(tiles.toArray(new Tile[0])); // remove the tiles used from player's hand
-        updateScore(player, score);
+        getPlayer(id).removeTilesFromHand(tiles.toArray(new Tile[0])); // Remove the tiles used from player's hand
+        updateScore(getPlayer(id), score);
         gameBoard.printBoard(); // Print the updated board
 
         return true;
@@ -259,4 +292,64 @@ public class GameManager {
     public MyServer getGameServer() {
         return gameServer;
     }
+
+    public boolean query(Word w) {
+        return Boolean.getBoolean(sendRequestToDM("q", "harrypotter", "" + w));
+    }
+
+    public String sendRequestToDM(String... args) {
+        final int maxRetries = 3;
+        int attemptCount = 0;
+
+        while (attemptCount < maxRetries) {
+            attemptCount++;
+            try {
+                if (DMSocket == null || DMSocket.isClosed()) {
+                    System.out.println("Socket is closed or null. Attempting to reconnect...");
+                    DMSocket = new Socket(Settings.getServerAddress(), Settings.getDMServerPort());
+                    out = new PrintWriter(DMSocket.getOutputStream(), true);
+                    in = new BufferedReader(new InputStreamReader(DMSocket.getInputStream()));
+                }
+
+                StringBuilder request = new StringBuilder();
+                if (args != null) {
+                    request.append(",").append(String.join(",", args));
+                }
+
+                if (out != null) {
+                    out.println(request);
+                    out.flush();
+                } else {
+                    System.out.println("Output stream is null. Could not send request.");
+                    return null;
+                }
+
+                if (in != null) {
+                    String response = in.readLine();
+                    if (response != null && !response.isEmpty()) {
+                        return response;
+                    } else {
+                        System.out.println("Server responded with an empty message.");
+                        return null;
+                    }
+                } else {
+                    System.out.println("Input stream is null. Could not read response.");
+                    return null;
+                }
+            } catch (SocketTimeoutException e) {
+                System.out.println("The server did not respond in time. Attempting to send request again...");
+                if (attemptCount >= maxRetries) {
+                    System.out.println("Server not responding after " + maxRetries + " attempts. Please check your connection.");
+                    return null;
+                }
+            } catch (IOException e) {
+                System.out.println("An error occurred when trying to send the request: " + e.getMessage());
+                return null;
+            }
+        }
+        System.out.println("Maximum retry attempts reached. Please check your connection.");
+        return null;
+    }
+
 }
+

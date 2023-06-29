@@ -76,7 +76,7 @@ public class GameController extends StackPane implements Observer, iController {
         id.bind(ViewModel.getSharedInstance().getIdProperty());
         handleId();
         //pressed boolean
-        pressed=false;
+        pressed = false;
         // pane list
         paneHandList = new ArrayList<>();
         // set changes button
@@ -147,10 +147,9 @@ public class GameController extends StackPane implements Observer, iController {
     }
 
 
-
     private void coloriseHandToBasicColor() {
         paneList.forEach(pane -> {
-            if(!confirmnPanes.contains(pane)) {
+            if (!confirmnPanes.contains(pane)) {
                 //setting the background to grey
                 pane.setBackground(new Background(new BackgroundFill(Color.rgb(227, 200, 141), CornerRadii.EMPTY, Insets.EMPTY)));
                 pane.setStyle("-fx-background-radius: 15px");
@@ -227,75 +226,75 @@ public class GameController extends StackPane implements Observer, iController {
     }
 
 
-   public void drawHand() {
-    Platform.runLater(() -> {
-        HandHbox.getChildren().clear();
+    public void drawHand() {
+        Platform.runLater(() -> {
+            HandHbox.getChildren().clear();
 
-        BackgroundFill backgroundFill = new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY);
-        Background background = new Background(backgroundFill);
+            BackgroundFill backgroundFill = new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY);
+            Background background = new Background(backgroundFill);
 
-        if (handString.get() == null || handString.get().isEmpty()) {
-            // Log an error or perform some default action
-            System.err.println("Warning: handString is null or empty!");
-            return; // Early return
-        }
+            if (handString.get() == null || handString.get().isEmpty()) {
+                // Log an error or perform some default action
+                System.err.println("Warning: handString is null or empty!");
+                return; // Early return
+            }
 
-        String[] splitString = handString.get().split(",");
+            String[] splitString = handString.get().split(",");
 
-        // Ensure we have an even number of elements in splitString
-        if(splitString.length % 2 != 0){
-            System.err.println("Warning: handString has an odd number of elements!");
-            return; // Early return
-        }
+            // Ensure we have an even number of elements in splitString
+            if (splitString.length % 2 != 0) {
+                System.err.println("Warning: handString has an odd number of elements!");
+                return; // Early return
+            }
 
-        for (int i = 0; i < splitString.length; i += 2) {
-            String letterStr = splitString[i];
-            String scoreStr = splitString[i + 1];
+            for (int i = 0; i < splitString.length; i += 2) {
+                String letterStr = splitString[i];
+                String scoreStr = splitString[i + 1];
 
-            Pane handPane = new Pane();
-            handPane.setId("handPane");
-            handPane.setBackground(background);
-            Label score = new Label();
-            Label letter = new Label();
+                Pane handPane = new Pane();
+                handPane.setId("handPane");
+                handPane.setBackground(background);
+                Label score = new Label();
+                Label letter = new Label();
 
-            letter.setText(letterStr);
-            score.setText(scoreStr);
+                letter.setText(letterStr);
+                score.setText(scoreStr);
 
-            Insets labelsPadding = new Insets(47);
-            letter.setPadding(labelsPadding);
-            score.setPadding(new Insets(10));
+                Insets labelsPadding = new Insets(47);
+                letter.setPadding(labelsPadding);
+                score.setPadding(new Insets(10));
 
-            handPane.setStyle("fx-border-color: black; -fx-border-width: 1px;");
+                handPane.setStyle("fx-border-color: black; -fx-border-width: 1px;");
 
-            handPane.getChildren().addAll(score, letter);
-            System.out.println("287: " + handPane.getChildren());
-            HandHbox.getChildren().add(handPane);
+                handPane.getChildren().addAll(score, letter);
+                System.out.println("287: " + handPane.getChildren());
+                HandHbox.getChildren().add(handPane);
 
-            handPane.setOnMouseClicked(event -> {
-                if (handPane.getBackground() != null && handPane.getBackground().equals(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)))) {
-                    letterFromHand = "";
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Error");
-                    alert.setContentText("You already used this tile!\nTry a different tile.");
-                    alert.showAndWait();
-                } else {
-                    paneList.add(handPane);
-                    handPane.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
-                    handPane.setStyle("-fx-background-radius: 15px; -fx-background-color: blue; -fx-effect: dropshadow(gaussian, #0a45ea, 20, 0, 2, 2);");
-                    paneHandList.add(letterStr);
-                    // Handle the click event on the pane
-                    System.out.println("Clicked on pane: " + handPane.getId());
-                    letterFromHand = letter.getText();
-                    System.out.println("The letter from the label: " + letterFromHand);
-                    // Perform further actions with the letter
-                }
+                handPane.setOnMouseClicked(event -> {
+                    if (handPane.getBackground() != null && handPane.getBackground().equals(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)))) {
+                        letterFromHand = "";
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Error");
+                        alert.setContentText("You already used this tile!\nTry a different tile.");
+                        alert.showAndWait();
+                    } else {
+                        paneList.add(handPane);
+                        handPane.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+                        handPane.setStyle("-fx-background-radius: 15px; -fx-background-color: blue; -fx-effect: dropshadow(gaussian, #0a45ea, 20, 0, 2, 2);");
+                        paneHandList.add(letterStr);
+                        // Handle the click event on the pane
+                        System.out.println("Clicked on pane: " + handPane.getId());
+                        letterFromHand = letter.getText();
+                        System.out.println("The letter from the label: " + letterFromHand);
+                        // Perform further actions with the letter
+                    }
 
-            });
+                });
 
-            handPane.setMinHeight(100.0);
-        }
-    });
-}
+                handPane.setMinHeight(100.0);
+            }
+        });
+    }
 
 
     private void draw() {
@@ -306,8 +305,8 @@ public class GameController extends StackPane implements Observer, iController {
             for (int j = 0; j < 15; j++) {
                 StackPane pane = new StackPane();
                 pane.setMinSize(40, 40);
-                setColor(pane,i,j);
-                if(boardClass.thereIsLetter(i,j)) {
+                setColor(pane, i, j);
+                if (boardClass.thereIsLetter(i, j)) {
                     Label label = new Label();
                     label.setText(boardClass.getBoard()[i][j]);
                     pane.getChildren().add(label);
@@ -320,33 +319,36 @@ public class GameController extends StackPane implements Observer, iController {
                 int finalJ = j;
                 pane.setOnMouseClicked(event -> {
                     int x = finalI;
-                    int y= finalJ;
-                    if(!letterFromHand.equals("")){
+                    int y = finalJ;
+                    if (!letterFromHand.equals("")) {
                         Label letter = new Label();
                         letter.setText(letterFromHand);
-                        boardClass.setBoard(x,y,letterFromHand);
+                        boardClass.setBoard(x, y, letterFromHand);
                         boardClass.printBoard();
-                        if(pane.getChildren().equals("3W") || pane.getChildren().equals("2W") || pane.getChildren().equals("2L") ||
-                                pane.getChildren().equals("3L") || pane.getChildren().equals("Start") );{
-                            pane.getChildren().clear();}
-                        if(pane.getChildren().isEmpty())
+                        if (pane.getChildren().equals("3W") || pane.getChildren().equals("2W") || pane.getChildren().equals("2L") ||
+                                pane.getChildren().equals("3L") || pane.getChildren().equals("Start")) ;
+                        {
+                            pane.getChildren().clear();
+                        }
+                        if (pane.getChildren().isEmpty())
                             pane.getChildren().add(letter);
                         confirmChangesBTN.setVisible(true);
                         //adding the new tile to the list
-                        tiles.add(new ConfrimTiles(x,y,letterFromHand));
+                        tiles.add(new ConfrimTiles(x, y, letterFromHand));
                         //setting the style like the hand...
                         pane.setStyle(" -fx-background-color: #e3c88d;\n" +
                                 "    -fx-border-style: solid;\n" +
                                 "    -fx-border-color: black;\n" +
                                 "    -fx-effect: dropshadow(gaussian, #e3b348, 20, 0, 2, 2);");
                     }
-                    letterFromHand="";
+                    letterFromHand = "";
                 });
                 row.getChildren().add(pane);
             }
             VboxBoard.getChildren().add(row);
         }
     }
+
     private void setColor(StackPane pane, int i, int j) {
         pane.setId("score");
         // red part

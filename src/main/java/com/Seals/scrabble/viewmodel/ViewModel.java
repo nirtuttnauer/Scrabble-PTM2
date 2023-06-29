@@ -21,7 +21,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     private StringProperty nickname;
     private StringProperty handToView;
     private String newHand;
-    private String handFromModel;
+    private StringProperty handFromModel;
     private final int[] values = {1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 1, 1, 3, 10, 1, 1, 1, 1, 4, 4, 8, 4, 10};
     private StringProperty id;
     private StringProperty bagAmount;
@@ -39,9 +39,9 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     public ViewModel() {
         //       tryPlaceWord= new SimpleStringProperty();
         tread = new Thread(this::startGame);
-        bagFromModelProperty= new SimpleStringProperty();
+        bagFromModelProperty = new SimpleStringProperty();
         board = new SimpleStringProperty();
-        handFromModel = new String();
+        handFromModel = new SimpleStringProperty();
         newHand = new String();
         handToView = new SimpleStringProperty();
         bagFromModel = new String();
@@ -108,18 +108,20 @@ public class ViewModel extends Observable implements Observer, iViewModel {
                 // build the string like this --> UA, 7tiles, id, bag amount,
                 if (stringArr[0].equals("UA")) {
                     System.err.println(Integer.getInteger(this.id.get()) == Integer.getInteger(stringArr[2].toString()));
-                 if (this.id.get().equals(stringArr[2])){
+                    if (this.id.get().equals(stringArr[2])) {
 
                         if (check.length() >= 10) {
-                            handFromModel = "";
-                            handFromModel = check.substring(3, 10);
+                            handFromModel.set("");
+                            ;
+                            System.out.println(stringArr[1]);
+                            handFromModel.set(stringArr[1]);
                         } else {
-                            handFromModel = "";
+                            handFromModel.set("");
                             System.out.println("Received shorter string than expected. Check the server response.");
                         }
 
                         if (check.length() >= 15) {
-                            bagAmount.set(check.substring(13, 15));
+                            bagAmount.set(stringArr[3]);
                         } else {
                             bagAmount.set("");
                             System.out.println("Received shorter string than expected. Check the server response.");
@@ -131,7 +133,6 @@ public class ViewModel extends Observable implements Observer, iViewModel {
                     }
                 } else if (stringArr[0].equals("board")) {
                     board.set(stringArr[1]);
-                    System.err.println(board.get());
                 } else if (stringArr[0].equals("ID")) {
                     if (id.get().equals(String.valueOf(0))) {
                         System.err.println(stringArr.toString());
@@ -144,6 +145,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
                 System.out.println("VM line 115: " + handToView);
                 System.out.println("VM line 116: " + board);
                 System.out.println("VM line 117: " + id.get());
+                System.out.println("VM line 117: " + bagAmount.get());
             }
         }
         //nickname.set(modelFacade.getNickname());
@@ -159,12 +161,12 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     public void setLetterValue() {
         Platform.runLater(() -> {
             newHand = "";
-            for (int i = 0; i < handFromModel.length(); i++) {
+            for (int i = 0; i < handFromModel.get().length(); i++) {
                 System.out.println("line 120: " + handFromModel);
-                int value = values[(int) (handFromModel.charAt(i) - 'A')];
-                newHand += handFromModel.charAt(i) + "," + value + ",";
+                int value = values[(int) (handFromModel.get().charAt(i) - 'A')];
+                newHand += handFromModel.get().charAt(i) + "," + value + ",";
             }
-            newHand = newHand.substring(0, newHand.length() - 1);
+            newHand = newHand.substring(0, (newHand.length() == 0) ? newHand.length() : newHand.length());
             setHandToView();
         });
     }
@@ -176,7 +178,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     }
 
     public void check() {
-        handFromModel = "AAAAAAA";
+//        handFromModel = "AAAAAAA";
         bagFromModel = "BA,30";
         bagAmount.set(bagFromModel.substring(3));
         setLetterValue();
@@ -212,10 +214,18 @@ public class ViewModel extends Observable implements Observer, iViewModel {
 
     @Override
     public void updateTryPlaceWordInViewModel(String val) {
-        StringBuilder sb = new StringBuilder("TP-");
+        StringBuilder sb = new StringBuilder("PL," + getIdProperty().get() + ",");
         System.out.println("updateTryPlaceWordInViewModel was call form viewModel");
-        sb.append(val);
-        modelFacade.TPRequestFromVM(sb.toString());
+        // N,1,1 I,2,2 R,3,3
+        String[] arr = val.split(" ");
+        for (int i = 0; i < arr.length; i++) {
+            sb.append(arr[i].split(",")[0]);
+        }
+        sb.append(arr[0].split(",")[0]).append(",").append(arr[0].split(",")[1]).append(",").append(arr[0].split(",")[2]);
+        sb.append(",").append(arr[arr.length - 1]);
+
+        System.out.println(sb.toString());
+        modelFacade.TPRequestFromVM(sb.toString());// ("PL,ID,mila,4,5,H")
         // nir need to get the boardClass instance , and update all the threads for the changes
     }
 

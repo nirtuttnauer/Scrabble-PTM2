@@ -13,7 +13,7 @@ public class PlaceCommand implements ICommand {
     @Override
     public String execute(String...s) {
              try {
-            boolean success = getGameManager().tryPlaceWordAction(getGameManager().getPlayerManager().getPlayer(getGameManager().getCurrentPlayer().getId()), s);
+            boolean success = getGameManager().tryPlaceWordAction(getGameManager().getCurrentPlayer().getId(), s);
             return success ? "Word successfully placed!" : "Word placement failed.";
         } catch (IllegalArgumentException e) {
             System.out.println("error");

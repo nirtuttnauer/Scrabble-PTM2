@@ -92,11 +92,15 @@ public class ModelFacade implements iModelFacade {
     }
 
     public void TPRequestFromVM(String req) {
-        String[] cmd = req.split("-");
-//        hModel.getGameManager().tryPlaceWordAction();
+        sendReq(req);
     }
     public int getID () {
         return (model != null) ? model.getID() : hostModel.getID();
+    }
+    public void sendReq(String args){
+        if (model != null) {
+            model.sendRequestToHost(args);
+        }else hostModel.sendRequestToHost(args);
     }
 
 }

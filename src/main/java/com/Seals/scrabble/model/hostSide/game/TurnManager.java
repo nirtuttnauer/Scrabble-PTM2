@@ -15,7 +15,7 @@ public class TurnManager {
         if (players.isEmpty()) {
             return null;
         }
-        return players.get(currentPlayerIndex);
+        return players.get((currentPlayerIndex != (-1)) ?currentPlayerIndex : 0);
     }
 
     public void nextTurn() {
