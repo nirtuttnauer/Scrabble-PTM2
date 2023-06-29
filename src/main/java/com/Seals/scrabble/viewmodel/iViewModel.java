@@ -33,5 +33,7 @@ public interface iViewModel extends Observer {
     void updateTryPlaceWordInViewModel(String val);
 
     void changeScheneToGame();
-    StringProperty getBoardProperty();
+     StringProperty getBagFromModel();
+
+    StringProperty bagFromModelProperty();
 }
