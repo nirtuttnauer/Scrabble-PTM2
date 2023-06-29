@@ -34,4 +34,6 @@ public interface iViewModel extends Observer {
 
     void changeScheneToGame();
      StringProperty getBagFromModel();
+
+    StringProperty bagFromModelProperty();
 }

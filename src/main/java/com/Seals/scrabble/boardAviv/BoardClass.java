@@ -1,5 +1,7 @@
 package com.Seals.scrabble.boardAviv;
 
+import java.util.Arrays;
+
 public class BoardClass {
     private int width;
     private int height;
@@ -25,8 +27,8 @@ public class BoardClass {
         return this.board[i][j];
     }
 
-    public void claerByIndex(int i , int j){
-        board[i][j] = null;
+    public void clearByIndex(int i , int j){
+        board[i][j] = "";
     }
     public int getWidth() {
         return width;
@@ -73,6 +75,13 @@ public class BoardClass {
                 }
             }
         }
+        System.out.println(" the new board is : " + Arrays.deepToString(newBoard));
         board=newBoard;
+    }
+
+    public boolean thereIsLetter(int i, int j) {
+        if((i<width || i>width) || (j>height || j<height))
+            return false;
+        return board[i][j].equals("");
     }
 }
