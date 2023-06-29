@@ -44,17 +44,20 @@ public class GameManager {
         this.scoreBoard = new ScoreBoard();
         gameBoard.printBoard();
 
-        // Waiting for the game to start
-        Scanner in = new Scanner(System.in);
-        while (!isGameInProgress) {
-            String input = in.nextLine();
-            if (input.equals("s")) {
-                isGameInProgress = true;
-            }
-        }
+//        // Waiting for the game to start
+//        Scanner in = new Scanner(System.in);
+//        while (!isGameInProgress) {
+//            String input = in.nextLine();
+//            if (input.equals("s")) {
+//                isGameInProgress = true;
+//            }
+//        }
 
         // Game has started
         playerManager.initializePlayerHands();
+        isGameInProgress = true;
+        delay(1000);
+
 
         nextTurn();
         while (isGameInProgress) {

@@ -9,6 +9,7 @@ public class Settings {
 
     private static int HostServerPort = 6055;
     private static String serverAdress = "localhost";
+    public static int numOfThreads = 8;
     private static String Css = "/com/Seals/scrabble/application.css";
 
 
