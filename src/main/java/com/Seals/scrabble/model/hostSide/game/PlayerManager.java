@@ -59,6 +59,7 @@ public class PlayerManager {
     public void initializePlayerHands() {
         for (Player player : players) {
             player.addTile(Tile.Bag.getBag().getRand());
+//            getGameManager().getGameServer();
         }
     }
 

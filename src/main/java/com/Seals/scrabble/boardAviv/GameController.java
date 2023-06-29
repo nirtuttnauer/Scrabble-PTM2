@@ -287,17 +287,30 @@ public class GameController extends StackPane implements Observer, iController {
     }
 
 
-    public void drawHand() {
+   public void drawHand() {
+    Platform.runLater(() -> {
         HandHbox.getChildren().clear();
 
         BackgroundFill backgroundFill = new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY);
         Background background = new Background(backgroundFill);
+        if (handString.get() == null || handString.get().isEmpty()) {
+            // Log an error or perform some default action
+            System.err.println("Warning: handString is null or empty!");
+            return; // Early return
+        }
 
         String[] splitString = handString.get().split(",");
 
-        for (int i = 0; i < splitString.length; i+=2) {
-            String letterStr= splitString[i];
-            String scoreStr=splitString[i+1];
+        // Ensure we have an even number of elements in splitString
+        if(splitString.length % 2 != 0){
+            System.err.println("Warning: handString has an odd number of elements!");
+            return; // Early return
+        }
+
+        for (int i = 0; i < splitString.length; i += 2) {
+            String letterStr = splitString[i];
+            String scoreStr = splitString[i + 1];
+
             Pane handPane = new Pane();
             handPane.setId("handPane");
             handPane.setBackground(background);
@@ -308,12 +321,8 @@ public class GameController extends StackPane implements Observer, iController {
             score.setText(scoreStr);
 
             Insets labelsPadding = new Insets(47);
-            letter.setPadding(labelsPadding);
-            score.setPadding(new Insets(10));
-
-            handPane.setStyle("fx-border-color: black; -fx-border-width: 1px;");
-
-            handPane.getChildren().addAll(score, letter);
+            score.setPadding(labelsPadding);
+            letter.setPadding(new Insets(10));
 
             HandHbox.getChildren().add(handPane);
 
