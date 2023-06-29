@@ -27,6 +27,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     private StringProperty bagAmount;
     private String bagFromModel;
     public StringProperty board;
+    private StringProperty bagFromModelProperty;
     //private StringProperty tryPlaceWord;
 
 
@@ -38,6 +39,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     public ViewModel() {
         //       tryPlaceWord= new SimpleStringProperty();
         tread = new Thread(this::startGame);
+        bagFromModelProperty= new SimpleStringProperty();
         board = new SimpleStringProperty();
         handFromModel = new String();
         newHand = new String();
@@ -49,6 +51,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         this.id = new SimpleStringProperty();
         this.bagAmount = new SimpleStringProperty();
         id.set("" + 0);
+        bagFromModelProperty.set("0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000");
         //check();
     }
 
@@ -225,6 +228,11 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     @Override
     public StringProperty getBoardProperty() {
         return board;
+    }
+
+    @Override
+    public StringProperty bagFromModelProperty() {
+        return bagFromModelProperty;
     }
 
 
