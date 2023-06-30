@@ -4,6 +4,7 @@ import com.Seals.scrabble.Settings;
 import com.Seals.scrabble.controller.LoginController;
 import com.Seals.scrabble.facade.ModelFacade;
 import com.Seals.scrabble.model.Model;
+import com.Seals.scrabble.model.hostSide.game.Player;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -28,6 +29,9 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     private String bagFromModel;
     public StringProperty board;
     private StringProperty bagFromModelProperty;
+    private StringProperty playersNickName;
+    private StringProperty currentPlayer;
+    private StringProperty scores;
     //private StringProperty tryPlaceWord;
 
 
@@ -51,6 +55,9 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         this.id = new SimpleStringProperty();
         this.bagAmount = new SimpleStringProperty();
         id.set("" + 0);
+        playersNickName = new SimpleStringProperty();
+        currentPlayer = new SimpleStringProperty();
+        scores = new SimpleStringProperty();
         //check();
     }
 
@@ -93,6 +100,17 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         return bagAmount;
     }
 
+    public StringProperty playersNickNameProperty() {
+        return playersNickName;
+    }
+
+    public StringProperty currentPlayerProperty() {
+        return currentPlayer;
+    }
+
+    public StringProperty scoresProperty() {
+        return scores;
+    }
 
     @Override
     public void update(Observable o, Object arg) {
@@ -139,6 +157,18 @@ public class ViewModel extends Observable implements Observer, iViewModel {
                         System.err.println(id.get());
                     }
 
+                }
+                 else if (stringArr[0].equals("players")){
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(1).append(",").append(2).append(",").append(3).append(",").append(4); //players,omer,nir,roi,aviv;
+                    playersNickName.set(sb.toString());
+                }
+                else if (stringArr[0].equals("current")) {
+                    currentPlayer.set(stringArr[1]);
+                } else if (stringArr[0].equals("scores")) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(1).append(",").append(2).append(",").append(3).append(",").append(4); //scores,14,33,53,21;
+                    scores.set(sb.toString());
                 }
 
                 System.out.println("VM line 115: " + handToView);
