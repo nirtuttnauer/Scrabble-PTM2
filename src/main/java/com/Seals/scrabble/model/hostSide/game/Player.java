@@ -48,7 +48,7 @@ public class Player {
         }
     }
 
-public List<Tile> addTilesFromString(String w) {
+public Tile[] addTilesFromString(String w) {
     List<Tile> tiles = new ArrayList<>();
 
     System.out.println("Player's hand: " + printHand());  // print the player's hand
@@ -65,7 +65,7 @@ public List<Tile> addTilesFromString(String w) {
             throw new IllegalArgumentException("Cannot get tile (error): " + c);
         }
     }
-    return tiles;
+    return tiles.toArray(new Tile[0]);
 }
 
 
@@ -92,6 +92,10 @@ public List<Tile> addTilesFromString(String w) {
     @Override
     public String toString() {
         return "Player " + getId();
+    }
+
+    public String getName() {
+        return name;
     }
 
     private Player getPlayer(int playerId) {

@@ -22,7 +22,7 @@ public class PlaceCommand implements ICommand {
         // Get the y-coordinate from the fourth argument
         int j = Integer.parseInt(s[3]);
         // Get the vertical flag from the fifth argument
-        Boolean isVertical = Boolean.getBoolean(s[4]);
+        Boolean isVertical =  (s[4].equals("V")) ?true: false;
 
         try {
             // Try to place the word on the board

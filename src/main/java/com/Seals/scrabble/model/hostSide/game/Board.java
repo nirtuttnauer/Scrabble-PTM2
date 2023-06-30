@@ -85,13 +85,12 @@ public class Board {
     }
 
     public int tryPlaceWord(Word word) {
-        if (boardLegal(word) && dictionaryLegal(word)) {
+        if (boardLegal(word)) {
             word = fullWord(word);
             ArrayList<Word> newWords = filterWords(getWords(word));
-            int score = getScore(newWords);
             PlaceWord(word);
             addNewWords(newWords);
-            return score;
+            return (dictionaryLegal(word)) ? getScore(newWords) : 0;
         }
         return 0;
     }
@@ -111,7 +110,7 @@ public class Board {
     }
 
     private ArrayList<Word> filterWords(ArrayList<Word> words) {
-        words.removeIf(word -> !dictionaryLegal(word) || SingleBoard.PlacedWords.contains(word));
+        words.removeIf(word -> SingleBoard.PlacedWords.contains(word));
         return words;
     }
 
@@ -237,9 +236,7 @@ public class Board {
         return SingleBoard.Places[7][7].tile != null;
     }
 
-    public boolean dictionaryLegal(Word word) {
-
-
+    public synchronized boolean dictionaryLegal(Word word) {
         return getGameManager().query(word);
     }
 
@@ -314,15 +311,15 @@ public class Board {
         StringBuilder s = new StringBuilder();
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
-                if (SingleBoard.Places[i][j].tile != null) {
-                    s.append(SingleBoard.Places[i][j].tile.letter).append(" ");
+                if (getBoard().Places[i][j].getTile() != null) {
+                    s.append(SingleBoard.Places[i][j].getTile().getLetter());
                 } else
                     s.append("0");
 
             }
-            if (i<14) s.append(" ");
+            if (i < 14) s.append(" ");
         }
-            return s.toString();
+        return s.toString();
 
     }
 

@@ -13,8 +13,10 @@ public class TurnUpdateCommand implements ICommand {
     public String execute(String...s) {
 //        System.out.println("hellppp");
 //        getGameManager().getGameServer().broadcast("TU from command");
-        getGameManager().getGameServer().broadcast(String.valueOf(getGameManager().getTurnManager().getCurrentPlayerIndex() + 1));
+        getGameManager().getGameServer().broadcast("UA," + getGameManager().getCurrentPlayer().printHand() + "," + getGameManager().getCurrentPlayer().getId() + "," + getGameManager().getBag().getQuantitiesString());
+        getGameManager().getGameServer().broadcast("turn," + String.valueOf(getGameManager().getTurnManager().getCurrentPlayerIndex() + 1));
 //return null;
+        System.out.println("tu :" +"UA," + getGameManager().getCurrentPlayer().printHand() + "," + getGameManager().getCurrentPlayer().getId() + "," + getGameManager().getBag().getQuantitiesString());
         return "UA," + getGameManager().getCurrentPlayer().printHand() + "," + getGameManager().getCurrentPlayer().getId() + "," + getGameManager().getBag().getQuantitiesString();
     }
 }

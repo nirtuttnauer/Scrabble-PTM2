@@ -122,6 +122,8 @@ public class ViewModel extends Observable implements Observer, iViewModel {
                 String boardFromModel = (arg.toString());
                 String[] stringArr = boardFromModel.split(",");
 
+//                if (stringArr[0].equals("players"))
+
                 // build the string like this --> UA, 7tiles, id, bag amount,
                 if (stringArr[0].equals("UA")) {
                     System.err.println(Integer.getInteger(this.id.get()) == Integer.getInteger(stringArr[2].toString()));
@@ -215,7 +217,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         System.out.println(bagAmountProperty().get());
     }
 
-    public static void startServer() {
+    public synchronized static void startServer() {
         modelFacade.toggleModels();
         modelFacade.getHostModel().startServer();
     }

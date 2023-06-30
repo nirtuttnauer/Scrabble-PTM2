@@ -150,10 +150,11 @@ public class Model extends Observable implements iModel {
                     if ((response = in.readLine()) != null) {
 //                    System.out.println("I heard something...");
                         System.out.println(response);
+//                        processResponse(response);
                         sendRequestToHost(processResponse(response));
                     }
                 } catch (SocketTimeoutException e) {
-//                System.out.println("Socket timeout, continuing to listen...");
+                System.out.println("Socket timeout, continuing to listen...");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -171,8 +172,9 @@ public class Model extends Observable implements iModel {
     }
 
     private String processResponse(String response) {
+        System.out.println("Model: " + response);
         String[] parts = response.split(",");
-        if (parts[0].equals("ID") || parts[0].equals("UA") || parts[0].equals("board")) {
+        if (parts[0].equals("ID") || parts[0].equals("UA") || parts[0].equals("board") || parts[0].equals("turn")|| parts[0].equals("players")) {
             setChanged();
             notifyObservers(response);
         }

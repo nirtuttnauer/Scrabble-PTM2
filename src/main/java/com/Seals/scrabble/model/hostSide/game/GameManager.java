@@ -30,7 +30,7 @@ public class GameManager {
     private ScoreBoard scoreBoard;
     private boolean isGameInProgress;
     private GameHandler gameHandler;
-
+    private String[] Books = {"search_folder/The Matrix.txt", "search_folder/Harray Potter.txt"};
     //server
     private MyServer gameServer;
 
@@ -102,9 +102,16 @@ public class GameManager {
 
 //            gameServer.broadcast(currentPlayer.printHand());
 //            gameServer.broadcast(currentPlayer.)
+            StringBuilder stringBuilder = new StringBuilder();
+            for (Player p : getPlayerManager().getPlayers()) {
+                stringBuilder.append(',').append(p.getName());
+            }
+
+
+            gameServer.broadcast("players" + stringBuilder.toString());
             gameServer.broadcast("UA," + currentPlayer.printHand() + "," + currentPlayer.getId() + "," + this.Bag.getQuantitiesString());
             gameServer.broadcast("board," + getGameBoard().printBoardLetters());
-            gameServer.broadcast("Current turn is," + (getTurnManager().getCurrentPlayerIndex() + 1));
+            gameServer.broadcast("turn," + (getTurnManager().getCurrentPlayerIndex() + 1));
 //            gameServer.broadcast(() => {);
 
             // rest of the code
@@ -162,39 +169,34 @@ public class GameManager {
         System.out.println("----Scrabble game ended----");
     }
 
-    public boolean tryPlaceWordAction(int id, String word, int i, int j, Boolean isVertical) {
-
-        if (id != id) {
+    public boolean tryPlaceWordAction(int playerId, String word, int i, int j, boolean isVertical) {
+        if (playerId != getPlayer(playerId).getId()) {
             throw new IllegalArgumentException("Player ID doesn't match the current player's ID");
         }
 
-        String wordString = word;
-
-        int x = i, y = j;
-
-        // Create tiles from the wordString and get from player's hand
-        List<Tile> tiles = new ArrayList<>();
+        Tile[] tiles = new Tile[0];
         try {
-            tiles = getPlayer(id).addTilesFromString(wordString);
+            tiles = getPlayer(playerId).addTilesFromString(word);
         } catch (Exception e) {
             e.printStackTrace();  // prints exception details including stack trace
             System.out.println("Error occurred in addTilesFromString: " + e.getMessage()); // prints the error message
-            System.out.println(tiles.isEmpty());
         }
 
-        if (tiles.isEmpty()) {
-            throw new IllegalArgumentException("Player doesn't have the necessary tiles to form this word.");
-        }
-        Word wordToPlace = new Word(tiles.toArray(new Tile[0]), x, y, isVertical);
+//        if (Arrays.stream(tiles).toList().isEmpty()) {
+//            throw new IllegalArgumentException("Player doesn't have the necessary tiles to form this word.");
+//        }
+//        System.out.println(""+tiles[1].getLetter() + tiles[2].getLetter());
+        Word wordToPlace = new Word(tiles, i, j, isVertical);
 
-        // Place the word on the board
         int score = gameBoard.tryPlaceWord(wordToPlace);
-        if (score == 0) return false;
-        getPlayer(id).removeTilesFromHand(tiles.toArray(new Tile[0])); // Remove the tiles used from player's hand
-        updateScore(getPlayer(id), score);
-        gameBoard.printBoard(); // Print the updated board
 
-        return true;
+
+        getPlayer(playerId).removeTilesFromHand(tiles);
+        getPlayer(playerId).addTile(Tile.Bag.getBag().getRand());
+        updateScore(getPlayer(playerId), score);
+        gameBoard.printBoard();
+
+        return (score != 0);
     }
 
 
@@ -276,8 +278,20 @@ public class GameManager {
         return gameServer;
     }
 
-    public boolean query(Word w) {
-        return Boolean.getBoolean(sendRequestToDM("Q", "harrypotter", "" + w));
+    public synchronized boolean query(Word w) {
+        StringBuilder sb = new StringBuilder();
+        for (Tile t: w.getTiles()) {
+            sb.append(t.getLetter());
+        }
+        return Boolean.getBoolean(sendRequestToDM("Q", getBooks()[0], getBooks()[1], "" + sb.toString()));
+    }
+
+    public String[] getBooks() {
+        return Books;
+    }
+
+    public void setBooks(String[] books) {
+        Books = books;
     }
 
     public String sendRequestToDM(String... args) {
@@ -299,7 +313,7 @@ public class GameManager {
 
                 StringBuilder request = new StringBuilder();
                 if (args != null) {
-                    request.append(",").append(String.join(",", args));
+                    request.append(String.join(",", args));
                 }
 
                 if (out != null) {

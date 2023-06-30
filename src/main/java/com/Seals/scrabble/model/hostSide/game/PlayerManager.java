@@ -56,10 +56,11 @@ public class PlayerManager {
         }
     }
 
-    public void initializePlayerHands() {
+    public synchronized void initializePlayerHands() {
         for (Player player : players) {
             player.addTile(Tile.Bag.getBag().getRand());
 //            getGameManager().getGameServer();
+            System.err.println(""+player.getId()+player.getName()+player.printHand());
         }
     }
 

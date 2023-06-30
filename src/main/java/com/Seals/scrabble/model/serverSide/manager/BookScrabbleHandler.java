@@ -24,16 +24,16 @@ public class BookScrabbleHandler implements ClientHandler {
         try {
             in = new Scanner(inFromClient);
             out = new PrintWriter(outToClient);
-            String[] arguments = in.next().split(",");
-
+            String[] arguments = in.nextLine().split(",");
+            System.out.println(""+arguments[0]+","+arguments[1]+","+arguments[2]+","+arguments[3]);
             List<String> list = new ArrayList<>(Arrays.asList(arguments));
             list.remove(0);
-            String[] newArray = list.toArray(new String[arguments.length-2]);
-            arguments = newArray;
+            String[] newArray = list.toArray(new String[arguments.length - 2]);
             ArrayList<String> argsList = new ArrayList<String>(Arrays.asList(arguments));
             argsList.remove(0);
+//            arguments = newArray;
             boolean result = false;
-            if (!arguments[0].equals("Q") && !arguments[1].equals("C")) {
+            if (!arguments[0].equals("Q") && !arguments[0].equals("C")) {
                 out.println("Query Failed");
             } else if (arguments[0].equals("Q")) {
                 String[] query = argsList.toArray(new String[argsList.size()]);
