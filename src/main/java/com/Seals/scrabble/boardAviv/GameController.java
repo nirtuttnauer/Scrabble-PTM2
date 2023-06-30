@@ -27,8 +27,7 @@ import java.util.*;
 import static com.Seals.scrabble.factories.SceneFactory.setScene;
 
 public class GameController extends StackPane implements Observer, iController {
-    @FXML
-    BorderPane body;
+
     @FXML
     VBox rightVBox;
     @FXML
@@ -49,8 +48,6 @@ public class GameController extends StackPane implements Observer, iController {
     private Label bagLbl;
     @FXML
     private HBox HandHbox;
-    @FXML
-    private HBox justForSHow;
     private List<ConfrimTiles> tiles;
     private List<Pane> paneHandList;
     private volatile boolean isFirstPlay = true;
@@ -64,7 +61,7 @@ public class GameController extends StackPane implements Observer, iController {
     private String handChanges;
     private StringProperty id;
     private StringProperty boardFromOmer;
-    private List<Pane> confirnmPanes;
+    private List<Pane> confirmnPanes;
     private StringProperty score;
     private StringProperty currentPlayer;
 
@@ -72,19 +69,14 @@ public class GameController extends StackPane implements Observer, iController {
     public void initialize() {
         //example
         //boardClass.setBoard(0,0,"A");
-        // hide justForSHow Hbox
-        justForSHow.setVisible(false);
-        Label label= new Label();
-        label.setText("It's not your turn");
-        justForSHow.getChildren().add(label);
         //list of tiles that will transform to the vm
         tiles = new ArrayList<>();
         paneList = new ArrayList<>();
-        this.confirnmPanes = new ArrayList<Pane>();
+        this.confirmnPanes = new ArrayList<Pane>();
         // players label
         id = new SimpleStringProperty();
         id.bind(ViewModel.getSharedInstance().getIdProperty());
-        handleLablesById();
+        handleId();
         //pressed boolean
         pressed = false;
         // pane list
@@ -102,7 +94,7 @@ public class GameController extends StackPane implements Observer, iController {
 
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.isPresent() && result.get() == yes) {
-                    confirnmPanes.addAll(paneList);
+                    confirmnPanes.addAll(paneList);
                     alert.setContentText("Checking your new data...");
                     handleTryPlaceWord();
                 } else {
@@ -125,7 +117,7 @@ public class GameController extends StackPane implements Observer, iController {
         this.score= new SimpleStringProperty();
         this.score.bind(ViewModel.getSharedInstance().getScores());
         if(score.get() != null)
-            setScore(handleId());
+            setScore(handleScore());
         this.boardFromOmer = new SimpleStringProperty();
         this.boardFromOmer.bind(ViewModel.getSharedInstance().bagFromModelProperty());
         this.bag = new SimpleStringProperty();
@@ -145,22 +137,14 @@ public class GameController extends StackPane implements Observer, iController {
         ViewModel.getSharedInstance().getCurrentPlayer().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                if(currentPlayer.get().equals(id.get())){
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setContentText("Your turn...");
-                    alert.showAndWait();
-                }
-                else{
-                    HandHbox.setVisible(false);
-                    justForSHow.setVisible(true);
-                }
+
             }
         });
         ViewModel.getSharedInstance().getScores().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
              // get the exact id from handleScore() to setScore()
-              setScore(handleId());
+              setScore(handleScore());
             }
         });
         ViewModel.getSharedInstance().bagFromModelProperty().addListener(new ChangeListener<String>() {
@@ -195,7 +179,7 @@ public class GameController extends StackPane implements Observer, iController {
         });
     }
 
-    private String handleId() {
+    private String handleScore() {
         String[] scoreArr = score.get().split(",");
         int i = Integer.parseInt(id.get());
         return scoreArr[i-1];
@@ -221,7 +205,7 @@ public class GameController extends StackPane implements Observer, iController {
 
     private void coloriseHandToBasicColor() {
         paneHandList.forEach(pane -> {
-            if (!confirnmPanes.contains(pane)) {
+            if (!confirmnPanes.contains(pane)) {
                 //setting the background to grey
                 pane.setBackground(new Background(new BackgroundFill(Color.rgb(227, 200, 141), CornerRadii.EMPTY, Insets.EMPTY)));
                 pane.setStyle("-fx-background-radius: 15px");
@@ -286,7 +270,7 @@ public class GameController extends StackPane implements Observer, iController {
         ViewModel.getSharedInstance().updateTryPlaceWordInViewModel(val);
     }
 
-    private void handleLablesById() {
+    private void handleId() {
         String id = this.id.get();
         switch (id) {
             case "1":

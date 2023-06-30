@@ -7,11 +7,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" fx:id="body" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="735.0" prefWidth="889.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Seals.scrabble.boardAviv.GameController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="735.0" prefWidth="889.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Seals.scrabble.boardAviv.GameController">
     <bottom>
         <HBox fx:id="HandHbox" prefHeight="70.0" prefWidth="612.0" />
-       <HBox fx:id="justForSHow" prefHeight="70.0" prefWidth="612.0" />
-
     </bottom>
     <center>
         <VBox fx:id="VboxBoard" prefHeight="562.0" prefWidth="689.0" />
