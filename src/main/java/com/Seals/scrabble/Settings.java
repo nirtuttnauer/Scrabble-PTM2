@@ -7,8 +7,9 @@ public class Settings {
     //server settings:
     private static int DMServerPort = 5555;
 
-    private static int HostServerPort = 6050;
+    private static int HostServerPort = 9995;
     private static String serverAdress = "localhost";
+    public static int numOfThreads = 10;
     private static String Css = "/com/Seals/scrabble/application.css";
 
 

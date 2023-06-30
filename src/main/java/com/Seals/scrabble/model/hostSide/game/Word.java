@@ -62,4 +62,11 @@ public class Word {
         Word word = (Word) o;
         return row == word.row && cols == word.cols && vertical == word.vertical && Arrays.equals(Tiles, word.Tiles);
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        Arrays.stream(Tiles).forEach(tile -> sb.append(tile.getLetter()));
+        return sb.toString();
+    }
 }

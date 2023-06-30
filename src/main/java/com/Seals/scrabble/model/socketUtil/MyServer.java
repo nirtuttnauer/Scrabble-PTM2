@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.Seals.scrabble.Settings.numOfThreads;
+
 public class MyServer implements Runnable{
     private final int port;
     private final Map<String, ClientHandler> clientHandlers;
@@ -23,7 +25,7 @@ public class MyServer implements Runnable{
         this.port = port;
         this.clientHandlers = new ConcurrentHashMap<>();
         this.stop = new AtomicBoolean(false);
-        this.executorService = Executors.newCachedThreadPool();
+        this.executorService = Executors.newFixedThreadPool(numOfThreads);
         this.queue = new LinkedBlockingQueue<>();
         this.ch = ch;
     }
@@ -77,7 +79,7 @@ public class MyServer implements Runnable{
         }
 
         for (ClientHandler clientHandler : clientHandlers.values()) {
-//            clientHandler.close();
+            clientHandler.close();
         }
     }
 
@@ -89,8 +91,8 @@ public class MyServer implements Runnable{
         return stop.get();
     }
 
-    public String broadcast(String message) {
-        System.out.println("line 107 " + clientHandlers.values().size());
+    public synchronized String broadcast(String message) {
+//        System.out.println("line 107 " + clientHandlers.values().size());
         for (ClientHandler clientHandler : clientHandlers.values()) {
             try {
                 clientHandler.sendMessage(message);
@@ -98,6 +100,10 @@ public class MyServer implements Runnable{
                 throw new RuntimeException(e);
             }
         }
+        return message;
+    }
+    public String message(String message){
+
         return message;
     }
 

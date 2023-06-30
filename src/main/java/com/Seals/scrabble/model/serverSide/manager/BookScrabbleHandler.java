@@ -7,9 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
 
 public class BookScrabbleHandler implements ClientHandler {
     DictionaryManager dictionaryManager;
@@ -26,20 +24,21 @@ public class BookScrabbleHandler implements ClientHandler {
         try {
             in = new Scanner(inFromClient);
             out = new PrintWriter(outToClient);
-            String[] arguments = in.next().split(",");
+            String[] arguments = in.nextLine().split(",");
+            System.out.println(""+arguments[0]+","+arguments[1]+","+arguments[2]+","+arguments[3]);
+            List<String> list = new ArrayList<>(Arrays.asList(arguments));
+            list.remove(0);
+            String[] newArray = list.toArray(new String[arguments.length - 2]);
             ArrayList<String> argsList = new ArrayList<String>(Arrays.asList(arguments));
             argsList.remove(0);
+//            arguments = newArray;
             boolean result = false;
             if (!arguments[0].equals("Q") && !arguments[0].equals("C")) {
-                out.println("Query Faild");
-            }
-
-            else if (arguments[0].equals("Q")) {
+                out.println("Query Failed");
+            } else if (arguments[0].equals("Q")) {
                 String[] query = argsList.toArray(new String[argsList.size()]);
                 result = dictionaryManager.query(query);
-            }
-
-            else if (arguments[0].equals("C")) {
+            } else if (arguments[0].equals("C")) {
                 String[] challenge = argsList.toArray(new String[argsList.size()]);
                 result = dictionaryManager.challenge(challenge);
             }
@@ -52,7 +51,7 @@ public class BookScrabbleHandler implements ClientHandler {
             this.close();
 
 
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
 

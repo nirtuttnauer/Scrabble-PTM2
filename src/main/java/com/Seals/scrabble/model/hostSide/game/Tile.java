@@ -139,6 +139,11 @@ public class Tile {
             return null;
         }
 
+        public String getQuantitiesString() {
+
+            return ""+ Arrays.stream(this.getQuantities()).reduce(0,(x,y) -> (x+y));
+        }
+
     }
 
 }

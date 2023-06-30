@@ -2,6 +2,7 @@ package com.Seals.scrabble.controller;
 
 import com.Seals.scrabble.viewmodel.ViewModel;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 import java.io.IOException;
@@ -12,22 +13,21 @@ import java.util.ResourceBundle;
 
 import static com.Seals.scrabble.factories.SceneFactory.setScene;
 
-public class LobbyController  implements Initializable, Observer,iController {
+public class LobbyController  implements Observer,iController {
     // Add your lobby-related logic and event handlers here
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    @FXML
+    public void initialize() {
         // Initialize the lobby view
     }
 
 
 
     public void onGameButtonClick(ActionEvent event) {
-        setScene("GameView");
+        ViewModel.getSharedInstance().changeScheneToGame();
     }
 
-    public void onMenuButtonClick(ActionEvent event) {
-    }
+
 
     @Override
     public void update(Observable o, Object arg) {
@@ -38,11 +38,11 @@ public class LobbyController  implements Initializable, Observer,iController {
 
     @Override
     public void onMenuButtonClick() throws IOException {
-
+        setScene("MenuView");
     }
 
     @Override
     public void onExitButtonClick() throws IOException {
-
+    
     }
 }

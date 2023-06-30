@@ -10,4 +10,6 @@ public interface iModelFacade extends Observer {
     String getNickname();
 
     void addObserver(ViewModel viewModel);
+
+    void startGame();
 }

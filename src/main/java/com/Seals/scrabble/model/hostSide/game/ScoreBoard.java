@@ -3,6 +3,8 @@ package com.Seals.scrabble.model.hostSide.game;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.Seals.scrabble.model.hModel.getGameManager;
+
 class ScoreBoard {
     private Map<Player, Integer> scores;
 
@@ -16,9 +18,12 @@ class ScoreBoard {
     }
 
     public void displayScoreboard() {
-        for (Map.Entry<Player, Integer> entry : scores.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue() + " points");
+        StringBuilder sb = new StringBuilder();
+        for (Integer v : scores.values()) {
+            sb.append(',').append(String.valueOf(v));
         }
+        getGameManager().getGameServer().broadcast("scores"+sb.toString());
+
     }
 
     public void addPlayer(Player player) {

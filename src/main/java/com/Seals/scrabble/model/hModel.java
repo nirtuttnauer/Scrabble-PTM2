@@ -29,7 +29,6 @@ public class hModel extends Model {
     public void startServer() {
         getGameManager().startServer();
         connectToHost();
-        sendRequestToHost("NP", null);
     }
 
 

@@ -1,5 +1,7 @@
 package com.Seals.scrabble.model.hostSide.game;
 
+import com.Seals.scrabble.model.hostSide.GameHandler;
+
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,21 +13,22 @@ public class Player {
     public static final int MAX_TILES = 7;
     private static int nextId = 1;
     public static final int MAX_PLAYERS = 4;
-    public final Socket socket;
+    public final GameHandler gh;
     private final String name;
     private int id;
     private List<Tile> hand;
 
-    public Player(Socket socket, String nickname) {
-            this.id = nextId++;
+    public Player(String nickname) {
+        this.id = nextId++;
         this.hand = new ArrayList<>();
-        this.socket = socket;
+//        this.socket = socket;
         this.name = nickname;
+        gh = null;
     }
 
     public static Player createPlayer(Socket socket, String nickname) {
         if (nextId <= MAX_PLAYERS) {
-            return new Player(socket,nickname);
+            return new Player(nickname);
         } else {
             System.out.println("Player limit reached");
             return null;
@@ -45,18 +48,36 @@ public class Player {
         }
     }
 
-    public List<Tile> addTilesFromString(String w) {
-        List<Tile> tiles = new ArrayList<>();
-        for (int i = 0; i < getHand().size(); i++) {
-            try {
-            tiles.add(Tile.Bag.getBag().getTile(w.charAt(i)));
-            }
-            catch (Exception e){
-                System.out.println("Cannot get tile (error)");
+public Tile[] addTilesFromString(String w) {
+    List<Tile> tiles = new ArrayList<>();
+
+    System.out.println("Player's hand: " + printHand());  // print the player's hand
+
+    for (char c : w.toCharArray()) {
+        // Find tile from the hand
+        Tile tileFromHand = getTileFromHand(c);
+
+        // Check if the tile was found
+        if (tileFromHand != null) {
+            // Add tile to the list
+            tiles.add(tileFromHand);
+        } else {
+            throw new IllegalArgumentException("Cannot get tile (error): " + c);
+        }
+    }
+    return tiles.toArray(new Tile[0]);
+}
+
+
+    private Tile getTileFromHand(char c) {
+        for (Tile tile : hand) {
+            if (Character.toUpperCase(tile.getLetter()) == c) {
+                return tile;
             }
         }
-        return tiles;
+        return null; // Return null if the tile was not found in the hand
     }
+
 
     public void removeTilesFromHand(Tile[] tiles) {
         for (Tile tile : tiles) {
@@ -73,14 +94,21 @@ public class Player {
         return "Player " + getId();
     }
 
+    public String getName() {
+        return name;
+    }
+
     private Player getPlayer(int playerId) {
         return getGameManager().getPlayer(playerId);
     }
 
-    public void printHand() {
+    public String printHand() {
         List<Tile> tiles = this.getHand();
-        String hand = tiles.stream().map(tile -> String.valueOf(tile.getLetter())).collect(Collectors.joining(", "));
-        System.out.println("Your hand: " + hand);
+        String hand = tiles.stream().map(tile -> String.valueOf(tile.getLetter())).collect(Collectors.joining(""));
+        return hand;
     }
 
+    public GameHandler getGh() {
+        return gh;
+    }
 }

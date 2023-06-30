@@ -3,6 +3,7 @@ package com.Seals.scrabble.facade;
 import com.Seals.scrabble.model.Model;
 import com.Seals.scrabble.model.hModel;
 import com.Seals.scrabble.viewmodel.ViewModel;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -50,6 +51,11 @@ public class ModelFacade implements iModelFacade {
     }
 
     @Override
+    public void startGame() {
+        hostModel.startGame();
+    }
+
+    @Override
     public void update(Observable o, Object arg) {
         if (o == model) {
             nickname.set(model.getNickname());
@@ -84,4 +90,17 @@ public class ModelFacade implements iModelFacade {
             model = null;
         }
     }
+
+    public void TPRequestFromVM(String req) {
+        sendReq(req);
+    }
+    public int getID () {
+        return (model != null) ? model.getID() : hostModel.getID();
+    }
+    public void sendReq(String args){
+        if (model != null) {
+            model.sendRequestToHost(args);
+        }else hostModel.sendRequestToHost(args);
+    }
+
 }

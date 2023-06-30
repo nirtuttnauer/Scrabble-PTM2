@@ -67,7 +67,7 @@ private String processRequest(String request) {
     if (command != null) {
         String[] args = new String[split.size()];
         split.toArray(args);
-        return command.execute(this.clientSocket, args);
+        return command.execute(args);
     } else {
         return "Unknown command: " + scmd;
     }
