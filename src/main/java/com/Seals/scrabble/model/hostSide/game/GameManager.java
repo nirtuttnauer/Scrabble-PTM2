@@ -38,6 +38,9 @@ public class GameManager {
     private PrintWriter out;
     private BufferedReader in;
 
+    public ScoreBoard getScoreBoard() {
+        return scoreBoard;
+    }
 
     public GameManager() {
         this.gameBoard = Board.getBoard();

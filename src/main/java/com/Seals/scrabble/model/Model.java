@@ -174,12 +174,12 @@ public class Model extends Observable implements iModel {
     private String processResponse(String response) {
         System.out.println("Model: " + response);
         String[] parts = response.split(",");
-        if (parts[0].equals("ID") || parts[0].equals("UA") || parts[0].equals("board") || parts[0].equals("turn")|| parts[0].equals("players")) {
+        if (parts[0].equals("ID") || parts[0].equals("UA") || parts[0].equals("board") ||parts[0].equals("scores") || parts[0].equals("turn")|| parts[0].equals("players")) {
             setChanged();
             notifyObservers(response);
         }
 //        System.out.println("update me");
-        delay(1000);
+        delay(3000);
         return "update me";
     }
 

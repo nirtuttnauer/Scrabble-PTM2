@@ -18,9 +18,12 @@ class ScoreBoard {
     }
 
     public void displayScoreboard() {
-        for (Map.Entry<Player, Integer> entry : scores.entrySet()) {
-            getGameManager().getGameServer().broadcast(entry.getKey() + ": " + entry.getValue() + " points");
+        StringBuilder sb = new StringBuilder();
+        for (Integer v : scores.values()) {
+            sb.append(',').append(String.valueOf(v));
         }
+        getGameManager().getGameServer().broadcast("scores"+sb.toString());
+
     }
 
     public void addPlayer(Player player) {

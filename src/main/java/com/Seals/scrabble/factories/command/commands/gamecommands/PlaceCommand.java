@@ -31,6 +31,8 @@ public class PlaceCommand implements ICommand {
             getGameManager().getGameServer().broadcast("board," + getGameManager().getGameBoard().printBoardLetters());
 
 
+            getGameManager().getGameServer().broadcast("scores," + getGameManager());
+
             // Return a message based on whether the placement was successful
             return success ? "Word successfully placed!" : "Word placement failed.";
         } catch (IllegalArgumentException e) {
