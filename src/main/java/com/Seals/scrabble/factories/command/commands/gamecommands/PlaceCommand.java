@@ -22,12 +22,13 @@ public class PlaceCommand implements ICommand {
         // Get the y-coordinate from the fourth argument
         int j = Integer.parseInt(s[3]);
         // Get the vertical flag from the fifth argument
-        Boolean isVertical =  (s[4].equals("V")) ?true: false;
+        Boolean isVertical = (s[4].equals("V")) ? true : false;
 
         try {
             // Try to place the word on the board
             System.err.println(Integer.parseInt(ID) + Word + i + j + isVertical);
             boolean success = getGameManager().tryPlaceWordAction(Integer.parseInt(ID), Word, i, j, isVertical);
+            getGameManager().getGameServer().broadcast("board," + getGameManager().getGameBoard().printBoardLetters());
 
 
             // Return a message based on whether the placement was successful
@@ -37,6 +38,7 @@ public class PlaceCommand implements ICommand {
             System.out.println("error");
             return e.getMessage();
         }
+
     }
 
 }

@@ -311,6 +311,8 @@ public class Board {
         StringBuilder s = new StringBuilder();
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
+                //always false for some reason
+//                System.out.println(getBoard().Places[i][j].getTile() != null);
                 if (getBoard().Places[i][j].getTile() != null) {
                     s.append(SingleBoard.Places[i][j].getTile().getLetter());
                 } else
@@ -319,6 +321,8 @@ public class Board {
             }
             if (i < 14) s.append(" ");
         }
+        getGameManager().getGameServer().broadcast("board," + s.toString());
+
         return s.toString();
 
     }

@@ -75,10 +75,11 @@ public class GameManager {
 //        }
 
         // Game has started
-        delay(2000);
+        delay(1000);
         isGameInProgress = true;
         delay(2000);
         playerManager.initializePlayerHands();
+        gameServer.broadcast("board," + getGameBoard().printBoardLetters());
 
 
         nextTurn();
@@ -110,7 +111,7 @@ public class GameManager {
 
             gameServer.broadcast("players" + stringBuilder.toString());
             gameServer.broadcast("UA," + currentPlayer.printHand() + "," + currentPlayer.getId() + "," + this.Bag.getQuantitiesString());
-            gameServer.broadcast("board," + getGameBoard().printBoardLetters());
+//            gameServer.broadcast("board," + getGameBoard().printBoardLetters());
             gameServer.broadcast("turn," + (getTurnManager().getCurrentPlayerIndex() + 1));
 //            gameServer.broadcast(() => {);
 
@@ -280,7 +281,7 @@ public class GameManager {
 
     public synchronized boolean query(Word w) {
         StringBuilder sb = new StringBuilder();
-        for (Tile t: w.getTiles()) {
+        for (Tile t : w.getTiles()) {
             sb.append(t.getLetter());
         }
         return Boolean.getBoolean(sendRequestToDM("Q", getBooks()[0], getBooks()[1], "" + sb.toString()));
