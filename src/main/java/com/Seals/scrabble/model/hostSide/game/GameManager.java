@@ -277,7 +277,7 @@ public class GameManager {
     }
 
     public boolean query(Word w) {
-        return Boolean.getBoolean(sendRequestToDM("Q:", "harrypotter", "" + w));
+        return Boolean.getBoolean(sendRequestToDM("Q", "harrypotter", "" + w));
     }
 
     public String sendRequestToDM(String... args) {
