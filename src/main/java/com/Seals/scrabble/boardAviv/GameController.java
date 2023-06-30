@@ -173,26 +173,12 @@ public class GameController extends StackPane implements Observer, iController {
         StringBuilder sb = new StringBuilder();
         String state = checkDirection();
         //sorting the tiles
-//        tiles.sort(new Comparator<ConfrimTiles>() {
-//            @Override
-//            public int compare(ConfrimTiles t1, ConfrimTiles t2) {
-//                if(state.equals("H")){
-//                    return t1.cordX-t2.cordX;
-//                }
-//                else
-//                return t1.cordY-t2.cordY;
-//            }
-//        });
-//        tiles.forEach(t -> {
-//            sb.append(t.letter).append(",").append(t.cordX).append(",").append(t.cordY).append("\n"); // split by "\n"
-//        });
-
         tiles.stream().sorted((t1,t2)->{
               if(state.equals("H")){
                     return t1.cordX-t2.cordX;
                 }
                 else
-              return t1.cordY-t2.cordY;
+                    return t1.cordY-t2.cordY;
         }).forEach(t->{
                sb.append(t.letter).append(",").append(t.cordX).append(",").append(t.cordY).append(" ");
         });
@@ -223,11 +209,11 @@ public class GameController extends StackPane implements Observer, iController {
 
     // If X coordinates are the same, it's vertical
     if (firstX == secondX) {
-        return "V";
+        return "H";
     }
     // If Y coordinates are the same, it's horizontal
     else if (firstY == secondY) {
-        return "H";
+        return "V";
     }
     else {
         return "tiles are not aligned horizontally or vertically";

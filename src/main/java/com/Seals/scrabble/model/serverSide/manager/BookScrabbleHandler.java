@@ -33,11 +33,9 @@ public class BookScrabbleHandler implements ClientHandler {
             ArrayList<String> argsList = new ArrayList<String>(Arrays.asList(arguments));
             argsList.remove(0);
             boolean result = false;
-            if (!arguments[0].equals("Q") && !arguments[0].equals("C")) {
-                out.println("Query Faild");
-            }
-
-            else if (arguments[0].equals("Q")) {
+            if (!arguments[0].equals("Q") && !arguments[1].equals("C")) {
+                out.println("Query Failed");
+            } else if (arguments[0].equals("Q")) {
                 String[] query = argsList.toArray(new String[argsList.size()]);
                 result = dictionaryManager.query(query);
             } else if (arguments[0].equals("C")) {
