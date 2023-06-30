@@ -121,14 +121,14 @@ public class GameController extends StackPane implements Observer, iController {
             bagLbl = new Label();
 
         // StringProperty...
-        this.currentPlayer= new SimpleStringProperty();
-        this.currentPlayer.bind(ViewModel.getSharedInstance().getCurrentPlayer());
+//        this.currentPlayer= new SimpleStringProperty();
+//        this.currentPlayer.bind(ViewModel.getSharedInstance().getCurrentPlayer());
         this.score= new SimpleStringProperty();
         this.score.bind(ViewModel.getSharedInstance().getScores());
         if(score.get() != null)
             setScore(handleId());
         this.boardFromOmer = new SimpleStringProperty();
-        this.boardFromOmer.bind(ViewModel.getSharedInstance().bagFromModelProperty());
+        this.boardFromOmer.bind(ViewModel.getSharedInstance().boardFromModelProperty());
         this.bag = new SimpleStringProperty();
         this.bag.bind(ViewModel.getSharedInstance().bagAmountProperty());
         this.letterFromHand = "";
@@ -143,20 +143,20 @@ public class GameController extends StackPane implements Observer, iController {
         draw();
 
         //add listeners
-        ViewModel.getSharedInstance().getCurrentPlayer().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                if(currentPlayer.get().equals(id.get())){
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setContentText("Your turn...");
-                    alert.showAndWait();
-                }
-                else{
-                    HandHbox.setVisible(false);
-                    justForSHow.setVisible(true);
-                }
-            }
-        });
+//        ViewModel.getSharedInstance().getCurrentPlayer().addListener(new ChangeListener<String>() {
+//            @Override
+//            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+//                if(currentPlayer.get().equals(id.get())){
+//                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//                    alert.setContentText("Your turn...");
+//                    alert.showAndWait();
+//                }
+//                else{
+//                    HandHbox.setVisible(false);
+//                    justForSHow.setVisible(true);
+//                }
+//            }
+//        });
         ViewModel.getSharedInstance().getScores().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
@@ -164,7 +164,7 @@ public class GameController extends StackPane implements Observer, iController {
               setScore(handleId());
             }
         });
-        ViewModel.getSharedInstance().bagFromModelProperty().addListener(new ChangeListener<String>() {
+        ViewModel.getSharedInstance().boardFromModelProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 boardClass.setAll(boardFromOmer.get());

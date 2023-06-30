@@ -35,9 +35,10 @@ public interface iViewModel extends Observer {
     void changeScheneToGame();
     StringProperty getBoardProperty();
 
-    StringProperty bagFromModelProperty();
 
      StringProperty getScores();
 
      StringProperty getCurrentPlayer();
+
+    StringProperty boardFromModelProperty();
 }
