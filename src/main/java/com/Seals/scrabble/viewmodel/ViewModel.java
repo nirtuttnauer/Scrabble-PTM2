@@ -4,12 +4,10 @@ import com.Seals.scrabble.Settings;
 import com.Seals.scrabble.controller.LoginController;
 import com.Seals.scrabble.facade.ModelFacade;
 import com.Seals.scrabble.model.Model;
-import com.Seals.scrabble.model.hostSide.game.Player;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -30,7 +28,18 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     public StringProperty board;
     private StringProperty bagFromModelProperty;
     private StringProperty playersNickName;
+
+    public StringProperty getCurrentPlayer() {
+        return currentPlayer;
+    }
+
     private StringProperty currentPlayer;
+
+
+    public StringProperty getScores() {
+        return scores;
+    }
+
     private StringProperty scores;
     //private StringProperty tryPlaceWord;
 
@@ -165,7 +174,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
                     sb.append(1).append(",").append(2).append(",").append(3).append(",").append(4); //players,omer,nir,roi,aviv;
                     playersNickName.set(sb.toString());
                 }
-                else if (stringArr[0].equals("current")) {
+                else if (stringArr[0].equals("turn")) {
                     currentPlayer.set(stringArr[1]);
                 } else if (stringArr[0].equals("scores")) {
                     StringBuilder sb = new StringBuilder();

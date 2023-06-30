@@ -62,6 +62,8 @@ public class GameController extends StackPane implements Observer, iController {
     private StringProperty id;
     private StringProperty boardFromOmer;
     private List<Pane> confirmnPanes;
+    private StringProperty score;
+    private StringProperty currentPlayer;
 
     @FXML
     public void initialize() {
@@ -110,6 +112,12 @@ public class GameController extends StackPane implements Observer, iController {
             bagLbl = new Label();
 
         // StringProperty...
+        this.currentPlayer= new SimpleStringProperty();
+        this.currentPlayer.bind(ViewModel.getSharedInstance().getCurrentPlayer());
+        this.score= new SimpleStringProperty();
+        this.score.bind(ViewModel.getSharedInstance().getScores());
+        if(score.get() != null)
+            setScore(handleScore());
         this.boardFromOmer = new SimpleStringProperty();
         this.boardFromOmer.bind(ViewModel.getSharedInstance().bagFromModelProperty());
         this.bag = new SimpleStringProperty();
@@ -126,6 +134,19 @@ public class GameController extends StackPane implements Observer, iController {
         draw();
 
         //add listeners
+        ViewModel.getSharedInstance().getCurrentPlayer().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+
+            }
+        });
+        ViewModel.getSharedInstance().getScores().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+             // get the exact id from handleScore() to setScore()
+              setScore(handleScore());
+            }
+        });
         ViewModel.getSharedInstance().bagFromModelProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
@@ -156,6 +177,19 @@ public class GameController extends StackPane implements Observer, iController {
                 drawHand();
             }
         });
+    }
+
+    private String handleScore() {
+        String[] scoreArr = score.get().split(",");
+        int i = Integer.parseInt(id.get());
+        return scoreArr[i-1];
+    }
+
+    private void setScore(String scoreById) {
+        Label label= new Label();
+        label.setText("Score: " +scoreById);
+        rightVBox.getChildren().add(label);
+        label.setVisible(true);
     }
 
     private void removeFromBoard() {

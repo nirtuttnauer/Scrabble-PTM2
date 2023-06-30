@@ -36,4 +36,8 @@ public interface iViewModel extends Observer {
     StringProperty getBoardProperty();
 
     StringProperty bagFromModelProperty();
+
+     StringProperty getScores();
+
+     StringProperty getCurrentPlayer();
 }

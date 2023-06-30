@@ -317,14 +317,12 @@ public class Board {
                     s.append(SingleBoard.Places[i][j].getTile().getLetter());
                 } else
                     s.append("0");
-
             }
             if (i < 14) s.append(" ");
         }
         getGameManager().getGameServer().broadcast("board," + s.toString());
 
         return s.toString();
-
     }
 
     public void printBoardScores() {
