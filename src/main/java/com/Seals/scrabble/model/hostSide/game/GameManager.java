@@ -77,7 +77,7 @@ public class GameManager {
         // Game has started
         delay(2000);
         isGameInProgress = true;
-        delay(1000);
+        delay(2000);
         playerManager.initializePlayerHands();
 
 
@@ -112,12 +112,11 @@ public class GameManager {
             // handle the case when the player is not found
         }
 
-        delay(9000);
+        delay(2000);
     }
 
     private boolean isGameFinished() {
-        return (Arrays.stream(Tile.Bag.getBag().getAmounts())
-                .reduce(0, (x, y) -> x + y) == 0);
+        return (Arrays.stream(Tile.Bag.getBag().getAmounts()).reduce(0, (x, y) -> x + y) == 0);
 
     }
 
@@ -163,42 +162,26 @@ public class GameManager {
         System.out.println("----Scrabble game ended----");
     }
 
-    public boolean tryPlaceWordAction(int id, String[] words) {
-        if (words.length < 5) {
-            throw new IllegalArgumentException("Insufficient arguments for placing a word");
-        }
+    public boolean tryPlaceWordAction(int id, String word, int i, int j, Boolean isVertical) {
 
-        int playerId = 0;
-        try {
-            playerId = Integer.parseInt(words[0]);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Error parsing player ID: " + e.getMessage());
-        }
-
-        if (playerId != id) {
+        if (id != id) {
             throw new IllegalArgumentException("Player ID doesn't match the current player's ID");
         }
 
-        String wordString = words[1];
+        String wordString = word;
 
-        int x = 0, y = 0;
-        try {
-            x = Integer.parseInt(words[2]);
-            y = Integer.parseInt(words[3]);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Error parsing word placement coordinates: " + e.getMessage());
-        }
-
-        boolean isVertical = "V".equalsIgnoreCase(words[4]);
+        int x = i, y = j;
 
         // Create tiles from the wordString and get from player's hand
         List<Tile> tiles = new ArrayList<>();
         try {
             tiles = getPlayer(id).addTilesFromString(wordString);
         } catch (Exception e) {
-            System.out.println("hey");
+            e.printStackTrace();  // prints exception details including stack trace
+            System.out.println("Error occurred in addTilesFromString: " + e.getMessage()); // prints the error message
             System.out.println(tiles.isEmpty());
         }
+
         if (tiles.isEmpty()) {
             throw new IllegalArgumentException("Player doesn't have the necessary tiles to form this word.");
         }
@@ -294,7 +277,7 @@ public class GameManager {
     }
 
     public boolean query(Word w) {
-        return Boolean.getBoolean(sendRequestToDM("q", "harrypotter", "" + w));
+        return Boolean.getBoolean(sendRequestToDM("Q:", "harrypotter", "" + w));
     }
 
     public String sendRequestToDM(String... args) {
@@ -303,12 +286,15 @@ public class GameManager {
 
         while (attemptCount < maxRetries) {
             attemptCount++;
+
             try {
+                out = new PrintWriter(DMSocket.getOutputStream(), true);
+                in = new BufferedReader(new InputStreamReader(DMSocket.getInputStream()));
                 if (DMSocket == null || DMSocket.isClosed()) {
+
                     System.out.println("Socket is closed or null. Attempting to reconnect...");
                     DMSocket = new Socket(Settings.getServerAddress(), Settings.getDMServerPort());
-                    out = new PrintWriter(DMSocket.getOutputStream(), true);
-                    in = new BufferedReader(new InputStreamReader(DMSocket.getInputStream()));
+
                 }
 
                 StringBuilder request = new StringBuilder();
@@ -327,6 +313,7 @@ public class GameManager {
                 if (in != null) {
                     String response = in.readLine();
                     if (response != null && !response.isEmpty()) {
+                        System.err.println("!!!DM SERVER RESPONSE: " + response);
                         return response;
                     } else {
                         System.out.println("Server responded with an empty message.");

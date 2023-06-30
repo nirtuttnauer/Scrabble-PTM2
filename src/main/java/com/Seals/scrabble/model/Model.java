@@ -122,44 +122,45 @@ public class Model extends Observable implements iModel {
         return nickname;
     }
 
-public void connectToHost() {
-    try {
-        System.out.println("Connecting to host on port " + hostPort);
-        guestSocket = new Socket(serverAddress, Settings.getHostServerPort());
-        guestSocket.setSoTimeout(5000); // Set the timeout to 5 seconds (5000 milliseconds)
-        out = new PrintWriter(guestSocket.getOutputStream(), true); // Sending request to server
-        in = new BufferedReader(new InputStreamReader(guestSocket.getInputStream())); // Change this line
-        System.out.println("Just connected to " + guestSocket.getRemoteSocketAddress());
-        startListening();
-        sendRequestToHost("new player", getNickname()); // Request for ID of new player
-    } catch (IOException e) {
-        // Handle any exceptions
-        e.printStackTrace();
-    }
-}
-
-
-private void startListening() {
-    listening = true;
-//    System.out.println("started listing on line 130");
-    listenerThread = new Thread(() -> {
-        while (listening) {
-            String response = null;
-            try {
-                if ((response = in.readLine()) != null) {
-//                    System.out.println("I heard something...");
-                    System.out.println(response);
-                    sendRequestToHost(processResponse(response));
-                }
-            } catch (SocketTimeoutException e) {
-//                System.out.println("Socket timeout, continuing to listen...");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    public void connectToHost() {
+        try {
+            System.out.println("Connecting to host on port " + hostPort);
+            guestSocket = new Socket(serverAddress, Settings.getHostServerPort());
+            guestSocket.setSoTimeout(5000); // Set the timeout to 5 seconds (5000 milliseconds)
+            out = new PrintWriter(guestSocket.getOutputStream(), true); // Sending request to server
+            in = new BufferedReader(new InputStreamReader(guestSocket.getInputStream())); // Change this line
+            System.out.println("Just connected to " + guestSocket.getRemoteSocketAddress());
+            startListening();
+            sendRequestToHost("new player", getNickname()); // Request for ID of new player
+        } catch (IOException e) {
+            // Handle any exceptions
+            connectToHost();
+            e.printStackTrace();
         }
-    });
-    listenerThread.start();
-}
+    }
+
+
+    private void startListening() {
+        listening = true;
+//    System.out.println("started listing on line 130");
+        listenerThread = new Thread(() -> {
+            while (listening) {
+                String response = null;
+                try {
+                    if ((response = in.readLine()) != null) {
+//                    System.out.println("I heard something...");
+                        System.out.println(response);
+                        sendRequestToHost(processResponse(response));
+                    }
+                } catch (SocketTimeoutException e) {
+//                System.out.println("Socket timeout, continuing to listen...");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        listenerThread.start();
+    }
 
 
     private void stopListening() {
@@ -171,7 +172,7 @@ private void startListening() {
 
     private String processResponse(String response) {
         String[] parts = response.split(",");
-        if (parts[0].equals("ID") || parts[0].equals("UA")) {
+        if (parts[0].equals("ID") || parts[0].equals("UA") || parts[0].equals("board")) {
             setChanged();
             notifyObservers(response);
         }
@@ -200,47 +201,45 @@ private void startListening() {
     }
 
 
-public void sendRequestToHost(String commandName, String... args) {
-    try {
-        if (guestSocket.isClosed()) {
-            System.out.println("Socket is closed");
-            guestSocket = new Socket(serverAddress, Settings.getHostServerPort());
-//            guestSocket.setSoTimeout(5000); // Set the timeout to 5 seconds (5000 milliseconds)
-            out = new PrintWriter(guestSocket.getOutputStream(), true); // Sending request to server
-            in = new BufferedReader(new InputStreamReader(guestSocket.getInputStream())); // Ready to read response
-        }
-
-        // Format the command and arguments into a request string
-        String request = commandName;
-        if (args != null) {
-            request += "," + String.join(",", args);
-        }
-
-        out.println(request);
-        out.flush();
-
-        // Read the response
+    public void sendRequestToHost(String commandName, String... args) {
         try {
-            String response = in.readLine();
-            if(response != null && !response.isEmpty()) {
-                String[] splitResponse = response.split(":");
-                if(splitResponse.length > 1 && splitResponse[0].equals("ID")) {
-                    this.setID(Integer.parseInt(splitResponse[1]));
-                }
+            if (guestSocket.isClosed()) {
+                System.out.println("Socket is closed");
+                guestSocket = new Socket(serverAddress, Settings.getHostServerPort());
+//            guestSocket.setSoTimeout(5000); // Set the timeout to 5 seconds (5000 milliseconds)
+                out = new PrintWriter(guestSocket.getOutputStream(), true); // Sending request to server
+                in = new BufferedReader(new InputStreamReader(guestSocket.getInputStream())); // Ready to read response
             }
-        } catch (SocketTimeoutException e) {
-            System.out.println("The server did not respond in time. Attempting to send request again...");
-            sendRequestToHost(commandName, args);
+
+            // Format the command and arguments into a request string
+            String request = commandName;
+            if (args != null) {
+                request += "," + String.join(",", args);
+            }
+
+            out.println(request);
+            out.flush();
+
+            // Read the response
+            try {
+                String response = in.readLine();
+                if (response != null && !response.isEmpty()) {
+                    String[] splitResponse = response.split(":");
+                    if (splitResponse.length > 1 && splitResponse[0].equals("ID")) {
+                        this.setID(Integer.parseInt(splitResponse[1]));
+                    }
+                }
+            } catch (SocketTimeoutException e) {
+                System.out.println("The server did not respond in time. Attempting to send request again...");
+                sendRequestToHost(commandName, args);
+            }
+
+            // Don't close socket, scanner, or writer here;
+            // they should be closed when done with all communication
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        // Don't close socket, scanner, or writer here;
-        // they should be closed when done with all communication
-    } catch (IOException e) {
-        throw new RuntimeException(e);
     }
-}
-
-
 
 
 //    private String processResponse(String response) {

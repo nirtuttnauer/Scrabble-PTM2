@@ -19,7 +19,7 @@ public class Player {
     private List<Tile> hand;
 
     public Player(String nickname) {
-            this.id = nextId++;
+        this.id = nextId++;
         this.hand = new ArrayList<>();
 //        this.socket = socket;
         this.name = nickname;
@@ -48,18 +48,36 @@ public class Player {
         }
     }
 
-    public List<Tile> addTilesFromString(String w) {
-        List<Tile> tiles = new ArrayList<>();
-        for (int i = 0; i < getHand().size(); i++) {
-            try {
-            tiles.add(Tile.Bag.getBag().getTile(w.charAt(i)));
-            }
-            catch (Exception e){
-                System.out.println("Cannot get tile (error)");
+public List<Tile> addTilesFromString(String w) {
+    List<Tile> tiles = new ArrayList<>();
+
+    System.out.println("Player's hand: " + printHand());  // print the player's hand
+
+    for (char c : w.toCharArray()) {
+        // Find tile from the hand
+        Tile tileFromHand = getTileFromHand(c);
+
+        // Check if the tile was found
+        if (tileFromHand != null) {
+            // Add tile to the list
+            tiles.add(tileFromHand);
+        } else {
+            throw new IllegalArgumentException("Cannot get tile (error): " + c);
+        }
+    }
+    return tiles;
+}
+
+
+    private Tile getTileFromHand(char c) {
+        for (Tile tile : hand) {
+            if (Character.toUpperCase(tile.getLetter()) == c) {
+                return tile;
             }
         }
-        return tiles;
+        return null; // Return null if the tile was not found in the hand
     }
+
 
     public void removeTilesFromHand(Tile[] tiles) {
         for (Tile tile : tiles) {

@@ -51,7 +51,6 @@ public class ViewModel extends Observable implements Observer, iViewModel {
         this.id = new SimpleStringProperty();
         this.bagAmount = new SimpleStringProperty();
         id.set("" + 0);
-        bagFromModelProperty.set("0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000");
         //check();
     }
 
@@ -145,7 +144,7 @@ public class ViewModel extends Observable implements Observer, iViewModel {
                 System.out.println("VM line 115: " + handToView);
                 System.out.println("VM line 116: " + board);
                 System.out.println("VM line 117: " + id.get());
-                System.out.println("VM line 117: " + bagAmount.get());
+                System.out.println("VM line 118: " + bagAmount.get());
             }
         }
         //nickname.set(modelFacade.getNickname());
@@ -215,19 +214,28 @@ public class ViewModel extends Observable implements Observer, iViewModel {
     @Override
     public void updateTryPlaceWordInViewModel(String val) {
         StringBuilder sb = new StringBuilder("PL," + getIdProperty().get() + ",");
-        System.out.println("updateTryPlaceWordInViewModel was call form viewModel");
-        // N,1,1 I,2,2 R,3,3
+        System.out.println("updateTryPlaceWordInViewModel was called from viewModel");
+
+        // Splitting the val by space and fetching orientation (V or H)
         String[] arr = val.split(" ");
-        for (int i = 0; i < arr.length; i++) {
+        String orientation = arr[arr.length - 1]; // 'V' or 'H'
+
+        // Forming the word
+        for (int i = 0; i < arr.length - 1; i++) { // excluding the orientation from the loop
             sb.append(arr[i].split(",")[0]);
         }
-        sb.append(arr[0].split(",")[0]).append(",").append(arr[0].split(",")[1]).append(",").append(arr[0].split(",")[2]);
-        sb.append(",").append(arr[arr.length - 1]);
+
+        // Append the initial coordinates
+        String[] firstCoords = arr[0].split(",");
+        sb.append(",").append(firstCoords[1]).append(",").append(firstCoords[2]);
+
+        // Append the orientation
+        sb.append(",").append(orientation);
 
         System.out.println(sb.toString());
-        modelFacade.TPRequestFromVM(sb.toString());// ("PL,ID,mila,4,5,H")
-        // nir need to get the boardClass instance , and update all the threads for the changes
+        modelFacade.TPRequestFromVM(sb.toString());
     }
+
 
     @Override
     public void changeScheneToGame() {
