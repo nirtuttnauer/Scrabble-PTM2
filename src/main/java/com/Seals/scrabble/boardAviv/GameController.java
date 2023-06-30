@@ -75,6 +75,7 @@ public class GameController extends StackPane implements Observer, iController {
         // hide justForSHow Hbox
         justForSHow.setVisible(false);
         Label label= new Label();
+        label.setAlignment(Pos.CENTER);
         label.setText("It's not your turn");
         justForSHow.getChildren().add(label);
         //list of tiles that will transform to the vm
