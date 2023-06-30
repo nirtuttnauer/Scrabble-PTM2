@@ -49,7 +49,7 @@ public class GameController extends StackPane implements Observer, iController {
     @FXML
     private HBox HandHbox;
     private List<ConfrimTiles> tiles;
-    private List<String> paneHandList;
+    private List<Pane> paneHandList;
     private volatile boolean isFirstPlay = true;
     private boolean pressed;
     private static BoardClass boardClass = new BoardClass(15, 15);
@@ -78,7 +78,7 @@ public class GameController extends StackPane implements Observer, iController {
         //pressed boolean
         pressed = false;
         // pane list
-        paneHandList = new ArrayList<>();
+        paneHandList = new ArrayList<Pane>();
         // set changes button
         this.confirmChangesBTN.setVisible(false);
         confirmChangesBTN.setOnAction(new EventHandler<ActionEvent>() {
@@ -98,6 +98,7 @@ public class GameController extends StackPane implements Observer, iController {
                 } else {
                     alert.setContentText("No problem, try again!");
                     coloriseHandToBasicColor();
+                    removeFromBoard();
                 }
                 confirmChangesBTN.setVisible(false);
             }
@@ -157,16 +158,26 @@ public class GameController extends StackPane implements Observer, iController {
         });
     }
 
+    private void removeFromBoard() {
+        int i=0;
+        while(i<tiles.size() || i<paneList.size()){
+            setColor((StackPane) paneList.get(i),tiles.get(i).cordX,tiles.get(i).cordY);
+            i++;
+        }
+        paneList.clear();
+        tiles.clear();
+    }
+
 
     private void coloriseHandToBasicColor() {
-        paneList.forEach(pane -> {
+        paneHandList.forEach(pane -> {
             if (!confirmnPanes.contains(pane)) {
                 //setting the background to grey
                 pane.setBackground(new Background(new BackgroundFill(Color.rgb(227, 200, 141), CornerRadii.EMPTY, Insets.EMPTY)));
                 pane.setStyle("-fx-background-radius: 15px");
             }
         });
-        paneList.clear();
+        paneHandList.clear();
     }
 
     private void handleTryPlaceWord() {
@@ -311,7 +322,7 @@ public class GameController extends StackPane implements Observer, iController {
                         paneList.add(handPane);
                         handPane.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
                         handPane.setStyle("-fx-background-radius: 15px; -fx-background-color: blue; -fx-effect: dropshadow(gaussian, #0a45ea, 20, 0, 2, 2);");
-                        paneHandList.add(letterStr);
+                        paneHandList.add(handPane);
                         // Handle the click event on the pane
                         System.out.println("Clicked on pane: " + handPane.getId());
                         letterFromHand = letter.getText();
@@ -362,9 +373,13 @@ public class GameController extends StackPane implements Observer, iController {
                         }
                         if (pane.getChildren().isEmpty())
                             pane.getChildren().add(letter);
+
                         confirmChangesBTN.setVisible(true);
+
                         //adding the new tile to the list
                         tiles.add(new ConfrimTiles(x, y, letterFromHand));
+                        paneList.add(pane);
+
                         //setting the style like the hand...
                         pane.setStyle(" -fx-background-color: #e3c88d;\n" +
                                 "    -fx-border-style: solid;\n" +
