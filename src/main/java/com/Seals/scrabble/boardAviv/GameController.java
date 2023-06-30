@@ -104,6 +104,9 @@ public class GameController extends StackPane implements Observer, iController {
         });
 
 
+        // bag label
+        if (bagLbl == null)
+            bagLbl = new Label();
 
         // StringProperty...
         this.boardFromOmer = new SimpleStringProperty();
@@ -118,9 +121,9 @@ public class GameController extends StackPane implements Observer, iController {
         } else {
             System.out.println("Hand object didn't create, handString is null");
         }
+        //draw the board...
+        draw();
 
-        if(boardFromOmer.get()!=null)
-            draw();
         //add listeners
         ViewModel.getSharedInstance().bagFromModelProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -130,12 +133,20 @@ public class GameController extends StackPane implements Observer, iController {
                 draw();
             }
         });
+
         ViewModel.getSharedInstance().bagAmountProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                bagLbl.setText(bag.get());
+            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        bagLbl.setText("The bag amount is: " + newValue);
+                        bagLbl.setVisible(true);
+                    }
+                });
             }
         });
+
 
         ViewModel.getSharedInstance().getHandProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -160,8 +171,30 @@ public class GameController extends StackPane implements Observer, iController {
 
     private void handleTryPlaceWord() {
         StringBuilder sb = new StringBuilder();
-        tiles.forEach(t -> {
-            sb.append(t.letter).append(",").append(t.cordX).append(",").append(t.cordY).append("\n"); // split by "\n"
+        String state = checkDirection();
+        //sorting the tiles
+//        tiles.sort(new Comparator<ConfrimTiles>() {
+//            @Override
+//            public int compare(ConfrimTiles t1, ConfrimTiles t2) {
+//                if(state.equals("H")){
+//                    return t1.cordX-t2.cordX;
+//                }
+//                else
+//                return t1.cordY-t2.cordY;
+//            }
+//        });
+//        tiles.forEach(t -> {
+//            sb.append(t.letter).append(",").append(t.cordX).append(",").append(t.cordY).append("\n"); // split by "\n"
+//        });
+
+        tiles.stream().sorted((t1,t2)->{
+              if(state.equals("H")){
+                    return t1.cordX-t2.cordX;
+                }
+                else
+              return t1.cordY-t2.cordY;
+        }).forEach(t->{
+               sb.append(t.letter).append(",").append(t.cordX).append(",").append(t.cordY).append(" ");
         });
 
         // checking if horizontal to vertical
@@ -175,21 +208,32 @@ public class GameController extends StackPane implements Observer, iController {
     }
 
     private String checkDirection() {
-        //first tile indexes
-        int firstX = tiles.get(0).cordX;
-        int firstY = tiles.get(0).cordY;
-
-        //second tile indexes
-        int seccondX = tiles.get(1).cordX;
-        int seccondY = tiles.get(1).cordY;
-
-        if (firstX == seccondY && seccondY != seccondX)
-            return "H";
-        else if (firstY == seccondY && seccondX != seccondY)
-            return "V";
-        else
-            return "cannot find if the word is vertical or horizontal";
+    // Check if there's at least two tiles to compare
+    if (tiles.size() < 2) {
+        return "not enough tiles to determine direction";
     }
+
+    // First tile indexes
+    int firstX = tiles.get(0).cordX;
+    int firstY = tiles.get(0).cordY;
+
+    // Second tile indexes
+    int secondX = tiles.get(1).cordX;
+    int secondY = tiles.get(1).cordY;
+
+    // If X coordinates are the same, it's vertical
+    if (firstX == secondX) {
+        return "V";
+    }
+    // If Y coordinates are the same, it's horizontal
+    else if (firstY == secondY) {
+        return "H";
+    }
+    else {
+        return "tiles are not aligned horizontally or vertically";
+    }
+}
+
 
     private void sendValueToVM(String val) {
         ViewModel.getSharedInstance().updateTryPlaceWordInViewModel(val);
