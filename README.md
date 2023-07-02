@@ -26,6 +26,9 @@
 - Nir - Model
 <br/> -->
 
+# Projects Video
+https://github.com/nirtuttnauer/Scrabble-PTM2/assets/21014429/9a187efb-f73a-4136-bfc9-27bfe0c2a663
+
 
 # Project UML Diagram
 <img src = "README resources/Current UML Diagram.png">
