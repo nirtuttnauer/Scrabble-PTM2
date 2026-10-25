@@ -1,4 +1,59 @@
 # BookScrabble
+
+A JavaFX Scrabble game with a View/ViewModel/Model structure and a book-backed
+word dictionary. The repository includes the desktop UI, host/server code, and
+sample dictionary books.
+
+## Getting started
+
+- Install a full **JDK 17** and make sure `JAVA_HOME` points to it. The application
+  sources target Java 11; the compile command below was checked with JDK 17.
+- Use a desktop session to run the JavaFX UI.
+- An internet connection is needed on the first build to download Maven and
+  dependencies. Maven is supplied by the checked-in wrapper; no separate Maven
+  installation is required.
+
+Run commands from the repository root so relative resource paths remain valid:
+
+```sh
+# Confirm the wrapper is using the intended JDK.
+./mvnw --version
+
+# Compile the application without compiling or running the legacy tests.
+./mvnw -DskipTests compile
+
+# Launch the desktop UI (configured entry point: com.Seals.scrabble.Main).
+./mvnw javafx:run
+```
+
+On Windows, replace `./mvnw` with `.\mvnw.cmd` in PowerShell. If Java cannot be
+found, check `JAVA_HOME` and `java -version` before retrying. JavaFX dependencies
+are declared in `pom.xml`.
+
+## Tests and current limitations
+
+```sh
+./mvnw test
+```
+
+The existing test suite currently fails during **test compilation**, before any
+tests run: it imports TestNG without declaring that dependency and references
+methods no longer present in the application (including `setGuestModel`,
+`getGameServer`, and `placeWord`). A JDK 17 baseline run reported 16 compiler
+errors. Successful application compilation is not a passing test suite.
+The desktop launch command is provided for local use; GUI startup has not been
+verified by the automated documentation check.
+
+## Repository layout
+
+- `src/main/java/com/Seals/scrabble/`: application, controllers, view models,
+  game logic, and socket/dictionary services.
+- `src/main/resources/com/Seals/scrabble/`: FXML views and application CSS.
+- `src/test/java/`: legacy tests.
+- `search_folder/` and `textFile/`: dictionary books and text fixtures.
+- `pom.xml`: JavaFX dependencies, Java compilation settings, and launcher.
+
+## Contributors
 - this project is a game made with JavaFX and was made by:
   * Nir Tuttnauer
   * Aviv Yosef Nataf
